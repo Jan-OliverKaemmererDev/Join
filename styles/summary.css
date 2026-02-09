@@ -40,8 +40,8 @@
 /* Metrics Grid */
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(3, 160px);
-  grid-template-rows: 160px 160px;
+  grid-template-columns: repeat(3, 170px);
+  grid-template-rows: 170px 170px;
   gap: 20px;
 }
 
@@ -67,6 +67,79 @@
   font-size: 48px;
 }
 
+.metric-card p {
+  font-size: 20px;
+  margin: 5px 0 0 0;
+}
+
+/* Icon Circles */
+.icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--sidebar-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.icon-circle img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Small Cards */
+.card-small {
+  flex-direction: row;
+  gap: 20px;
+  padding: 25px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.card-small img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.card-small div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.card-small b {
+  font-size: 48px;
+  display: block;
+  line-height: 1;
+}
+
+.card-small p {
+  font-size: 20px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Square Cards */
+.card-square {
+  gap: 15px;
+  padding: 20px 10px;
+}
+
+.card-square b {
+  font-size: 64px;
+}
+
+.card-square p {
+  font-size: 20px;
+  text-align: center;
+  margin: 0;
+}
+
 /* Large Urgent Card */
 .card-large {
   grid-column: span 3;
@@ -81,9 +154,33 @@
   gap: 20px;
 }
 
+.urgent-info img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.urgent-info b {
+  font-size: 48px;
+}
+
+.urgent-info p {
+  font-size: 20px;
+  margin: 5px 0 0 0;
+}
+
 .deadline-info {
   border-left: 2px solid #d1d1d1;
   padding-left: 40px;
+}
+
+.deadline-info b {
+  font-size: 20px;
+}
+
+.deadline-info p {
+  font-size: 16px;
+  margin: 5px 0 0 0;
 }
 
 /* Greeting */
