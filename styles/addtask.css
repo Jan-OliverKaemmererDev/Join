@@ -142,6 +142,12 @@
   height: 16px;
 }
 
+.priority-btn img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
 /* Subtasks */
 .subtask-input-wrapper {
   display: flex;
