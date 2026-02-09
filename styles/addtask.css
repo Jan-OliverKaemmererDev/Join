@@ -1,0 +1,324 @@
+/**
+ * addtask.css
+ * Styles for the Add Task page
+ */
+
+/* Add Task Section */
+.add-task-section {
+  padding: 40px 80px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.add-task-section h1 {
+  font-size: 61px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #000;
+}
+
+/* Form Container - Two Column Layout */
+.form-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 40px;
+}
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 20px;
+  font-weight: 400;
+  color: #2a3647;
+}
+
+.required {
+  color: #ff3d00;
+  margin-left: 2px;
+}
+
+/* Input Fields */
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group textarea,
+.form-group select {
+  padding: 12px 16px;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  font-size: 20px;
+  font-family: inherit;
+  color: #000;
+  background-color: #fff;
+  transition: border-color 0.2s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="date"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #29abe2;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #d1d1d1;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10L12 15L17 10H7Z' fill='%232A3647'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+/* Priority Buttons */
+.priority-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.priority-btn {
+  flex: 1;
+  padding: 16px 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.priority-btn:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Priority Button Active States */
+.priority-btn[data-priority="urgent"].active {
+  background-color: #ff3d00;
+  color: #fff;
+}
+
+.priority-btn[data-priority="medium"].active {
+  background-color: #ffa800;
+  color: #fff;
+}
+
+.priority-btn[data-priority="low"].active {
+  background-color: #7ae229;
+  color: #fff;
+}
+
+.priority-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Subtasks */
+.subtask-input-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.subtask-input-wrapper input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  font-size: 20px;
+  font-family: inherit;
+}
+
+.btn-add-subtask {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 10px;
+  background-color: #2a3647;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.btn-add-subtask:hover {
+  background-color: #29abe2;
+}
+
+.subtask-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: #f6f7f8;
+  border-radius: 8px;
+}
+
+.subtask-item span {
+  font-size: 16px;
+  color: #2a3647;
+}
+
+.subtask-item button {
+  background: none;
+  border: none;
+  color: #ff3d00;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0 8px;
+}
+
+/* Form Footer */
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid #d1d1d1;
+}
+
+.required-note {
+  font-size: 14px;
+  color: #2a3647;
+  margin: 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+}
+
+/* Buttons */
+.btn-clear,
+.btn-create {
+  padding: 16px 24px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-clear {
+  background-color: #fff;
+  color: #2a3647;
+  border: 1px solid #2a3647;
+}
+
+.btn-clear:hover {
+  background-color: #2a3647;
+  color: #fff;
+}
+
+.btn-clear:hover svg path {
+  fill: #fff;
+}
+
+.btn-create {
+  background-color: #2a3647;
+  color: #fff;
+}
+
+.btn-create:hover:not(:disabled) {
+  background-color: #29abe2;
+}
+
+.btn-create:disabled {
+  background-color: #d1d1d1;
+  color: #a8a8a8;
+  cursor: not-allowed;
+}
+
+.btn-clear svg,
+.btn-create svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .form-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .add-task-section {
+    padding: 30px 40px;
+  }
+
+  .add-task-section h1 {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 768px) {
+  .add-task-section {
+    padding: 20px;
+  }
+
+  .add-task-section h1 {
+    font-size: 36px;
+  }
+
+  .priority-buttons {
+    flex-direction: column;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-clear,
+  .btn-create {
+    width: 100%;
+    justify-content: center;
+  }
+}

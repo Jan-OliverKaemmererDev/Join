@@ -1,14 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
     <title>Join - Login</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-</body>
-<script src="./script.js" defer></script>
+  </head>
+  <body onload="initLogin()">
+    <div id="animation-container" class="animation-container">
+      <img
+        id="flying-logo"
+        src="./assets/login-screen/join-logo.png"
+        alt="Join Logo"
+      />
+    </div>
+
+    <header class="login-header">
+      <div class="header-right">
+        <span>Not a Join user?</span>
+        <button
+          onclick="window.location.href = 'signup.html'"
+          class="btn-signup"
+        >
+          Sign up
+        </button>
+      </div>
+    </header>
+
+    <main class="login-main">
+      <div class="login-card">
+        <h1>Log in</h1>
+        <div class="blue-underline"></div>
+        <form onsubmit="handleLogin(event)">
+          <input type="email" id="email" placeholder="Email" required />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <div class="login-actions">
+            <button type="submit" class="btn-dark">Log in</button>
+            <button type="button" class="btn-light" onclick="guestLogin()">
+              Guest Log in
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="login-footer">
+      <a href="privacypolicy.html?public=true">Privacy Policy</a>
+      <a href="legalnotice.html?public=true">Legal notice</a>
+    </footer>
+
+    <!-- Authentication System -->
+    <script src="./scripts/auth.js"></script>
+
+    <!-- Main Script -->
+    <script src="./script.js"></script>
+  </body>
 </html>

@@ -1,11 +1,376 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Board</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./styles/board.css" />
+    <link rel="stylesheet" href="./styles/addtask.css" />
+    <!-- Reusing form styles for overlay -->
+    <title>Join - Board</title>
+  </head>
+  <body onload="initBoard()">
+    <nav class="sidebar">
+      <img src="./assets/main-page/join-logo-white.svg" alt="Join Logo" />
+      <div class="nav-links">
+        <a href="summaryuser.html">
+          <img src="./assets/summary-page/summary-icon.svg" alt="" />
+          Summary
+        </a>
+        <a href="addtask.html">
+          <img src="./assets/summary-page/add-task-icon.svg" alt="" />
+          Add Task
+        </a>
+        <a href="board.html" class="active">
+          <img src="./assets/summary-page/board-icon.svg" alt="" />
+          Board
+        </a>
+        <a href="contacts.html">
+          <img src="./assets/summary-page/contacts-icon.svg" alt="" />
+          Contacts
+        </a>
+      </div>
+      <div class="legal-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="legal.html">Legal notice</a>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <header class="dashboard-header">
+        <span>Kanban Project Management Tool</span>
+        <div class="header-icons">
+          <a href="help.html" class="help-link">
+            <img src="./assets/summary-page/help.svg" alt="Help" />
+          </a>
+          <div class="user-initials" id="user-initials">G</div>
+        </div>
+      </header>
+
+      <section class="board-container">
+        <!-- Board Header -->
+        <div class="board-header">
+          <h1>Board</h1>
+          <div class="board-actions">
+            <div class="search-bar">
+              <input
+                type="text"
+                id="search-input"
+                placeholder="Find Task"
+                oninput="searchTasks()"
+              />
+              <div class="search-icon-container">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z"
+                    fill="#2A3647"
+                  />
+                </svg>
+              </div>
+            </div>
+            <button class="btn-add-task" onclick="openAddTaskOverlay()">
+              Add task
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM17 13H13V17H11V13H7V11H11V7H13V11H17V13Z"
+                  fill="white"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Board Columns -->
+        <div class="board-columns">
+          <div
+            class="board-column"
+            id="column-todo"
+            ondrop="drop(event, 'todo')"
+            ondragover="
+              allowDrop(event);
+              highlight('todo-list');
+            "
+            ondragleave="removeHighlight('todo-list')"
+          >
+            <div class="column-header">
+              <span>To do</span>
+              <div class="column-header-plus" onclick="openAddTaskOverlay()">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path
+                    d="M5 0V10M0 5H10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="task-list" id="todo-list">
+              <!-- Tasks will be rendered here -->
+            </div>
+          </div>
+
+          <div
+            class="board-column"
+            id="column-inprogress"
+            ondrop="drop(event, 'inprogress')"
+            ondragover="
+              allowDrop(event);
+              highlight('inprogress-list');
+            "
+            ondragleave="removeHighlight('inprogress-list')"
+          >
+            <div class="column-header">
+              <span>In progress</span>
+              <div class="column-header-plus" onclick="openAddTaskOverlay()">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path
+                    d="M5 0V10M0 5H10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="task-list" id="inprogress-list"></div>
+          </div>
+
+          <div
+            class="board-column"
+            id="column-awaitfeedback"
+            ondrop="drop(event, 'awaitfeedback')"
+            ondragover="
+              allowDrop(event);
+              highlight('awaitfeedback-list');
+            "
+            ondragleave="removeHighlight('awaitfeedback-list')"
+          >
+            <div class="column-header">
+              <span>Await feedback</span>
+              <div class="column-header-plus" onclick="openAddTaskOverlay()">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path
+                    d="M5 0V10M0 5H10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="task-list" id="awaitfeedback-list"></div>
+          </div>
+
+          <div
+            class="board-column"
+            id="column-done"
+            ondrop="drop(event, 'done')"
+            ondragover="
+              allowDrop(event);
+              highlight('done-list');
+            "
+            ondragleave="removeHighlight('done-list')"
+          >
+            <div class="column-header">
+              <span>Done</span>
+              <div class="column-header-plus" onclick="openAddTaskOverlay()">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path
+                    d="M5 0V10M0 5H10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="task-list" id="done-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Add Task Overlay -->
+    <div class="overlay-container" id="add-task-overlay">
+      <div
+        class="overlay-content add-task-overlay-card"
+        onclick="event.stopPropagation()"
+      >
+        <div style="display: flex; justify-content: flex-end">
+          <button
+            onclick="closeAddTaskOverlay()"
+            style="
+              border: none;
+              background: none;
+              font-size: 24px;
+              cursor: pointer;
+            "
+          >
+            &times;
+          </button>
+        </div>
+        <!-- Reuse existing Add Task form structure by including it or just recreating it.
+                  If include is not possible (static HTML), we need to copy it. 
+                  Since we linked addtask.css, we can use the same classes. -->
+        <h1 style="font-size: 61px; font-weight: 700; margin-bottom: 40px">
+          Add Task
+        </h1>
+
+        <!-- We can try to load content dynamically or just replicate the form here. 
+                  For robustness given the instructions, I will replicate the form but ensure IDs are unique or handled if necessary.
+                  Since we are in a different file/context, IDs like 'title' might conflict if we were SPA, but here it's separate unless we load scripts that look for them.
+                  scripts/addtask.js looks for 'title', 'description' etc. So we should match those IDs if we want to reuse the script logic, OR maintain separate logic.
+                  Reusing the script logic is smart. -->
+
+        <form id="add-task-form" onsubmit="handleAddTask(event)">
+          <div class="form-container">
+            <!-- Left Column -->
+            <div class="form-column">
+              <div class="form-group">
+                <label for="title">Title<span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="title"
+                  placeholder="Enter a title"
+                  oninput="validateForm()"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                  id="description"
+                  placeholder="Enter a Description"
+                  rows="5"
+                  oninput="validateForm()"
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="due-date"
+                  >Due date<span class="required">*</span></label
+                >
+                <input
+                  type="date"
+                  id="due-date"
+                  oninput="validateForm()"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-column">
+              <div class="form-group">
+                <label>Priority</label>
+                <div class="priority-buttons">
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    data-priority="urgent"
+                    onclick="selectPriority('urgent')"
+                  >
+                    Urgent <img src="./assets/add-task/urgent.svg" alt="" />
+                  </button>
+                  <button
+                    type="button"
+                    class="priority-btn active"
+                    data-priority="medium"
+                    onclick="selectPriority('medium')"
+                  >
+                    Medium <img src="./assets/add-task/medium.svg" alt="" />
+                  </button>
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    data-priority="low"
+                    onclick="selectPriority('low')"
+                  >
+                    Low <img src="./assets/add-task/low.svg" alt="" />
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="assigned-to">Assigned to</label>
+                <select id="assigned-to" oninput="validateForm()">
+                  <option value="">Select contacts to assign</option>
+                  <option value="user1">Sofia Müller</option>
+                  <option value="user2">Anton Mayer</option>
+                  <option value="user3">Anja Schulz</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="category"
+                  >Category<span class="required">*</span></label
+                >
+                <select id="category" oninput="validateForm()" required>
+                  <option value="">Select task category</option>
+                  <option value="technical">Technical Task</option>
+                  <option value="user-story">User Story</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Subtasks</label>
+                <div class="subtask-input-wrapper">
+                  <input
+                    type="text"
+                    id="subtask-input"
+                    placeholder="Add new subtask"
+                  />
+                  <button
+                    type="button"
+                    class="btn-add-subtask"
+                    onclick="addSubtask()"
+                  >
+                    +
+                  </button>
+                </div>
+                <ul id="subtask-list" class="subtask-list"></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <p class="required-note">
+              <span class="required">*</span>This field is required
+            </p>
+            <div class="form-actions">
+              <button type="button" class="btn-clear" onclick="clearForm()">
+                Clear ✕
+              </button>
+              <button
+                type="submit"
+                id="create-task-btn"
+                class="btn-create"
+                disabled
+              >
+                Create Task ✓
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Task Details Overlay -->
+    <div
+      class="overlay-container"
+      id="task-details-overlay"
+      onclick="closeTaskDetails()"
+    >
+      <div
+        class="overlay-content task-details-card"
+        id="task-details-content"
+        onclick="event.stopPropagation()"
+      >
+        <!-- Content injected by JS -->
+      </div>
+    </div>
+
+    <script src="./scripts/auth.js"></script>
+    <script src="./scripts/addtask.js"></script>
+    <!-- Reusing logic for add task form -->
+    <script src="./scripts/board.js"></script>
+  </body>
 </html>

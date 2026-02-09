@@ -1,0 +1,139 @@
+/* --- SIGNUP SPEZIFISCHES CSS --- */
+
+/* Logo fixiert oben links */
+.logo-top-left {
+    position: fixed;
+    top: 37px;
+    left: 37px;
+    width: 100px;
+    z-index: 50;
+}
+
+/* Header Bereich: Neu strukturiert für perfekte Zentrierung */
+.signup-header {
+    position: relative; /* Wichtig für die absolute Positionierung des Pfeils */
+    display: flex;
+    justify-content: center; /* Zentriert den H1 Titel */
+    align-items: center;
+    width: 100%;
+}
+
+.signup-header h1 {
+    margin: 0;
+    text-align: center;
+}
+
+/* Pfeil Container: Absolut links positionieren */
+.signup-header a {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%); /* Vertikal mittig zum Text */
+    display: flex; /* Entfernt extra spacing bei links */
+}
+
+/* Pfeil Icon Styling */
+.back-arrow-icon {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.back-arrow-icon:hover {
+    transform: scale(1.1);
+}
+
+/* --- INPUT ICONS --- */
+
+#name {
+    background-image: url('../assets/login-screen/person.svg');
+    background-repeat: no-repeat;
+    background-position: right 21px center;
+}
+
+#email {
+    background-image: url('../assets/login-screen/mail.svg');
+    /* Rest erbt von input aus style.css */
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input-wrapper input {
+    background-image: none !important; 
+    padding-right: 50px; 
+}
+
+.input-icon {
+    position: absolute;
+    right: 21px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+}
+
+/* --- PRIVACY & BUTTONS --- */
+
+.privacy-policy-check {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Zentriert alles horizontal */
+    gap: 12px; /* Etwas mehr Abstand zwischen Box und Text */
+    margin-top: 15px;
+    font-size: 16px;
+    color: #A8A8A8;
+    white-space: nowrap; /* Versucht alles in einer Zeile zu halten */
+}
+
+.privacy-policy-check a {
+    color: var(--light-blue);
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 4px;
+}
+
+.privacy-policy-check a:hover {
+    text-decoration: underline;
+}
+
+/* Checkbox Styling */
+.privacy-policy-check input[type="checkbox"] {
+    width: 16px;  /* Größer */
+    height: 16px; /* Größer */
+    cursor: pointer;
+    accent-color: var(--dark-blue); /* Färbt den Haken/Hintergrund bei Auswahl */
+    margin: 0;
+}
+
+/* Button Anpassungen */
+.center-button {
+    display: flex;
+    justify-content: center; /* Zentriert den Button Container */
+    margin-top: 25px; /* Etwas mehr Luft nach oben */
+}
+
+.btn-small {
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 10px;
+    flex: unset; 
+    width: auto;
+}
+
+button:disabled {
+    background-color: #A8A8A8;
+    cursor: not-allowed;
+    filter: none;
+}
+
+.error-text {
+    color: #FF8190;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}

@@ -1,0 +1,144 @@
+/* summary.css */
+
+:root {
+  --bg-color: #f6f7f8;
+  --sidebar-color: #2a3647;
+  --hover-color: #091931;
+  --light-blue: #29abe2;
+  --white: #ffffff;
+}
+
+/* Summary Layout */
+.summary-section {
+  padding: 40px;
+}
+
+.summary-title {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.vertical-line {
+  width: 3px;
+  height: 60px;
+  background-color: var(--light-blue);
+}
+
+.summary-title h1 {
+  font-size: 61px;
+  margin: 0;
+}
+
+.summary-container {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 160px);
+  grid-template-rows: 160px 160px;
+  gap: 20px;
+}
+
+.metric-card {
+  background: white;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card:hover {
+  background-color: var(--sidebar-color);
+  color: white;
+  transform: scale(1.05);
+}
+
+.metric-card b {
+  font-size: 48px;
+}
+
+/* Large Urgent Card */
+.card-large {
+  grid-column: span 3;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.urgent-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.deadline-info {
+  border-left: 2px solid #d1d1d1;
+  padding-left: 40px;
+}
+
+/* Greeting */
+.greeting-container h2 {
+  font-size: 47px;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.greeting-container h1 {
+  font-size: 64px;
+  color: var(--light-blue);
+  margin-top: 5px;
+}
+
+/* Responsive Design 320px+ */
+@media (max-width: 1000px) {
+  .summary-container {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  .greeting-container {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 800px) {
+  .sidebar {
+    width: 100%;
+    height: 80px;
+    flex-direction: row;
+    bottom: 0;
+    top: auto;
+    padding: 0;
+    z-index: 100;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding-bottom: 80px;
+  }
+
+  .nav-links {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card-large {
+    grid-column: span 2;
+  }
+}

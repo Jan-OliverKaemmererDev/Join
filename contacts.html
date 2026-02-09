@@ -1,11 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacts</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join - Contacts</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./styles/contacts.css" />
+    <link rel="stylesheet" href="./styles/board.css" />
+    <!-- Reusing board header/sidebar if needed -->
+    <!-- Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body onload="initContacts()">
+    <nav class="sidebar">
+      <img src="./assets/main-page/join-logo-white.svg" alt="Join Logo" />
+      <div class="nav-links">
+        <a href="summaryuser.html">
+          <img src="./assets/summary-page/summary-icon.svg" alt="" />
+          Summary
+        </a>
+        <a href="addtask.html">
+          <img src="./assets/summary-page/add-task-icon.svg" alt="" />
+          Add Task
+        </a>
+        <a href="board.html">
+          <img src="./assets/summary-page/board-icon.svg" alt="" />
+          Board
+        </a>
+        <a href="contacts.html" class="active">
+          <img src="./assets/summary-page/contacts-icon.svg" alt="" />
+          Contacts
+        </a>
+      </div>
+      <div class="legal-links">
+        <a href="privacypolicy.html">Privacy Policy</a>
+        <a href="legalnotice.html">Legal notice</a>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <header class="dashboard-header">
+        <span>Kanban Project Management Tool</span>
+        <div class="header-icons">
+          <a href="help.html" class="help-link">
+            <img src="./assets/summary-page/help.svg" alt="Help" />
+          </a>
+          <div class="user-initials" id="user-initials">G</div>
+        </div>
+      </header>
+
+      <div class="contacts-container">
+        <!-- Left Pane: List -->
+        <div class="contacts-list-container">
+          <div class="add-contact-btn-container">
+            <button class="btn-add-contact" onclick="openAddContactDialog()">
+              Add new contact
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M16 8V24"
+                  stroke="white"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M8 16H24"
+                  stroke="white"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div id="contacts-list" class="contacts-list-scroll">
+            <!-- Contacts will be rendered here -->
+          </div>
+        </div>
+
+        <!-- Right Pane: Details -->
+        <div class="contact-details-container">
+          <div class="details-header-static">
+            <h1>Contacts</h1>
+            <p>Better with a team</p>
+          </div>
+
+          <div id="contact-details-view" class="contact-details-view">
+            <!-- Contact Details injected here -->
+            <div id="contact-details-content"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Overlays and Dialogs to be implemented -->
+    <div id="add-contact-overlay" class="overlay-bg">
+      <!-- Dialog Content -->
+    </div>
+
+    <!-- Scripts -->
+    <script src="./scripts/auth.js"></script>
+    <script src="./scripts/side-menu.js"></script>
+    <script src="./scripts/contacts.js"></script>
+  </body>
 </html>

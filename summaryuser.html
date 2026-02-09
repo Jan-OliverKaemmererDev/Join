@@ -1,11 +1,114 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summary User</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./styles/summary.css" />
+    <title>Join - Summary</title>
+  </head>
+  <body onload="initSummaryUser()">
+    <nav class="sidebar">
+      <img src="./assets/main-page/join-logo-white.svg" alt="Join Logo" />
+      <div class="nav-links">
+        <a href="summaryuser.html" class="active">
+          <img src="./assets/summary-page/summary-icon.svg" alt="" />
+          Summary
+        </a>
+        <a href="addtask.html">
+          <img src="./assets/summary-page/add-task-icon.svg" alt="" />
+          Add Task
+        </a>
+        <a href="board.html">
+          <img src="./assets/summary-page/board-icon.svg" alt="" />
+          Board
+        </a>
+        <a href="contacts.html">
+          <img src="./assets/summary-page/contacts-icon.svg" alt="" />
+          Contacts
+        </a>
+      </div>
+      <div class="legal-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="legal.html">Legal notice</a>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <header class="dashboard-header">
+        <span>Kanban Project Management Tool</span>
+        <div class="header-icons">
+          <a href="help.html" class="help-link">
+            <img src="./assets/summary-page/help.svg" alt="Help" />
+          </a>
+          <div class="user-initials" id="user-initials">SM</div>
+        </div>
+      </header>
+
+      <section class="summary-section">
+        <div class="summary-title">
+          <h1>Join 360</h1>
+          <div class="vertical-line"></div>
+          <span>Key Metrics at a Glance</span>
+        </div>
+
+        <div class="summary-container">
+          <div class="metrics-grid">
+            <div class="metric-card card-small">
+              <div class="icon-circle dark">
+                <img src="./assets/img/edit-icon.png" />
+              </div>
+              <div>
+                <b id="count-todo">1</b>
+                <p>To-do</p>
+              </div>
+            </div>
+            <div class="metric-card card-small">
+              <div class="icon-circle dark">
+                <img src="./assets/img/check-icon.png" />
+              </div>
+              <div>
+                <b id="count-done">1</b>
+                <p>Done</p>
+              </div>
+            </div>
+            <div class="metric-card card-large">
+              <div class="urgent-info">
+                <img src="./assets/img/urgent-icon.png" />
+                <div>
+                  <b id="count-urgent">1</b>
+                  <p>Urgent</p>
+                </div>
+              </div>
+              <div class="deadline-info">
+                <b id="next-deadline">October 16, 2022</b>
+                <p>Upcoming Deadline</p>
+              </div>
+            </div>
+            <div class="metric-card card-square">
+              <b id="count-board">5</b>
+              <p>Tasks in Board</p>
+            </div>
+            <div class="metric-card card-square">
+              <b id="count-progress">2</b>
+              <p>Tasks In Progress</p>
+            </div>
+            <div class="metric-card card-square">
+              <b id="count-awaiting">2</b>
+              <p>Awaiting Feedback</p>
+            </div>
+          </div>
+
+          <div class="greeting-container">
+            <h2 id="greeting-text">Good morning,</h2>
+            <h1 id="user-name">Sofia Müller</h1>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="./scripts/auth.js"></script>
+    <script src="./script.js"></script>
+    <script src="./scripts/side-menu.js"></script>
+    <script src="./scripts/summaryuser.js"></script>
+  </body>
 </html>

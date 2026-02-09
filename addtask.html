@@ -1,11 +1,256 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Task</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./styles/addtask.css" />
+    <title>Join - Add Task</title>
+  </head>
+  <body onload="initAddTask()">
+    <nav class="sidebar">
+      <img src="./assets/main-page/join-logo-white.svg" alt="Join Logo" />
+      <div class="nav-links">
+        <a href="summaryuser.html">
+          <img src="./assets/summary-page/summary-icon.svg" alt="" />
+          Summary
+        </a>
+        <a href="addtask.html" class="active">
+          <img src="./assets/summary-page/add-task-icon.svg" alt="" />
+          Add Task
+        </a>
+        <a href="board.html">
+          <img src="./assets/summary-page/board-icon.svg" alt="" />
+          Board
+        </a>
+        <a href="contacts.html">
+          <img src="./assets/summary-page/contacts-icon.svg" alt="" />
+          Contacts
+        </a>
+      </div>
+      <div class="legal-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="legal.html">Legal notice</a>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <header class="dashboard-header">
+        <span>Kanban Project Management Tool</span>
+        <div class="header-icons">
+          <a href="help.html" class="help-link">
+            <img src="./assets/summary-page/help.svg" alt="Help" />
+          </a>
+          <div class="user-initials" id="user-initials">SM</div>
+        </div>
+      </header>
+
+      <section class="add-task-section">
+        <h1>Add Task</h1>
+
+        <form id="add-task-form" onsubmit="handleAddTask(event)">
+          <div class="form-container">
+            <!-- Left Column -->
+            <div class="form-column">
+              <div class="form-group">
+                <label for="title">Title<span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="title"
+                  placeholder="Enter a title"
+                  oninput="validateForm()"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                  id="description"
+                  placeholder="Enter a Description"
+                  rows="5"
+                  oninput="validateForm()"
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="due-date"
+                  >Due date<span class="required">*</span></label
+                >
+                <input
+                  type="date"
+                  id="due-date"
+                  placeholder="dd/mm/yyyy"
+                  oninput="validateForm()"
+                  required
+                />
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-column">
+              <div class="form-group">
+                <label>Priority</label>
+                <div class="priority-buttons">
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    data-priority="urgent"
+                    onclick="selectPriority('urgent')"
+                  >
+                    Urgent
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                    >
+                      <path d="M8 4L12 10H4L8 4Z" fill="currentColor" />
+                      <path d="M8 6L11 11H5L8 6Z" fill="currentColor" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="priority-btn active"
+                    data-priority="medium"
+                    onclick="selectPriority('medium')"
+                  >
+                    Medium
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                    >
+                      <rect
+                        x="2"
+                        y="7"
+                        width="12"
+                        height="2"
+                        fill="currentColor"
+                      />
+                      <rect
+                        x="2"
+                        y="10"
+                        width="12"
+                        height="2"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="priority-btn"
+                    data-priority="low"
+                    onclick="selectPriority('low')"
+                  >
+                    Low
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="currentColor"
+                    >
+                      <path d="M8 12L4 6H12L8 12Z" fill="currentColor" />
+                      <path d="M8 10L5 5H11L8 10Z" fill="currentColor" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="assigned-to">Assigned to</label>
+                <select id="assigned-to" oninput="validateForm()">
+                  <option value="">Select contacts to assign</option>
+                  <option value="user1">Sofia Müller</option>
+                  <option value="user2">Anton Mayer</option>
+                  <option value="user3">Anja Schulz</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="category"
+                  >Category<span class="required">*</span></label
+                >
+                <select id="category" oninput="validateForm()" required>
+                  <option value="">Select task category</option>
+                  <option value="technical">Technical Task</option>
+                  <option value="user-story">User Story</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Subtasks</label>
+                <div class="subtask-input-wrapper">
+                  <input
+                    type="text"
+                    id="subtask-input"
+                    placeholder="Add new subtask"
+                  />
+                  <button
+                    type="button"
+                    class="btn-add-subtask"
+                    onclick="addSubtask()"
+                  >
+                    +
+                  </button>
+                </div>
+                <ul id="subtask-list" class="subtask-list"></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <p class="required-note">
+              <span class="required">*</span>This field is required
+            </p>
+            <div class="form-actions">
+              <button type="button" class="btn-clear" onclick="clearForm()">
+                Clear
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M8 0L9.5 1.5L2.5 8.5L9.5 15.5L8 17L0 9L8 0Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M14 0L15.5 1.5L8.5 8.5L15.5 15.5L14 17L6 9L14 0Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+              <button
+                type="submit"
+                id="create-task-btn"
+                class="btn-create"
+                disabled
+              >
+                Create Task
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M6 0L14 8L6 16L4 14L10 8L4 2L6 0Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script src="./scripts/auth.js"></script>
+    <script src="./script.js"></script>
+    <script src="./scripts/side-menu.js"></script>
+    <script src="./scripts/addtask.js"></script>
+  </body>
 </html>
