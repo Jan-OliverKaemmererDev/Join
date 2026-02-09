@@ -1,5 +1,5 @@
 /**
- * utils.js
+ * toggle-menu.js
  * Shared utility functions used across multiple pages
  */
 
