@@ -29,8 +29,8 @@
         </a>
       </div>
       <div class="legal-links">
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="legal.html">Legal notice</a>
+        <a href="privacypolicy.html">Privacy Policy</a>
+        <a href="legalnotice.html">Legal notice</a>
       </div>
     </nav>
 
@@ -41,7 +41,20 @@
           <a href="help.html" class="help-link">
             <img src="./assets/summary-page/help.svg" alt="Help" />
           </a>
-          <div class="user-initials" id="user-initials">SM</div>
+          <div class="user-menu-container">
+            <div
+              class="user-initials"
+              id="user-initials"
+              onclick="toggleUserMenu()"
+            >
+              SM
+            </div>
+            <div class="user-dropdown" id="user-dropdown">
+              <a href="legalnotice.html">Legal Notice</a>
+              <a href="privacypolicy.html">Privacy Policy</a>
+              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -56,7 +69,7 @@
           <div class="metrics-grid">
             <div class="metric-card card-small">
               <div class="icon-circle dark">
-                <img src="./assets/img/edit-icon.png" />
+                <img src="./assets/img/edit-icon.png" alt="To-do icon" />
               </div>
               <div>
                 <b id="count-todo">1</b>
@@ -65,7 +78,7 @@
             </div>
             <div class="metric-card card-small">
               <div class="icon-circle dark">
-                <img src="./assets/img/check-icon.png" />
+                <img src="./assets/img/check-icon.png" alt="Done icon" />
               </div>
               <div>
                 <b id="count-done">1</b>
@@ -74,7 +87,7 @@
             </div>
             <div class="metric-card card-large">
               <div class="urgent-info">
-                <img src="./assets/img/urgent-icon.png" />
+                <img src="./assets/img/urgent-icon.png" alt="Urgent icon" />
                 <div>
                   <b id="count-urgent">1</b>
                   <p>Urgent</p>
@@ -107,8 +120,10 @@
       </section>
     </main>
     <script src="./scripts/auth.js"></script>
+    <script src="./scripts/utils.js"></script>
     <script src="./script.js"></script>
     <script src="./scripts/side-menu.js"></script>
+    <script src="./scripts/user-menu.js"></script>
     <script src="./scripts/summaryuser.js"></script>
   </body>
 </html>

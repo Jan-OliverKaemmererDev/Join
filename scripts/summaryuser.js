@@ -11,8 +11,8 @@ function initSummaryUser() {
   // Load current user data
   const currentUser = getCurrentUser();
 
-  if (!currentUser || currentUser.isGuest) {
-    // If no user or guest user, redirect to login
+  if (!currentUser) {
+    // If no user, redirect to login
     window.location.href = "index.html";
     return;
   }
@@ -162,10 +162,10 @@ function calculateTaskMetrics(tasks) {
       case "done":
         metrics.done++;
         break;
-      case "in-progress":
+      case "inprogress":
         metrics.progress++;
         break;
-      case "awaiting":
+      case "awaitfeedback":
         metrics.awaiting++;
         break;
     }
@@ -176,10 +176,10 @@ function calculateTaskMetrics(tasks) {
     }
 
     // Track nearest deadline
-    if (task.deadline) {
-      const taskDate = new Date(task.deadline);
+    if (task.dueDate) {
+      const taskDate = new Date(task.dueDate);
       if (!nearestDeadline || taskDate < new Date(nearestDeadline)) {
-        nearestDeadline = task.deadline;
+        nearestDeadline = task.dueDate;
       }
     }
   });

@@ -29,8 +29,8 @@
         </a>
       </div>
       <div class="legal-links">
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="legal.html">Legal notice</a>
+        <a href="privacypolicy.html">Privacy Policy</a>
+        <a href="legalnotice.html">Legal notice</a>
       </div>
     </nav>
 
@@ -38,7 +38,20 @@
       <header class="dashboard-header">
         <span>Kanban Project Management Tool</span>
         <div class="header-icons">
-          <div class="user-initials" id="user-initials">SM</div>
+          <div class="user-menu-container">
+            <div
+              class="user-initials"
+              id="user-initials"
+              onclick="toggleUserMenu()"
+            >
+              SM
+            </div>
+            <div class="user-dropdown" id="user-dropdown">
+              <a href="legalnotice.html">Legal Notice</a>
+              <a href="privacypolicy.html">Privacy Policy</a>
+              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -151,8 +164,10 @@
     </main>
 
     <script src="./scripts/auth.js"></script>
+    <script src="./scripts/utils.js"></script>
     <script src="./script.js"></script>
     <script src="./scripts/side-menu.js"></script>
+    <script src="./scripts/user-menu.js"></script>
     <script src="./scripts/help.js"></script>
   </body>
 </html>

@@ -94,7 +94,7 @@ function initSummary() {
   // Benutzerdaten aus Local Storage laden
   const currentUser = getCurrentUser();
 
-  if (currentUser && !currentUser.isGuest) {
+  if (currentUser) {
     displayUserInitials(currentUser.name);
   } else {
     // Falls kein Benutzer eingeloggt ist, zurück zum Login

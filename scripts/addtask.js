@@ -13,7 +13,7 @@ function initAddTask() {
   // Load current user and update UI
   const currentUser = getCurrentUser();
 
-  if (!currentUser || currentUser.isGuest) {
+  if (!currentUser) {
     // Redirect to login if no user
     window.location.href = "index.html";
     return;
@@ -153,7 +153,7 @@ function handleAddTask(event) {
 
   // Get current user
   const currentUser = getCurrentUser();
-  if (!currentUser || currentUser.isGuest) {
+  if (!currentUser) {
     alert("Please log in to create tasks");
     return;
   }

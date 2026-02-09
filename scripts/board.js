@@ -27,12 +27,12 @@ function initBoard() {
  */
 function checkUser() {
   const currentUser = getCurrentUser();
-  if (!currentUser || currentUser.isGuest) {
-    // Allow guest for demo, or redirect?
-    // For now, let's assume we proceed. user-initials logic in addtask.js handles it.
-    // But we should update the header initials
+  if (!currentUser) {
+    // Redirect to login if no user
+    window.location.href = "index.html";
+    return;
   }
-  if (currentUser && document.getElementById("user-initials")) {
+  if (document.getElementById("user-initials")) {
     updateHeaderInitials(currentUser);
   }
 }

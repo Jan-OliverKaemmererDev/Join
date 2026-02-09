@@ -13,6 +13,7 @@ const STORAGE_KEYS = {
 };
 
 const GUEST_USER = {
+  id: "guest",
   name: "Gast",
   email: "guest@join.com",
   isGuest: true,

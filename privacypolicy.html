@@ -14,12 +14,6 @@
       <!-- Container for dynamic navigation content -->
       <div
         id="nav-content"
-        style="
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-        "
       >
         <!-- Default: Full Navigation (will be hidden if logged out) -->
         <div class="nav-links">
@@ -43,11 +37,10 @@
         <div class="legal-links">
           <a
             href="privacypolicy.html"
-            class="active"
-            style="font-weight: 700; color: #29abe2"
+            class="active privacy-policy-link"
             >Privacy Policy</a
           >
-          <a href="legal.html">Legal notice</a>
+          <a href="legalnotice.html">Legal notice</a>
         </div>
       </div>
     </nav>
@@ -59,7 +52,20 @@
           <a href="help.html" class="help-link">
             <img src="./assets/summary-page/help.svg" alt="Help" />
           </a>
-          <div class="user-initials" id="user-initials">G</div>
+          <div class="user-menu-container">
+            <div
+              class="user-initials"
+              id="user-initials"
+              onclick="toggleUserMenu()"
+            >
+              G
+            </div>
+            <div class="user-dropdown" id="user-dropdown">
+              <a href="legalnotice.html">Legal Notice</a>
+              <a href="privacypolicy.html">Privacy Policy</a>
+              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -131,5 +137,8 @@
         }
       }
     </script>
+    <script src="./scripts/auth.js"></script>
+    <script src="./scripts/utils.js"></script>
+    <script src="./scripts/user-menu.js"></script>
   </body>
 </html>

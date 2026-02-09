@@ -31,8 +31,8 @@
         </a>
       </div>
       <div class="legal-links">
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="legal.html">Legal notice</a>
+        <a href="privacypolicy.html">Privacy Policy</a>
+        <a href="legalnotice.html">Legal notice</a>
       </div>
     </nav>
 
@@ -43,7 +43,20 @@
           <a href="help.html" class="help-link">
             <img src="./assets/summary-page/help.svg" alt="Help" />
           </a>
-          <div class="user-initials" id="user-initials">G</div>
+          <div class="user-menu-container">
+            <div
+              class="user-initials"
+              id="user-initials"
+              onclick="toggleUserMenu()"
+            >
+              G
+            </div>
+            <div class="user-dropdown" id="user-dropdown">
+              <a href="legalnotice.html">Legal Notice</a>
+              <a href="privacypolicy.html">Privacy Policy</a>
+              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -193,15 +206,10 @@
         class="overlay-content add-task-overlay-card"
         onclick="event.stopPropagation()"
       >
-        <div style="display: flex; justify-content: flex-end">
+        <div class="overlay-close-container">
           <button
             onclick="closeAddTaskOverlay()"
-            style="
-              border: none;
-              background: none;
-              font-size: 24px;
-              cursor: pointer;
-            "
+            class="overlay-close-button"
           >
             &times;
           </button>
@@ -209,7 +217,7 @@
         <!-- Reuse existing Add Task form structure by including it or just recreating it.
                   If include is not possible (static HTML), we need to copy it. 
                   Since we linked addtask.css, we can use the same classes. -->
-        <h1 style="font-size: 61px; font-weight: 700; margin-bottom: 40px">
+        <h1 class="add-task-title">
           Add Task
         </h1>
 
@@ -369,6 +377,9 @@
     </div>
 
     <script src="./scripts/auth.js"></script>
+    <script src="./scripts/utils.js"></script>
+    <script src="./script.js"></script>
+    <script src="./scripts/user-menu.js"></script>
     <script src="./scripts/addtask.js"></script>
     <!-- Reusing logic for add task form -->
     <script src="./scripts/board.js"></script>
