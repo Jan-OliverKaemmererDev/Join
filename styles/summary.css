@@ -122,6 +122,10 @@
     z-index: 100;
   }
 
+  .sidebar > img {
+    display: none;
+  }
+
   .main-content {
     margin-left: 0;
     width: 100%;
@@ -132,6 +136,23 @@
     flex-direction: row;
     width: 100%;
     justify-content: space-around;
+    gap: 0;
+  }
+
+  .nav-links a {
+    flex-direction: column;
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .nav-links a img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .legal-links {
+    display: none;
   }
 
   .metrics-grid {
