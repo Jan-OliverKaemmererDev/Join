@@ -1,6 +1,14 @@
+/**
+ * Initialisiert die Login-Seite
+ */
 function initLogin() {
 }
 
+
+/**
+ * Verarbeitet den Login-Vorgang
+ * @param {Event} event - Das Submit-Event des Login-Formulars
+ */
 function handleLogin(event) {
   event.preventDefault();
   const email = document.getElementById("email").value;
@@ -14,6 +22,10 @@ function handleLogin(event) {
   }
 }
 
+
+/**
+ * Führt einen Gast-Login durch
+ */
 function guestLogin() {
   const result = guestLoginUser();
   if (result.success) {
@@ -24,6 +36,11 @@ function guestLogin() {
   }
 }
 
+
+/**
+ * Zeigt eine Login-Fehlermeldung an
+ * @param {string} message - Die anzuzeigende Fehlermeldung
+ */
 function showLoginError(message) {
   let errorMsg = document.getElementById("login-error");
   if (!errorMsg) {
@@ -43,6 +60,12 @@ function showLoginError(message) {
   }, 5000);
 }
 
+
+/**
+ * Schaltet die Sichtbarkeit des Passworts um
+ * @param {string} inputId - Die ID des Passwort-Input-Feldes
+ * @param {HTMLElement} iconElement - Das Icon-Element für die Sichtbarkeit
+ */
 function togglePasswordVisibility(inputId, iconElement) {
   const input = document.getElementById(inputId);
   if (input.type === "password") {
@@ -54,6 +77,10 @@ function togglePasswordVisibility(inputId, iconElement) {
   }
 }
 
+
+/**
+ * Initialisiert die Summary-Seite für angemeldete Benutzer
+ */
 function initSummary() {
   initSideMenu("summary");
   const currentUser = getCurrentUser();
@@ -64,6 +91,10 @@ function initSummary() {
   }
 }
 
+
+/**
+ * Initialisiert die Summary-Seite für Gast-Benutzer
+ */
 function initSummaryGuest() {
   initSideMenu("summary");
   displayGuestInitials();

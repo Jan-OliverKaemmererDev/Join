@@ -1,3 +1,6 @@
+/**
+ * Initialisiert die Help-Seite und zeigt die Benutzer-Initialen an
+ */
 function initHelp() {
   const currentUser = getCurrentUser();
   if (currentUser) {
@@ -8,6 +11,11 @@ function initHelp() {
   }
 }
 
+
+/**
+ * Aktualisiert die Benutzer-Initialen im Header
+ * @param {Object} user - Das Benutzer-Objekt mit name-Eigenschaft
+ */
 function updateHeaderInitials(user) {
   const initialsElement = document.getElementById("user-initials");
   if (initialsElement) {
@@ -16,6 +24,12 @@ function updateHeaderInitials(user) {
   }
 }
 
+
+/**
+ * Generiert Initialen aus einem Namen
+ * @param {string} name - Der vollständige Name des Benutzers
+ * @returns {string} Die generierten Initialen
+ */
 function getInitialsFromName(name) {
   const parts = name.trim().split(" ");
   if (parts.length === 1) {

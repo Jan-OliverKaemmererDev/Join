@@ -1,3 +1,8 @@
+/**
+ * Generiert das HTML-Template für ein Subtask-Element
+ * @param {Object} subtask - Das Subtask-Objekt mit id und text
+ * @returns {string} Das HTML-Template für das Subtask-Element
+ */
 function getSubtaskItemTemplate(subtask) {
   return `
     <li class="subtask-item">
@@ -7,6 +12,12 @@ function getSubtaskItemTemplate(subtask) {
   `;
 }
 
+
+/**
+ * Generiert das HTML-Template für eine Toast-Nachricht
+ * @param {string} message - Die anzuzeigende Nachricht
+ * @returns {string} Das HTML-Template für die Toast-Nachricht
+ */
 function getToastTemplate(message) {
   return `
     <span>${message}</span>

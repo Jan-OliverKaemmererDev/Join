@@ -11,6 +11,10 @@ const GUEST_USER = {
   isGuest: true,
 };
 
+
+/**
+ * Initialisiert das Authentifizierungssystem
+ */
 function initAuth() {
   if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
@@ -21,15 +25,32 @@ function initAuth() {
   }
 }
 
+
+/**
+ * Ruft alle registrierten Benutzer ab
+ * @returns {Array} Array mit allen Benutzern
+ */
 function getUsers() {
   const usersJson = localStorage.getItem(STORAGE_KEYS.USERS);
   return usersJson ? JSON.parse(usersJson) : [];
 }
 
+
+/**
+ * Speichert Benutzer im LocalStorage
+ * @param {Array} users - Array mit Benutzern
+ */
 function saveUsers(users) {
   localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
 }
 
+
+/**
+ * Prüft ob eine E-Mail bereits existiert
+ * @param {Array} users - Array mit Benutzern
+ * @param {string} email - Die zu prüfende E-Mail-Adresse
+ * @returns {boolean} True wenn E-Mail existiert
+ */
 function emailExists(users, email) {
   for (let i = 0; i < users.length; i++) {
     if (users[i].email.toLowerCase() === email.toLowerCase()) {
@@ -39,6 +60,14 @@ function emailExists(users, email) {
   return false;
 }
 
+
+/**
+ * Registriert einen neuen Benutzer
+ * @param {string} name - Der Name des Benutzers
+ * @param {string} email - Die E-Mail-Adresse
+ * @param {string} password - Das Passwort
+ * @returns {Object} Ergebnis-Objekt mit success und message
+ */
 function signUpUser(name, email, password) {
   try {
     const users = getUsers();
@@ -63,6 +92,14 @@ function signUpUser(name, email, password) {
   }
 }
 
+
+/**
+ * Erstellt ein neues Benutzer-Objekt
+ * @param {string} name - Der Name des Benutzers
+ * @param {string} email - Die E-Mail-Adresse
+ * @param {string} password - Das Passwort
+ * @returns {Object} Das neue Benutzer-Objekt
+ */
 function createNewUser(name, email, password) {
   return {
     id: Date.now().toString(),
@@ -74,10 +111,24 @@ function createNewUser(name, email, password) {
   };
 }
 
+
+/**
+ * Erstellt ein Fehler-Ergebnis-Objekt
+ * @param {string} error - Der Fehlertyp
+ * @param {string} message - Die Fehlermeldung
+ * @returns {Object} Das Fehler-Objekt
+ */
 function createErrorResult(error, message) {
   return { success: false, error: error, message: message };
 }
 
+
+/**
+ * Sucht einen Benutzer anhand der E-Mail-Adresse
+ * @param {Array} users - Array mit Benutzern
+ * @param {string} email - Die gesuchte E-Mail-Adresse
+ * @returns {Object|null} Der gefundene Benutzer oder null
+ */
 function findUserByEmail(users, email) {
   for (let i = 0; i < users.length; i++) {
     if (users[i].email.toLowerCase() === email.toLowerCase()) {
@@ -87,6 +138,13 @@ function findUserByEmail(users, email) {
   return null;
 }
 
+
+/**
+ * Meldet einen Benutzer an
+ * @param {string} email - Die E-Mail-Adresse
+ * @param {string} password - Das Passwort
+ * @returns {Object} Ergebnis-Objekt mit success und user
+ */
 function loginUser(email, password) {
   try {
     const users = getUsers();
@@ -107,6 +165,12 @@ function loginUser(email, password) {
   }
 }
 
+
+/**
+ * Erstellt ein Session-User-Objekt ohne sensible Daten
+ * @param {Object} user - Das vollständige Benutzer-Objekt
+ * @returns {Object} Das Session-User-Objekt
+ */
 function createSessionUser(user) {
   return {
     id: user.id,
@@ -116,6 +180,11 @@ function createSessionUser(user) {
   };
 }
 
+
+/**
+ * Meldet einen Gast-Benutzer an
+ * @returns {Object} Ergebnis-Objekt mit success und user
+ */
 function guestLoginUser() {
   try {
     localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(GUEST_USER));
@@ -127,18 +196,33 @@ function guestLoginUser() {
   }
 }
 
+
+/**
+ * Ruft den aktuell angemeldeten Benutzer ab
+ * @returns {Object|null} Der aktuelle Benutzer oder null
+ */
 function getCurrentUser() {
   const userJson = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
   return userJson ? JSON.parse(userJson) : null;
 }
 
+
+/**
+ * Meldet den aktuellen Benutzer ab
+ */
 function logoutUser() {
   localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
   console.log("User logged out");
 }
 
+
+/**
+ * Prüft ob ein Benutzer angemeldet ist
+ * @returns {boolean} True wenn ein Benutzer angemeldet ist
+ */
 function isLoggedIn() {
   return getCurrentUser() !== null;
 }
+
 
 initAuth();

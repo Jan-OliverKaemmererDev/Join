@@ -1,3 +1,8 @@
+/**
+ * Generiert das HTML-Template für ein Contact-Listen-Element
+ * @param {Object} contact - Das Contact-Objekt mit allen Eigenschaften
+ * @returns {string} Das HTML-Template für das Contact-Element
+ */
 function getContactItemTemplate(contact) {
   return `
     <div class="contact-item" onclick="showContactDetails(${contact.id})" data-id="${contact.id}">
@@ -12,6 +17,12 @@ function getContactItemTemplate(contact) {
   `;
 }
 
+
+/**
+ * Generiert das HTML-Template für die Contact-Detailansicht
+ * @param {Object} contact - Das Contact-Objekt mit allen Eigenschaften
+ * @returns {string} Das HTML-Template für die Contact-Details
+ */
 function getContactDetailsTemplate(contact) {
   return `
     <div class="contact-header-details">
@@ -48,6 +59,11 @@ function getContactDetailsTemplate(contact) {
   `;
 }
 
+
+/**
+ * Generiert das HTML-Template für den Add-Contact-Dialog
+ * @returns {string} Das HTML-Template für den Add-Contact-Dialog
+ */
 function getAddContactDialogTemplate() {
   return `
     <div class="slide-in-dialog" onclick="event.stopPropagation()">
@@ -93,6 +109,12 @@ function getAddContactDialogTemplate() {
   `;
 }
 
+
+/**
+ * Generiert das HTML-Template für den Edit-Contact-Dialog
+ * @param {Object} contact - Das Contact-Objekt mit allen Eigenschaften
+ * @returns {string} Das HTML-Template für den Edit-Contact-Dialog
+ */
 function getEditContactDialogTemplate(contact) {
   return `
     <div class="slide-in-dialog active" onclick="event.stopPropagation()">
@@ -133,10 +155,21 @@ function getEditContactDialogTemplate(contact) {
   `;
 }
 
+
+/**
+ * Generiert das HTML-Template für einen Contact-Gruppen-Buchstaben
+ * @param {string} letter - Der anzuzeigende Buchstabe
+ * @returns {string} Das HTML-Template für den Gruppen-Buchstaben
+ */
 function getContactGroupLetterTemplate(letter) {
   return `<div class="contact-group-letter">${letter}</div>`;
 }
 
+
+/**
+ * Generiert das HTML-Template für eine Trennlinie
+ * @returns {string} Das HTML-Template für die Trennlinie
+ */
 function getSeparatorLineTemplate() {
   return `<div class="separator-line" style="border-bottom: 1px solid #D1D1D1; margin: 0 35px 0 35px; display: none;"></div>`;
 }

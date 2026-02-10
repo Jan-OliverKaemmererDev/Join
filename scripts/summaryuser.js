@@ -1,3 +1,6 @@
+/**
+ * Initialisiert die Summary-Seite für angemeldete Benutzer
+ */
 function initSummaryUser() {
   const currentUser = getCurrentUser();
   if (!currentUser) {
@@ -10,6 +13,11 @@ function initSummaryUser() {
   updateTaskMetrics(currentUser);
 }
 
+
+/**
+ * Aktualisiert den Benutzernamen auf der Seite
+ * @param {Object} user - Das Benutzer-Objekt
+ */
 function updateUserName(user) {
   const userNameElement = document.getElementById("user-name");
   if (userNameElement) {
@@ -17,6 +25,11 @@ function updateUserName(user) {
   }
 }
 
+
+/**
+ * Aktualisiert die Benutzer-Initialen im Header
+ * @param {Object} user - Das Benutzer-Objekt
+ */
 function updateUserInitials(user) {
   const initialsElement = document.getElementById("user-initials");
   if (initialsElement) {
@@ -25,6 +38,12 @@ function updateUserInitials(user) {
   }
 }
 
+
+/**
+ * Generiert Initialen aus einem Namen
+ * @param {string} name - Der vollständige Name
+ * @returns {string} Die generierten Initialen
+ */
 function getInitials(name) {
   const parts = name.trim().split(" ");
   if (parts.length === 1) {
@@ -36,6 +55,10 @@ function getInitials(name) {
   }
 }
 
+
+/**
+ * Aktualisiert die Begrüßungsnachricht basierend auf der Tageszeit
+ */
 function updateGreeting() {
   const hour = new Date().getHours();
   let greeting = "Good evening,";
@@ -50,6 +73,11 @@ function updateGreeting() {
   }
 }
 
+
+/**
+ * Aktualisiert die Task-Metriken auf der Summary-Seite
+ * @param {Object} user - Das Benutzer-Objekt
+ */
 function updateTaskMetrics(user) {
   const userTasks = getUserTasks(user.id);
   const metrics = calculateTaskMetrics(userTasks);
@@ -67,6 +95,12 @@ function updateTaskMetrics(user) {
   }
 }
 
+
+/**
+ * Ruft die Tasks eines Benutzers ab
+ * @param {string} userId - Die ID des Benutzers
+ * @returns {Array} Array mit den Tasks des Benutzers
+ */
 function getUserTasks(userId) {
   const tasksKey = "join_tasks_" + userId;
   const tasksJson = localStorage.getItem(tasksKey);
@@ -76,6 +110,12 @@ function getUserTasks(userId) {
   return [];
 }
 
+
+/**
+ * Berechnet die Task-Metriken aus einem Task-Array
+ * @param {Array} tasks - Array mit Tasks
+ * @returns {Object} Objekt mit berechneten Metriken
+ */
 function calculateTaskMetrics(tasks) {
   const metrics = {
     todo: 0,
@@ -103,6 +143,12 @@ function calculateTaskMetrics(tasks) {
   return metrics;
 }
 
+
+/**
+ * Verarbeitet den Status eines Tasks und aktualisiert die Metriken
+ * @param {Object} task - Das Task-Objekt
+ * @param {Object} metrics - Das Metriken-Objekt
+ */
 function processTaskStatus(task, metrics) {
   switch (task.status) {
     case "todo":
@@ -120,12 +166,25 @@ function processTaskStatus(task, metrics) {
   }
 }
 
+
+/**
+ * Zählt dringende Tasks in den Metriken
+ * @param {Object} task - Das Task-Objekt
+ * @param {Object} metrics - Das Metriken-Objekt
+ */
 function countUrgentTasks(task, metrics) {
   if (task.priority === "urgent") {
     metrics.urgent++;
   }
 }
 
+
+/**
+ * Verfolgt die nächste Deadline
+ * @param {Object} task - Das Task-Objekt
+ * @param {string|null} nearestDeadline - Die aktuell nächste Deadline
+ * @returns {string|null} Die aktualisierte nächste Deadline
+ */
 function trackNearestDeadline(task, nearestDeadline) {
   if (task.dueDate) {
     const taskDate = new Date(task.dueDate);
@@ -136,12 +195,22 @@ function trackNearestDeadline(task, nearestDeadline) {
   return nearestDeadline;
 }
 
+
+/**
+ * Formatiert eine Deadline für die Anzeige
+ * @param {string} deadline - Die Deadline als String
+ * @returns {string} Die formatierte Deadline
+ */
 function formatDeadline(deadline) {
   const date = new Date(deadline);
   const options = { year: "numeric", month: "long", day: "numeric" };
   return date.toLocaleDateString("en-US", options);
 }
 
+
+/**
+ * Meldet den Benutzer ab und leitet zur Login-Seite
+ */
 function logoutFromSummary() {
   logoutUser();
   window.location.href = "index.html";

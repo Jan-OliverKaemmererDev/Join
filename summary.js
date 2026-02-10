@@ -1,8 +1,15 @@
+/**
+ * Initialisiert die Summary-Seite
+ */
 function initSummary() {
     updateGreeting();
     renderTaskMetrics();
 }
 
+
+/**
+ * Aktualisiert die Begrüßungsnachricht basierend auf der Tageszeit
+ */
 function updateGreeting() {
     const hour = new Date().getHours();
     let greeting = "Good evening,";
@@ -14,6 +21,10 @@ function updateGreeting() {
     document.getElementById('greeting-text').innerText = greeting;
 }
 
+
+/**
+ * Rendert die Task-Metriken auf der Seite
+ */
 function renderTaskMetrics() {
     document.getElementById('count-todo').innerText = "1";
     document.getElementById('count-done').innerText = "1";

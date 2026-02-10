@@ -1,3 +1,8 @@
+/**
+ * Generiert Initialen aus einem Namen
+ * @param {string} name - Der vollständige Name
+ * @returns {string} Die generierten Initialen
+ */
 function getInitialsFromName(name) {
   if (!name) return "?";
   const parts = name.trim().split(" ");
@@ -10,6 +15,11 @@ function getInitialsFromName(name) {
   }
 }
 
+
+/**
+ * Aktualisiert die Benutzer-Initialen im Header
+ * @param {Object} user - Das Benutzer-Objekt mit name-Eigenschaft
+ */
 function updateHeaderInitials(user) {
   const initialsElement = document.getElementById("user-initials");
   if (initialsElement && user) {
@@ -18,6 +28,11 @@ function updateHeaderInitials(user) {
   }
 }
 
+
+/**
+ * Zeigt die Benutzer-Initialen an
+ * @param {string} name - Der Benutzername
+ */
 function displayUserInitials(name) {
   const initialsElement = document.getElementById("user-initials");
   if (initialsElement && name) {
@@ -26,6 +41,10 @@ function displayUserInitials(name) {
   }
 }
 
+
+/**
+ * Zeigt die Gast-Initialen an
+ */
 function displayGuestInitials() {
   const initialsElement = document.getElementById("user-initials");
   if (initialsElement) {
@@ -33,6 +52,11 @@ function displayGuestInitials() {
   }
 }
 
+
+/**
+ * Initialisiert das Seitenmenü
+ * @param {string} page - Die aktuelle Seite
+ */
 function initSideMenu(page) {
   console.log("Side menu initialized for page:", page);
 }
