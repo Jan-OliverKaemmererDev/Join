@@ -227,7 +227,8 @@ button:hover {
 
 .login-footer a:hover {
   color: var(--light-blue);
-  font-weight: 700;
+  text-shadow: 0 0 0.5px var(--light-blue);
+  /* font-weight: 700; */
 }
 
 @media (max-width: 480px) {
