@@ -215,16 +215,10 @@
             &times;
           </button>
         </div>
-                  If include is not possible (static HTML), we need to copy it. 
-                  Since we linked addtask.css, we can use the same classes. -->
+
         <h1 class="add-task-title">
           Add Task
         </h1>
-
-                  For robustness given the instructions, I will replicate the form but ensure IDs are unique or handled if necessary.
-                  Since we are in a different file/context, IDs like 'title' might conflict if we were SPA, but here it's separate unless we load scripts that look for them.
-                  scripts/addtask.js looks for 'title', 'description' etc. So we should match those IDs if we want to reuse the script logic, OR maintain separate logic.
-                  Reusing the script logic is smart. -->
 
         <form id="add-task-form" onsubmit="handleAddTask(event)">
           <div class="form-container">
