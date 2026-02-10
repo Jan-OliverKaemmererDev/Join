@@ -1,4 +1,4 @@
-/* summary.css */
+
 
 :root {
   --bg-color: #f6f7f8;
@@ -8,7 +8,7 @@
   --white: #ffffff;
 }
 
-/* Summary Layout */
+
 .summary-section {
   padding: 40px;
 }
@@ -37,7 +37,7 @@
   align-items: center;
 }
 
-/* Metrics Grid */
+
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(3, 170px);
@@ -72,7 +72,7 @@
   margin: 5px 0 0 0;
 }
 
-/* Icon Circles */
+
 .icon-circle {
   width: 60px;
   height: 60px;
@@ -90,7 +90,7 @@
   object-fit: contain;
 }
 
-/* Small Cards */
+
 .card-small {
   flex-direction: row;
   gap: 20px;
@@ -124,7 +124,7 @@
   white-space: nowrap;
 }
 
-/* Square Cards */
+
 .card-square {
   gap: 15px;
   padding: 20px 10px;
@@ -140,7 +140,7 @@
   margin: 0;
 }
 
-/* Large Urgent Card */
+
 .card-large {
   grid-column: span 3;
   flex-direction: row;
@@ -183,7 +183,7 @@
   margin: 5px 0 0 0;
 }
 
-/* Greeting */
+
 .greeting-container h2 {
   font-size: 47px;
   font-weight: 400;
@@ -196,7 +196,7 @@
   margin-top: 5px;
 }
 
-/* Responsive Design 320px+ */
+
 @media (max-width: 1000px) {
   .summary-container {
     flex-direction: column-reverse;

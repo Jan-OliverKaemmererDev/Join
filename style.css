@@ -1,4 +1,4 @@
-/* Globale Variablen & Reset */
+
 :root {
   --dark-blue: #2a3647;
   --light-blue: #29abe2;
@@ -14,7 +14,7 @@ body {
   background-color: var(--bg-color);
 }
 
-/* --- SPLASH ANIMATION (Index Only) --- */
+
 .animation-container {
   position: fixed;
   top: 0;
@@ -61,7 +61,7 @@ body {
   }
 }
 
-/* --- LAYOUT BASIS (Login & Signup Container) --- */
+
 .login-header {
   display: flex;
   justify-content: flex-end;
@@ -80,7 +80,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 200px); /* Header + Footer Platz */
+  height: calc(100vh - 200px); 
 }
 
 .login-card {
@@ -108,7 +108,7 @@ body {
   margin: 15px 0 35px 0;
 }
 
-/* --- FORMULAR ELEMENTE (Global) --- */
+
 form {
   display: flex;
   flex-direction: column;
@@ -120,7 +120,7 @@ input {
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   padding: 12px 21px;
-  padding-right: 50px; /* Platz für Icons */
+  padding-right: 50px; 
   font-size: 20px;
   outline: none;
   width: 100%;
@@ -133,7 +133,7 @@ input:focus {
   border: 1px solid var(--light-blue);
 }
 
-/* Standard Icons für Login (werden in Signup teilweise überschrieben) */
+
 #email {
   background-image: url("./assets/login-screen/mail.svg");
   background-repeat: no-repeat;
@@ -146,7 +146,7 @@ input:focus {
   background-position: right 21px center;
 }
 
-/* --- BUTTONS --- */
+
 button {
   cursor: pointer;
   border: unset;
@@ -191,7 +191,7 @@ button:hover {
   flex: 1;
 }
 
-/* --- TOAST MESSAGE --- */
+
 .toast-message {
   position: fixed;
   bottom: -100px;
@@ -214,7 +214,7 @@ button:hover {
   display: none;
 }
 
-/* --- FOOTER (Privacy & Legal) --- */
+
 .login-footer {
   position: fixed;
   bottom: 32px;
@@ -238,7 +238,7 @@ button:hover {
   font-weight: 700;
 }
 
-/* --- RESPONSIVENESS (Global) --- */
+
 @media (max-width: 480px) {
   .login-card {
     padding: 30px 20px;
@@ -255,7 +255,7 @@ button:hover {
   }
 }
 
-/* --- SIDEBAR NAVIGATION (Shared) --- */
+
 .sidebar {
   height: 100vh;
   width: 232px;
@@ -325,7 +325,7 @@ button:hover {
   font-weight: 700;
 }
 
-/* --- MAIN CONTENT & HEADER --- */
+
 .main-content {
   margin-left: 232px;
   width: calc(100% - 232px);
@@ -372,12 +372,12 @@ button:hover {
   background-color: rgba(42, 54, 71, 0.1);
 }
 
-/* User Menu Container */
+
 .user-menu-container {
   position: relative;
 }
 
-/* User Dropdown Menu */
+
 .user-dropdown {
   position: absolute;
   top: 60px;

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="./styles/board.css" />
     <link rel="stylesheet" href="./styles/addtask.css" />
-    <!-- Reusing form styles for overlay -->
+    
     <title>Join - Board</title>
   </head>
   <body onload="initBoard()">
@@ -62,7 +62,7 @@
       </header>
 
       <section class="board-container">
-        <!-- Board Header -->
+        
         <div class="board-header">
           <h1>Board</h1>
           <div class="board-actions">
@@ -94,7 +94,7 @@
           </div>
         </div>
 
-        <!-- Board Columns -->
+        
         <div class="board-columns">
           <div
             class="board-column"
@@ -119,7 +119,7 @@
               </div>
             </div>
             <div class="task-list" id="todo-list">
-              <!-- Tasks will be rendered here -->
+              
             </div>
           </div>
 
@@ -201,7 +201,7 @@
       </section>
     </main>
 
-    <!-- Add Task Overlay -->
+    
     <div class="overlay-container" id="add-task-overlay">
       <div
         class="overlay-content add-task-overlay-card"
@@ -215,14 +215,12 @@
             &times;
           </button>
         </div>
-        <!-- Reuse existing Add Task form structure by including it or just recreating it.
                   If include is not possible (static HTML), we need to copy it. 
                   Since we linked addtask.css, we can use the same classes. -->
         <h1 class="add-task-title">
           Add Task
         </h1>
 
-        <!-- We can try to load content dynamically or just replicate the form here. 
                   For robustness given the instructions, I will replicate the form but ensure IDs are unique or handled if necessary.
                   Since we are in a different file/context, IDs like 'title' might conflict if we were SPA, but here it's separate unless we load scripts that look for them.
                   scripts/addtask.js looks for 'title', 'description' etc. So we should match those IDs if we want to reuse the script logic, OR maintain separate logic.
@@ -230,7 +228,7 @@
 
         <form id="add-task-form" onsubmit="handleAddTask(event)">
           <div class="form-container">
-            <!-- Left Column -->
+            
             <div class="form-column">
               <div class="form-group">
                 <label for="title">Title<span class="required">*</span></label>
@@ -266,7 +264,7 @@
               </div>
             </div>
 
-            <!-- Right Column -->
+            
             <div class="form-column">
               <div class="form-group">
                 <label>Priority</label>
@@ -362,7 +360,7 @@
       </div>
     </div>
 
-    <!-- Task Details Overlay -->
+    
     <div
       class="overlay-container"
       id="task-details-overlay"
@@ -373,7 +371,7 @@
         id="task-details-content"
         onclick="event.stopPropagation()"
       >
-        <!-- Content injected by JS -->
+        
       </div>
     </div>
 
@@ -381,8 +379,9 @@
     <script src="./scripts/toggle-menu.js"></script>
     <script src="./script.js"></script>
     <script src="./scripts/user-menu.js"></script>
+    <script src="./scripts/templates/addtask-template.js"></script>
     <script src="./scripts/addtask.js"></script>
-    <!-- Reusing logic for add task form -->
+    <script src="./scripts/templates/board-template.js"></script>
     <script src="./scripts/board.js"></script>
   </body>
 </html>

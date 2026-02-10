@@ -1,19 +1,13 @@
-/* Contacts Page Styles */
+
 body {
   margin: 0;
   font-family: "Inter", sans-serif;
   background-color: #f6f7f8;
-  overflow: hidden; /* Prevent body scroll, handle in containers */
+  overflow: hidden; 
 }
 
-/* Reusing sidebar and header styles from board.css/style.css 
-   Assuming they are globally available or copied. 
-   We will link style.css and board.css if needed or just copy relevant parts.
-   Better to rely on common styles if possible. 
-*/
-
 .main-content {
-  margin-left: 232px; /* Sidebar width */
+  margin-left: 232px; 
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,14 +20,14 @@ body {
   position: relative;
 }
 
-/* Left Pane: Contact List */
+
 .contacts-list-container {
   width: 456px;
   background-color: white;
-  box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08); /* Drop shadow to right */
+  box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08); 
   display: flex;
   flex-direction: column;
-  z-index: 2; /* Above the right pane */
+  z-index: 2; 
 }
 
 .add-contact-btn-container {
@@ -67,10 +61,10 @@ body {
 .contacts-list-scroll {
   flex: 1;
   overflow-y: auto;
-  padding: 0 24px; /* Scrollbar padding */
+  padding: 0 24px; 
 }
 
-/* Custom Scrollbar */
+
 .contacts-list-scroll::-webkit-scrollbar {
   width: 8px;
 }
@@ -110,7 +104,7 @@ body {
   color: white;
 }
 
-/* Overlays */
+
 .overlay-bg {
   position: fixed;
   top: 0;
@@ -120,7 +114,7 @@ body {
   background-color: rgba(0, 0, 0, 0.2);
   z-index: 999;
 
-  /* Centering logic */
+  
   display: none;
   justify-content: center;
   align-items: center;
@@ -163,12 +157,12 @@ body {
   color: #007cee;
 }
 
-/* Right Pane: Details */
+
 .contact-details-container {
   flex: 1;
   background-color: #f6f7f8;
   position: relative;
-  overflow: hidden; /* For animations */
+  overflow: hidden; 
 }
 
 .details-header-static {
@@ -193,20 +187,20 @@ body {
   padding-left: 30px;
 }
 
-/* Details View Animation and Layout */
+
 .contact-details-view {
   position: absolute;
-  top: 300px; /* Increased to ensure no overlap with header */
+  top: 300px; 
   left: 100%;
   width: 100%;
-  height: calc(100% - 300px); /* Adjust height accordingly */
+  height: calc(100% - 300px); 
   background-color: #f6f7f8;
   transition: transform 0.4s ease-in-out;
-  padding: 0 55px; /* Side padding */
+  padding: 0 55px; 
   z-index: 10;
   transform: translateX(200%);
   left: 8px;
-  overflow-y: auto; /* Allow scrolling within details if needed */
+  overflow-y: auto; 
 }
 
 .contact-details-view.visible {
@@ -236,7 +230,7 @@ body {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
-/* ... existing avatar styles ... */
+
 
 .contact-name-section {
   display: flex;
@@ -248,13 +242,13 @@ body {
   font-size: 47px;
   font-weight: 700;
   margin: 0;
-  line-height: 1.2; /* Better line height */
+  line-height: 1.2; 
 }
 
 .contact-actions {
   display: flex;
   gap: 16px;
-  margin-top: 8px; /* Add slight separation from name */
+  margin-top: 8px; 
 }
 
 .btn-text-icon {
@@ -267,16 +261,16 @@ body {
   align-items: center;
   gap: 8px;
   padding: 0;
-  transition: color 0.1s ease-in-out; /* Smooth color transition */
+  transition: color 0.1s ease-in-out; 
 }
 .btn-text-icon:hover {
   color: #29abe2;
-  /* Removed font-weight change to prevent layout shift */
+  
   filter: invert(53%) sepia(92%) saturate(1633%) hue-rotate(164deg)
-    brightness(97%) contrast(89%); /* Optional: if using img */
+    brightness(97%) contrast(89%); 
 }
 .btn-text-icon:hover svg path {
-  stroke: #29abe2; /* SVG hover state */
+  stroke: #29abe2; 
 }
 
 .btn-text-icon img,
@@ -296,7 +290,7 @@ body {
   gap: 20px;
 }
 
-/* Contact Info Details */
+
 .contact-info-details {
   display: flex;
   flex-direction: column;
@@ -306,10 +300,10 @@ body {
 .info-group {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Reduced from 15px */
+  gap: 10px; 
 }
 
-/* Dialog Styles */
+
 .slide-in-dialog {
   position: relative;
   right: auto;
@@ -460,7 +454,7 @@ body {
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
-/* Success Alert */
+
 .success-alert {
   position: fixed;
   bottom: 20%;

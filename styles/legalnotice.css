@@ -1,8 +1,3 @@
-/**
- * legalnotice.css
- * Styles for the Legal Notice page
- */
-
 .legal-notice-container {
   padding: 80px;
   max-width: 1000px;
@@ -60,13 +55,13 @@
   text-decoration: underline;
 }
 
-/* Arrow for back navigation when logged out - Reusing style from privacypolicy if possible, but defining here for safety unless we have global styles */
+
 .back-arrow-icon {
   width: 24px;
   height: 24px;
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 1024px) {
   .legal-notice-container {
     padding: 40px;
