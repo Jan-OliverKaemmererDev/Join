@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="./styles/contacts.css" />
     <link rel="stylesheet" href="./styles/board.css" />
+    <link rel="stylesheet" href="./styles/mobile/contacts-mobile.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
       rel="stylesheet"
@@ -58,7 +59,14 @@
             <div class="user-dropdown" id="user-dropdown">
               <a href="legalnotice.html">Legal Notice</a>
               <a href="privacypolicy.html">Privacy Policy</a>
-              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+              <a
+                href="#"
+                onclick="
+                  handleLogout();
+                  return false;
+                "
+                >Log out</a
+              >
             </div>
           </div>
         </div>
@@ -93,8 +101,7 @@
               </svg>
             </button>
           </div>
-          <div id="contacts-list" class="contacts-list-scroll">
-          </div>
+          <div id="contacts-list" class="contacts-list-scroll"></div>
         </div>
 
         <div class="contact-details-container">
@@ -110,7 +117,26 @@
       </div>
     </main>
 
-    <div id="add-contact-overlay" class="overlay-bg">
+    <div id="add-contact-overlay" class="overlay-bg"></div>
+
+    <!-- Für Responsive -->
+    <div class="mobile-nav d-none-desktop">
+      <div class="nav-item">
+        <img src="./assets/summary-page/summary-icon.svg" alt="" />
+        <span>Summary</span>
+      </div>
+      <div class="nav-item">
+        <img src="./assets/summary-page/add-task-icon.svg" alt="" />
+        <span>Add Task</span>
+      </div>
+      <div class="nav-item">
+        <img src="./assets/summary-page/board-icon.svg" alt="" />
+        <span>Board</span>
+      </div>
+      <div class="nav-item active">
+        <img src="./assets/summary-page/contacts-icon.svg" alt="" />
+        <span>Contacts</span>
+      </div>
     </div>
 
     <script src="./scripts/auth.js"></script>

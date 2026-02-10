@@ -17,7 +17,6 @@ function getContactItemTemplate(contact) {
   `;
 }
 
-
 /**
  * Generiert das HTML-Template für die Contact-Detailansicht
  * @param {Object} contact - Das Contact-Objekt mit allen Eigenschaften
@@ -25,40 +24,37 @@ function getContactItemTemplate(contact) {
  */
 function getContactDetailsTemplate(contact) {
   return `
-    <div class="contact-header-details">
-      <div class="contact-avatar-large" style="background-color: ${contact.color};">
-        ${contact.initials}
-      </div>
-      <div class="contact-name-section">
-        <h2 class="contact-name-details">${contact.name}</h2>
-        <div class="contact-actions">
-          <button class="btn-text-icon" onclick="openEditContactDialog(${contact.id})">
-            <img src="./assets/icons/edit.svg" alt="Edit">
-            Edit
-          </button>
-          <button class="btn-text-icon" onclick="deleteContact(${contact.id})">
-            <img src="./assets/icons/delete.svg" alt="Delete">
-            Delete
-          </button>
+        <div class="details-header-mobile">
+            <div>
+                <h1>Contacts</h1>
+                <p>Better with a team</p>
+                <div class="blue-line-horizontal"></div>
+            </div>
+            <img src="./assets/login-screen/arrow-left.svg" class="back-arrow-mobile" onclick="closeContactDetails()">
         </div>
-      </div>
-    </div>
-    <div class="contact-information-header">
-      Contact Information
-    </div>
-    <div class="contact-info-details">
-      <div class="info-group">
-        <span class="info-label">Email</span>
-        <a href="mailto:${contact.email}" class="info-value-link">${contact.email}</a>
-      </div>
-      <div class="info-group">
-        <span class="info-label">Phone</span>
-        <a href="tel:${contact.phone}" class="info-value">${contact.phone}</a>
-      </div>
-    </div>
-  `;
-}
 
+        <div class="contact-view-title">
+            <div class="initials-large" style="background-color: ${contact.color}">
+                ${contact.initials}
+            </div>
+            <div class="contact-name-large">${contact.name}</div>
+        </div>
+
+        <div class="info-headline-container">
+            <span>Contact Information</span>
+        </div>
+
+        <div class="info-label">Email</div>
+        <a href="mailto:${contact.email}" class="info-value-email">${contact.email}</a>
+
+        <div class="info-label">Phone</div>
+        <div class="info-value">${contact.phone}</div>
+
+        <div class="mobile-menu-btn">
+            <img src="./assets/icons/more_vert.svg">
+        </div>
+    `;
+}
 
 /**
  * Generiert das HTML-Template für den Add-Contact-Dialog
@@ -109,7 +105,6 @@ function getAddContactDialogTemplate() {
   `;
 }
 
-
 /**
  * Generiert das HTML-Template für den Edit-Contact-Dialog
  * @param {Object} contact - Das Contact-Objekt mit allen Eigenschaften
@@ -155,7 +150,6 @@ function getEditContactDialogTemplate(contact) {
   `;
 }
 
-
 /**
  * Generiert das HTML-Template für einen Contact-Gruppen-Buchstaben
  * @param {string} letter - Der anzuzeigende Buchstabe
@@ -164,7 +158,6 @@ function getEditContactDialogTemplate(contact) {
 function getContactGroupLetterTemplate(letter) {
   return `<div class="contact-group-letter">${letter}</div>`;
 }
-
 
 /**
  * Generiert das HTML-Template für eine Trennlinie

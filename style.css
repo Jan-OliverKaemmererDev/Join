@@ -5,7 +5,22 @@
   --white: #ffffff;
   --font-main: "Inter", sans-serif;
 }
+/* Sidebar nicht sichtbar bei mobile */
+@media (max-width: 1000px) {
+  /* Wichtig: Nutze die exakte Klasse deiner Sidebar */
+  .sidebar,
+  aside,
+  #sidebar {
+    display: none !important;
+  }
 
+  /* Das Hauptfenster muss jetzt die volle Breite nutzen */
+  .main-content,
+  .content-container {
+    margin-left: 0 !important; /* Entfernt den Platzhalter für die Sidebar */
+    width: 100% !important;
+  }
+}
 body {
   margin: 0;
   padding: 0;

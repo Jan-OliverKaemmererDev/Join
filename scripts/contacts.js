@@ -57,7 +57,6 @@ let contacts = [
   },
 ];
 
-
 /**
  * Initialisiert die Contacts-Seite
  */
@@ -67,16 +66,14 @@ function initContacts() {
   checkUser();
 }
 
-
 /**
  * Sortiert die Kontakte alphabetisch nach Namen
  */
 function sortContacts() {
-  contacts.sort(function(a, b) {
+  contacts.sort(function (a, b) {
     return a.name.localeCompare(b.name);
   });
 }
-
 
 /**
  * Rendert die komplette Kontaktliste
@@ -91,7 +88,6 @@ function renderContactList() {
     currentLetter = renderContactGroup(contact, currentLetter, listContainer);
   }
 }
-
 
 /**
  * Rendert einen Kontakt in seiner alphabetischen Gruppe
@@ -111,7 +107,6 @@ function renderContactGroup(contact, currentLetter, listContainer) {
   return currentLetter;
 }
 
-
 /**
  * Findet einen Kontakt anhand der ID
  * @param {number} id - Die ID des Kontakts
@@ -126,7 +121,6 @@ function findContactById(id) {
   return null;
 }
 
-
 /**
  * Zeigt die Details eines Kontakts an
  * @param {number} id - Die ID des Kontakts
@@ -134,11 +128,18 @@ function findContactById(id) {
 function showContactDetails(id) {
   const contact = findContactById(id);
   if (!contact) return;
+
   renderContactDetails(contact);
   highlightSelectedContact(id);
-  showDetailsView();
-}
 
+  const detailsView = document.getElementById("contact-details-view");
+  detailsView.classList.add("visible");
+
+  // Falls auf Mobile: Liste ausblenden, wenn Details da sind
+  if (window.innerWidth <= 1000) {
+    document.querySelector(".contacts-list-container").style.display = "none";
+  }
+}
 
 /**
  * Hebt den ausgewählten Kontakt hervor
@@ -154,7 +155,6 @@ function highlightSelectedContact(id) {
   }
 }
 
-
 /**
  * Zeigt die Detailansicht an
  */
@@ -162,7 +162,6 @@ function showDetailsView() {
   const detailsView = document.getElementById("contact-details-view");
   detailsView.classList.add("visible");
 }
-
 
 /**
  * Rendert die Kontakt-Details
@@ -173,7 +172,6 @@ function renderContactDetails(contact) {
   content.innerHTML = getContactDetailsTemplate(contact);
 }
 
-
 /**
  * Schließt die Kontakt-Detailansicht
  */
@@ -181,8 +179,12 @@ function closeContactDetails() {
   const detailsView = document.getElementById("contact-details-view");
   detailsView.classList.remove("visible");
   removeAllActiveClasses();
-}
 
+  // Falls auf Mobile: Liste wieder einblenden
+  if (window.innerWidth <= 1000) {
+    document.querySelector(".contacts-list-container").style.display = "block";
+  }
+}
 
 /**
  * Entfernt die active-Klasse von allen Kontakt-Items
@@ -194,7 +196,6 @@ function removeAllActiveClasses() {
   }
 }
 
-
 /**
  * Überprüft ob ein Benutzer angemeldet ist
  */
@@ -204,7 +205,6 @@ function checkUser() {
     updateUserInitials(user);
   }
 }
-
 
 /**
  * Aktualisiert die Benutzer-Initialen im Header
@@ -219,7 +219,6 @@ function updateUserInitials(user) {
   document.getElementById("user-initials").innerText = initials.toUpperCase();
 }
 
-
 /**
  * Öffnet den Add-Contact-Dialog
  */
@@ -230,18 +229,16 @@ function openAddContactDialog() {
   activateDialog(overlay);
 }
 
-
 /**
  * Aktiviert den Dialog mit Animation
  * @param {HTMLElement} overlay - Das Overlay-Element
  */
 function activateDialog(overlay) {
-  setTimeout(function() {
+  setTimeout(function () {
     const dialog = overlay.querySelector(".slide-in-dialog");
     if (dialog) dialog.classList.add("active");
   }, 10);
 }
-
 
 /**
  * Schließt den Add-Contact-Dialog
@@ -256,7 +253,6 @@ function closeAddContactDialog() {
   }
 }
 
-
 /**
  * Deaktiviert den Dialog mit Animation
  * @param {HTMLElement} dialog - Das Dialog-Element
@@ -264,11 +260,10 @@ function closeAddContactDialog() {
  */
 function deactivateDialog(dialog, overlay) {
   dialog.classList.remove("active");
-  setTimeout(function() {
+  setTimeout(function () {
     closeOverlay(overlay);
   }, 400);
 }
-
 
 /**
  * Schließt das Overlay
@@ -278,7 +273,6 @@ function closeOverlay(overlay) {
   overlay.classList.remove("active");
   overlay.innerHTML = "";
 }
-
 
 /**
  * Erstellt einen neuen Kontakt
@@ -292,7 +286,6 @@ function createContact(event) {
   closeAddContactDialog();
   showSuccessAlert();
 }
-
 
 /**
  * Erstellt ein neues Kontakt-Objekt aus den Formulardaten
@@ -312,7 +305,6 @@ function buildNewContact() {
   };
 }
 
-
 /**
  * Zeigt eine Erfolgsmeldung an
  */
@@ -325,31 +317,28 @@ function showSuccessAlert() {
   hideAlertAfterDelay(alert);
 }
 
-
 /**
  * Zeigt die Alert an
  * @param {HTMLElement} alert - Das Alert-Element
  */
 function showAlert(alert) {
-  setTimeout(function() {
+  setTimeout(function () {
     alert.classList.add("show");
   }, 100);
 }
-
 
 /**
  * Versteckt die Alert nach einer Verzögerung
  * @param {HTMLElement} alert - Das Alert-Element
  */
 function hideAlertAfterDelay(alert) {
-  setTimeout(function() {
+  setTimeout(function () {
     alert.classList.remove("show");
-    setTimeout(function() {
+    setTimeout(function () {
       alert.remove();
     }, 500);
   }, 2000);
 }
-
 
 /**
  * Öffnet den Edit-Contact-Dialog
@@ -364,7 +353,6 @@ function openEditContactDialog(id) {
   activateEditDialog(overlay);
 }
 
-
 /**
  * Aktiviert den Edit-Dialog
  * @param {HTMLElement} overlay - Das Overlay-Element
@@ -372,11 +360,10 @@ function openEditContactDialog(id) {
 function activateEditDialog(overlay) {
   const dialog = overlay.querySelector(".slide-in-dialog");
   dialog.classList.remove("active");
-  setTimeout(function() {
+  setTimeout(function () {
     if (dialog) dialog.classList.add("active");
   }, 10);
 }
-
 
 /**
  * Speichert die Änderungen an einem Kontakt
@@ -393,7 +380,6 @@ function saveContact(event, id) {
   closeAddContactDialog();
 }
 
-
 /**
  * Aktualisiert die Kontakt-Daten
  * @param {Object} contact - Das Kontakt-Objekt
@@ -404,7 +390,6 @@ function updateContactData(contact) {
   contact.phone = document.getElementById("edit-contact-phone").value;
   contact.initials = getInitials(contact.name);
 }
-
 
 /**
  * Löscht einen Kontakt
@@ -419,7 +404,6 @@ function deleteContact(id) {
   }
 }
 
-
 /**
  * Findet den Index eines Kontakts anhand der ID
  * @param {number} id - Die ID des Kontakts
@@ -433,7 +417,6 @@ function findContactIndexById(id) {
   }
   return -1;
 }
-
 
 /**
  * Gibt eine zufällige Farbe zurück
@@ -451,7 +434,6 @@ function getRandomColor() {
   ];
   return colors[Math.floor(Math.random() * colors.length)];
 }
-
 
 /**
  * Generiert Initialen aus einem Namen
