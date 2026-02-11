@@ -6,6 +6,7 @@
     <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg" />
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="./styles/addtask.css" />
+    <link rel="stylesheet" href="./styles/mobile/addtask-mobile.css" />
     <title>Join - Add Task</title>
   </head>
   <body onload="initAddTask()">
@@ -53,7 +54,14 @@
             <div class="user-dropdown" id="user-dropdown">
               <a href="legalnotice.html">Legal Notice</a>
               <a href="privacypolicy.html">Privacy Policy</a>
-              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+              <a
+                href="#"
+                onclick="
+                  handleLogout();
+                  return false;
+                "
+                >Log out</a
+              >
             </div>
           </div>
         </div>
@@ -64,7 +72,6 @@
 
         <form id="add-task-form" onsubmit="handleAddTask(event)">
           <div class="form-container">
-            
             <div class="form-column">
               <div class="form-group">
                 <label for="title">Title<span class="required">*</span></label>
@@ -101,7 +108,6 @@
               </div>
             </div>
 
-            
             <div class="form-column">
               <div class="form-group">
                 <label>Priority</label>
@@ -113,7 +119,10 @@
                     onclick="selectPriority('urgent')"
                   >
                     Urgent
-                    <img src="./assets/icons/urgent-iconAddTask.png" alt="Urgent" />
+                    <img
+                      src="./assets/icons/urgent-iconAddTask.png"
+                      alt="Urgent"
+                    />
                   </button>
                   <button
                     type="button"
@@ -122,7 +131,10 @@
                     onclick="selectPriority('medium')"
                   >
                     Medium
-                    <img src="./assets/icons/medium-iconAddTask.png" alt="Medium" />
+                    <img
+                      src="./assets/icons/medium-iconAddTask.png"
+                      alt="Medium"
+                    />
                   </button>
                   <button
                     type="button"

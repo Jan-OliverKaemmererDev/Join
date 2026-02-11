@@ -256,8 +256,9 @@ button:hover {
 
 @media (max-width: 480px) {
   body {
-    overflow: hidden;
-    height: 100vh;
+    /* overflow: hidden;
+    height: 100vh; */
+    background-color: var(--bg-color);
   }
 
   .animation-container {
@@ -276,7 +277,9 @@ button:hover {
   #flying-logo {
     opacity: 0;
     z-index: 1002;
-    animation: moveLogoDiagonalMobile 0.8s ease-in-out 0.5s forwards, fadeInDesktopLogo 0.2s ease-in-out 1.3s forwards;
+    animation:
+      moveLogoDiagonalMobile 0.8s ease-in-out 0.5s forwards,
+      fadeInDesktopLogo 0.2s ease-in-out 1.3s forwards;
   }
 
   @keyframes moveLogoDiagonalMobile {
@@ -313,7 +316,9 @@ button:hover {
     transform: translate(-50%, -50%);
     width: 150px;
     z-index: 1001;
-    animation: moveLogoMobileDiagonalAnim 0.8s ease-in-out 0.5s forwards, fadeOutMobileLogo 0.2s ease-in-out 1.3s forwards;
+    animation:
+      moveLogoMobileDiagonalAnim 0.8s ease-in-out 0.5s forwards,
+      fadeOutMobileLogo 0.2s ease-in-out 1.3s forwards;
   }
 
   @keyframes moveLogoMobileDiagonalAnim {

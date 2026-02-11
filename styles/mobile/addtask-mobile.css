@@ -1,0 +1,209 @@
+@media (min-width: 320px) and (max-width: 780px) {
+  /* --- General Layout --- */
+  body {
+    background-color: #f6f7f8;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding-top: 80px;
+    padding-bottom: 200px;
+    height: auto !important;
+    overflow-y: visible !important;
+  }
+
+  .add-task-section {
+    padding: 24px 16px;
+  }
+
+  .add-task-section h1 {
+    font-size: 47px;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  /* --- Header --- */
+  .dashboard-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    padding: 0 16px;
+    z-index: 1000;
+    background: white;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dashboard-header span {
+    display: none;
+  }
+
+  .dashboard-header::before {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 38px;
+    background-image: url("../../assets/login-screen/join-logo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .header-icons {
+    gap: 12px;
+  }
+
+  .help-link {
+    display: none;
+  }
+
+  .user-initials {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  /* --- Form Elements --- */
+  .form-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 0;
+  }
+
+  .form-group label {
+    font-size: 16px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  /* Priority Buttons - Side by Side */
+  .priority-buttons {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .priority-btn {
+    padding: 8px 4px;
+    font-size: 14px;
+    flex: 1;
+    gap: 6px;
+  }
+
+  .priority-btn img {
+    width: 14px;
+    height: 10px;
+  }
+
+  /* --- Sticky Form Actions --- */
+  .form-footer {
+    position: fixed;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    background-color: #f6f7f8;
+    padding: 16px;
+    border-top: none;
+    z-index: 900;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .required-note {
+    display: none;
+  }
+
+  .form-actions {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn-clear,
+  .btn-create {
+    flex: 1;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 10px;
+    justify-content: center;
+    height: 48px;
+  }
+
+  .btn-clear {
+    border: 1px solid #2a3647;
+  }
+
+  /* --- Bottom Navigation (Repurposed Sidebar) --- */
+  .sidebar {
+    display: flex !important;
+    position: fixed;
+    flex-direction: row;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    height: 80px;
+    width: 100%;
+    padding: 0;
+    background-color: #2a3647;
+    z-index: 1001;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sidebar > img,
+  .legal-links {
+    display: none;
+  }
+
+  .nav-links {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    gap: 0;
+  }
+
+  .nav-links a {
+    flex-direction: column;
+    padding: 8px;
+    font-size: 12px;
+    gap: 4px;
+    color: #a8a8a8;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+  }
+
+  .nav-links a img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1) opacity(0.6);
+  }
+
+  .nav-links a.active {
+    background-color: #091931;
+    border-radius: 12px;
+    color: white;
+  }
+
+  .nav-links a.active img {
+    filter: brightness(0) invert(1) opacity(1);
+  }
+
+  .nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+  }
+}

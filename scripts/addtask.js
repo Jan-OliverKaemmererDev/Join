@@ -1,7 +1,6 @@
 let selectedPriority = "medium";
 let subtasks = [];
 
-
 /**
  * Initialisiert die Add-Task-Seite
  */
@@ -16,7 +15,6 @@ function initAddTask() {
   validateForm();
 }
 
-
 /**
  * Setzt das Mindestdatum für das Due-Date-Feld auf heute
  */
@@ -24,7 +22,6 @@ function setMinimumDate() {
   const today = new Date().toISOString().split("T")[0];
   document.getElementById("due-date").setAttribute("min", today);
 }
-
 
 /**
  * Aktualisiert die Benutzer-Initialen im Header
@@ -37,7 +34,6 @@ function updateHeaderInitials(user) {
     initialsElement.textContent = initials;
   }
 }
-
 
 /**
  * Generiert Initialen aus einem Namen
@@ -52,7 +48,6 @@ function getInitialsFromName(name) {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
-
 /**
  * Wählt eine Priorität aus und aktualisiert die UI
  * @param {string} priority - Die ausgewählte Priorität
@@ -62,7 +57,6 @@ function selectPriority(priority) {
   removeActiveFromAll(buttons);
   addActiveToSelected(priority);
 }
-
 
 /**
  * Entfernt die active-Klasse von allen Buttons
@@ -74,19 +68,19 @@ function removeActiveFromAll(buttons) {
   }
 }
 
-
 /**
  * Fügt die active-Klasse zum ausgewählten Priority-Button hinzu
  * @param {string} priority - Die ausgewählte Priorität
  */
 function addActiveToSelected(priority) {
-  const selectedBtn = document.querySelector("[data-priority=\"" + priority + "\"]");
+  const selectedBtn = document.querySelector(
+    '[data-priority="' + priority + '"]',
+  );
   if (selectedBtn) {
     selectedBtn.classList.add("active");
     selectedPriority = priority;
   }
 }
-
 
 /**
  * Fügt einen neuen Subtask hinzu
@@ -103,7 +97,6 @@ function addSubtask() {
   renderSubtasks();
 }
 
-
 /**
  * Erstellt ein Subtask-Objekt
  * @param {string} text - Der Subtask-Text
@@ -117,7 +110,6 @@ function createSubtask(text) {
   };
 }
 
-
 /**
  * Rendert die Liste der Subtasks
  */
@@ -128,7 +120,6 @@ function renderSubtasks() {
     appendSubtaskToList(list, subtasks[i]);
   }
 }
-
 
 /**
  * Fügt einen Subtask zur Liste hinzu
@@ -142,7 +133,6 @@ function appendSubtaskToList(list, subtask) {
   list.appendChild(li);
 }
 
-
 /**
  * Entfernt einen Subtask anhand der ID
  * @param {number} id - Die ID des zu entfernenden Subtasks
@@ -151,7 +141,6 @@ function removeSubtask(id) {
   subtasks = filterSubtasks(id);
   renderSubtasks();
 }
-
 
 /**
  * Filtert Subtasks und entfernt den Subtask mit der angegebenen ID
@@ -168,7 +157,6 @@ function filterSubtasks(id) {
   return filtered;
 }
 
-
 /**
  * Validiert das Formular und aktiviert/deaktiviert den Submit-Button
  */
@@ -183,7 +171,6 @@ function validateForm() {
     submitBtn.disabled = true;
   }
 }
-
 
 /**
  * Verarbeitet das Hinzufügen eines neuen Tasks
@@ -201,8 +188,10 @@ function handleAddTask(event) {
   showToast("Task added to board");
   dispatchTaskAddedEvent(task);
   clearForm();
+  setTimeout(() => {
+    window.location.href = "board.html";
+  }, 1000);
 }
-
 
 /**
  * Erstellt ein Task-Objekt aus den Formulardaten
@@ -225,7 +214,6 @@ function buildTask(currentUser) {
   };
 }
 
-
 /**
  * Erstellt eine Kopie des Subtasks-Arrays
  * @returns {Array} Die Kopie des Subtasks-Arrays
@@ -238,15 +226,15 @@ function copySubtasks() {
   return copy;
 }
 
-
 /**
  * Löst ein taskAdded-Event aus
  * @param {Object} task - Das hinzugefügte Task-Objekt
  */
 function dispatchTaskAddedEvent(task) {
-  window.dispatchEvent(new CustomEvent("taskAdded", { detail: { task: task } }));
+  window.dispatchEvent(
+    new CustomEvent("taskAdded", { detail: { task: task } }),
+  );
 }
-
 
 /**
  * Speichert einen Task im LocalStorage
@@ -261,7 +249,6 @@ function saveTask(userId, task) {
   console.log("Task saved:", task);
 }
 
-
 /**
  * Lädt existierende Tasks aus dem LocalStorage
  * @param {string} tasksKey - Der LocalStorage-Key für die Tasks
@@ -275,7 +262,6 @@ function loadExistingTasks(tasksKey) {
   return [];
 }
 
-
 /**
  * Setzt das Formular zurück
  */
@@ -287,7 +273,6 @@ function clearForm() {
   renderSubtasks();
   validateForm();
 }
-
 
 /**
  * Zeigt eine Toast-Nachricht an
@@ -305,7 +290,6 @@ function showToast(message) {
   hideToastAfterDelay(toast);
 }
 
-
 /**
  * Erstellt ein Toast-Element
  * @returns {HTMLElement} Das erstellte Toast-Element
@@ -318,13 +302,12 @@ function createToastElement() {
   return toast;
 }
 
-
 /**
  * Versteckt die Toast-Nachricht nach einer Verzögerung
  * @param {HTMLElement} toast - Das Toast-Element
  */
 function hideToastAfterDelay(toast) {
-  setTimeout(function() {
+  setTimeout(function () {
     toast.classList.add("d-none");
   }, 3000);
 }
