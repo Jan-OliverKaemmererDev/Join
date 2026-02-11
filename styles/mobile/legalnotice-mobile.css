@@ -1,0 +1,152 @@
+/* ==========================================================================
+   RESPONSIVE DESIGN (320px bis 780px)
+   ========================================================================== */
+
+@media (min-width: 320px) and (max-width: 780px) {
+  /* 1. GLOBAL & MAIN CONTENT */
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .main-content {
+    margin-left: 0 !important; /* Sidebar-Abstand vom Desktop entfernen */
+    padding-top: 80px !important; /* Platz für fixierten Header */
+    padding-bottom: 90px !important; /* Platz für fixierte Bottom-Nav */
+    width: 100% !important;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+
+  /* 2. HEADER ANPASSUNGEN */
+  .dashboard-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 80px !important;
+    background-color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 20px !important;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1100 !important;
+  }
+
+  /* Das Logo links im Header (img weg, Logo her) */
+  .dashboard-header span {
+    display: none !important; /* "Kanban..." Text ausblenden */
+  }
+
+  .dashboard-header::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 48px;
+    background-image: url("../../assets/login-screen/join-logo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .header-icons {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+  }
+
+  .help-link {
+    display: none !important; /* Hilfe-Icon mobil oft ausgeblendet */
+  }
+
+  /* Der Kreis mit den Initialen (MM/SM) nach rechts */
+  .user-initials {
+    width: 40px !important;
+    height: 40px !important;
+    border: 2px solid #2a3647 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 700 !important;
+    color: #29abe2 !important;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  /* 3. BOTTOM NAVIGATION (Ehemals Sidebar) */
+  .sidebar {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    height: 80px !important;
+    background-color: #2a3647 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    padding: 0 !important;
+    z-index: 1000 !important;
+    border-radius: 0 !important;
+  }
+
+  .sidebar > img {
+    display: none !important; /* Weißes Logo aus der Sidebar entfernen */
+  }
+
+  .nav-links {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .nav-links a {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    color: white !important;
+    text-decoration: none !important;
+    font-size: 12px !important;
+    width: 20% !important;
+    padding: 10px 0 !important;
+  }
+
+  .nav-links img {
+    width: 24px !important;
+    height: 24px !important;
+    margin: 0 !important;
+  }
+
+  /* Verstecke die Legal Links in der Sidebar (Privacy/Legal) */
+  .legal-links {
+    display: none !important;
+  }
+
+  /* 4. LEGAL NOTICE CONTENT ANPASSUNGEN */
+  .legal-notice-container {
+    padding: 40px 16px 100px 16px !important; /* Unten mehr Padding wegen Nav */
+    max-width: 100% !important;
+  }
+
+  .legal-notice-container h1 {
+    font-size: 36px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  /* Der blaue Pfeil im H1 wie auf dem Screenshot */
+  .legal-notice-container h1::after {
+    content: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 28C22.6274 28 28 22.6274 28 16C28 9.37258 22.6274 4 16 4C9.37258 4 4 9.37258 4 16C4 22.6274 9.37258 28 16 28Z' stroke='%2329ABE2' stroke-width='2'/%3E%3Cpath d='M11 16L17 10M11 16L17 22M11 16H21' stroke='%2329ABE2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    cursor: pointer;
+  }
+}

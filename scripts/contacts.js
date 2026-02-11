@@ -132,13 +132,13 @@ function showContactDetails(id) {
   renderContactDetails(contact);
   highlightSelectedContact(id);
 
-  const detailsView = document.getElementById("contact-details-view");
-  detailsView.classList.add("visible");
+  const container = document.querySelector(".contact-details-container");
 
-  // Falls auf Mobile: Liste ausblenden, wenn Details da sind
-  if (window.innerWidth <= 1000) {
-    document.querySelector(".contacts-list-container").style.display = "none";
+  if (window.innerWidth <= 780) {
+    container.classList.add("show-mobile"); // Zeigt das Overlay auf Mobile
   }
+
+  document.getElementById("contact-details-view").classList.add("visible");
 }
 
 /**
