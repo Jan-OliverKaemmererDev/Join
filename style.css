@@ -52,6 +52,10 @@ body {
   animation: moveLogoDiagonal 0.8s ease-in-out 0.5s forwards;
 }
 
+.mobile-logo {
+  display: none;
+}
+
 @keyframes moveLogoDiagonal {
   from {
     top: 50%;
@@ -222,6 +226,10 @@ button:hover {
   display: none;
 }
 
+.mobile-signup {
+  display: none;
+}
+
 .login-footer {
   position: fixed;
   bottom: 32px;
@@ -247,18 +255,168 @@ button:hover {
 }
 
 @media (max-width: 480px) {
-  .login-card {
-    padding: 30px 20px;
-    box-shadow: none;
-    background: transparent;
+  body {
+    overflow: hidden;
+    height: 100vh;
   }
 
-  .header-right span {
+  .animation-container {
+    background-color: rgba(42, 54, 71, 1);
+    animation: fadeOutBackgroundMobile 0.4s ease-in-out 1.3s forwards;
+  }
+
+  @keyframes fadeOutBackgroundMobile {
+    to {
+      background-color: transparent;
+      pointer-events: none;
+      z-index: 50;
+    }
+  }
+
+  #flying-logo {
+    opacity: 0;
+    z-index: 1002;
+    animation: moveLogoDiagonalMobile 0.8s ease-in-out 0.5s forwards, fadeInDesktopLogo 0.2s ease-in-out 1.3s forwards;
+  }
+
+  @keyframes moveLogoDiagonalMobile {
+    0% {
+      opacity: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+    }
+    1% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+      top: 20px;
+      left: 20px;
+      transform: translate(0, 0);
+      width: 80px;
+    }
+  }
+
+  @keyframes fadeInDesktopLogo {
+    to {
+      opacity: 1;
+    }
+  }
+
+  .mobile-logo {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    z-index: 1001;
+    animation: moveLogoMobileDiagonalAnim 0.8s ease-in-out 0.5s forwards, fadeOutMobileLogo 0.2s ease-in-out 1.3s forwards;
+  }
+
+  @keyframes moveLogoMobileDiagonalAnim {
+    from {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+    }
+    to {
+      top: 20px;
+      left: 20px;
+      transform: translate(0, 0);
+      width: 80px;
+    }
+  }
+
+  @keyframes fadeOutMobileLogo {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  .login-header {
     display: none;
+  }
+
+  .login-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 90px 20px 20px;
+    overflow: hidden;
+  }
+
+  .login-card {
+    padding: 20px;
+    box-shadow: 0 0 14px 3px rgba(0, 0, 0, 0.04);
+    background: var(--white);
+    border-radius: 30px;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .login-card h1 {
+    font-size: 40px;
+    margin-bottom: 5px;
+  }
+
+  .blue-underline {
+    width: 70px;
+    height: 2px;
+    margin: 8px 0 15px 0;
+  }
+
+  form {
+    gap: 15px;
+  }
+
+  input {
+    font-size: 16px;
+    padding: 10px 15px;
+    padding-right: 45px;
   }
 
   .login-actions {
     flex-direction: column;
+    margin-top: 8px;
+    gap: 10px;
+  }
+
+  .btn-dark,
+  .btn-light {
+    font-size: 16px;
+    padding: 10px 18px;
+  }
+
+  .mobile-signup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    font-size: 15px;
+    color: var(--dark-blue);
+  }
+
+  .mobile-signup .btn-signup {
+    padding: 8px 16px;
+    font-size: 15px;
+  }
+
+  .login-footer {
+    position: fixed;
+    bottom: 15px;
+    gap: 20px;
+  }
+
+  .login-footer a {
+    font-size: 12px;
   }
 }
 
