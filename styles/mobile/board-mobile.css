@@ -1,5 +1,5 @@
-/* --- Grundlegendes Layout für Mobile (bis 1000px) --- */
-@media (max-width: 1000px) {
+/* --- Grundlegendes Layout für Mobile (320px bis 780px) --- */
+@media (min-width: 320px) and (max-width: 780px) {
   body {
     background-color: #f6f7f8;
     margin: 0;
@@ -197,6 +197,7 @@
     justify-content: space-around;
     align-items: center;
     z-index: 1000;
+    padding: 0 16px;
     padding-bottom: env(safe-area-inset-bottom);
   }
 
@@ -205,36 +206,37 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #cdcdcd;
-    font-size: 12px;
-    gap: 8px;
-    padding: 8px;
-    border-radius: 8px;
+    color: white;
+    font-size: 10px;
+    gap: 4px;
+    padding: 8px 5px;
     cursor: pointer;
     text-decoration: none;
     transition: all 0.2s;
+    width: auto;
+    height: auto;
   }
 
   .nav-item img {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     object-fit: contain;
     filter: brightness(0) invert(1);
   }
 
   .nav-item.active {
     color: white;
-    font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
   }
 
   .nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(0, 0, 0, 0.1);
   }
 }
 
-/* Für sehr kleine Bildschirme (Smartphones) */
-@media (max-width: 600px) {
+/* Für sehr kleine Bildschirme (Smartphones) - 320px bis 600px */
+@media (min-width: 320px) and (max-width: 600px) {
   .board-header h1 {
     font-size: 36px;
   }
@@ -265,16 +267,16 @@
   }
 
   .mobile-nav {
-    height: 70px;
+    height: 80px;
   }
 
   .nav-item {
-    font-size: 11px;
+    font-size: 10px;
     gap: 4px;
   }
 
   .nav-item img {
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
   }
 }

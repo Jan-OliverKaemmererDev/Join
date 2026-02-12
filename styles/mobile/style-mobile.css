@@ -1,7 +1,7 @@
 /* Mobile Styles für Login und allgemeine Komponenten */
 
 /* Sidebar verstecken bei mobile */
-@media (max-width: 1000px) {
+@media (min-width: 320px) and (max-width: 780px) {
   .sidebar,
   aside,
   #sidebar {
@@ -21,9 +21,17 @@
 }
 
 /* Mobile Responsive Styles */
-@media (max-width: 480px) {
+@media (min-width: 320px) and (max-width: 780px) {
+  html {
+    overflow-x: hidden;
+    height: 100%;
+  }
+
   body {
     background-color: var(--bg-color);
+    overflow-x: hidden;
+    height: 100%;
+    position: relative;
   }
 
   .animation-container {
@@ -117,9 +125,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    padding: 90px 20px 20px;
-    overflow: hidden;
+    min-height: 100vh;
+    padding: 100px 20px 40px;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 
   .login-card {
@@ -129,6 +138,7 @@
     border-radius: 30px;
     max-width: 100%;
     width: 100%;
+    box-sizing: border-box;
   }
 
   .login-card h1 {

@@ -10,6 +10,15 @@
     overflow-x: hidden;
   }
 
+  /* Sidebar initial verstecken, um Flackern zu vermeiden */
+  .sidebar {
+    visibility: hidden;
+  }
+
+  .sidebar.loaded {
+    visibility: visible;
+  }
+
   .main-content {
     margin-left: 0 !important; /* Sidebar-Abstand vom Desktop entfernen */
     padding-top: 80px !important; /* Platz für fixierten Header */
@@ -89,7 +98,7 @@
     flex-direction: row !important;
     justify-content: space-around !important;
     align-items: center !important;
-    padding: 0 !important;
+    padding: 0 16px !important;
     z-index: 1000 !important;
     border-radius: 0 !important;
   }
@@ -101,10 +110,12 @@
   .nav-links {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-around !important;
+    justify-content: space-between !important;
     align-items: center !important;
     width: 100% !important;
-    margin: 0 !important;
+    max-width: 428px !important;
+    margin: 0 auto !important;
+    height: 80px !important;
   }
 
   .nav-links a {
@@ -112,18 +123,68 @@
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 5px !important;
+    gap: 4px !important;
     color: white !important;
     text-decoration: none !important;
-    font-size: 12px !important;
-    width: 20% !important;
-    padding: 10px 0 !important;
+    font-size: 10px !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 8px 5px !important;
   }
 
   .nav-links img {
-    width: 24px !important;
-    height: 24px !important;
+    width: 32px !important;
+    height: 32px !important;
     margin: 0 !important;
+  }
+
+  .nav-links .login-icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  /* Guest Navigation spezifische Styles */
+  .nav-links .guest-nav-link {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    height: 100% !important;
+  }
+
+  .nav-links .guest-text-only {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 100% !important;
+  }
+
+  .nav-links .guest-text-only span {
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+  }
+
+  /* Aktive Seite hervorheben */
+  .nav-links .guest-nav-link.active,
+  .nav-links .guest-text-only.active {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 8px !important;
+    padding: 0px 5px !important;
+    margin: -5px 0 !important;
+  }
+
+  /* Leerer Platz in der Guest-Navigation */
+  .nav-links .empty-space {
+    flex: 1 !important;
+    display: block !important;
   }
 
   /* Verstecke die Legal Links in der Sidebar (Privacy/Legal) */
