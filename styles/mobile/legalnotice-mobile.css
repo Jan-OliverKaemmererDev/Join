@@ -61,7 +61,7 @@
   }
 
   .header-icons {
-    display: flex !important;
+    display: flex;
     align-items: center !important;
     gap: 15px !important;
   }
@@ -189,8 +189,22 @@
 
   /* Verstecke die Legal Links in der Sidebar (Privacy/Legal) */
   .legal-links {
-    display: none !important;
-  }
+    display: flex !important;
+    justify-content: center;
+    gap: 16px;
+    padding-bottom: 16px; /* Etwas Abstand vom unteren Rand */
+}
+
+.legal-links a {
+    color: #A8A8A8; /* Farbe anpassen falls nötig */
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.legal-links a.active {
+    color: #29abe2; /* Join-Blau für aktiven Link */
+    font-weight: bold;
+}
 
   /* 4. LEGAL NOTICE CONTENT ANPASSUNGEN */
   .legal-notice-container {
@@ -205,9 +219,115 @@
     align-items: center !important;
   }
 
-  /* Der blaue Pfeil im H1 wie auf dem Screenshot */
-  .legal-notice-container h1::after {
-    content: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 28C22.6274 28 28 22.6274 28 16C28 9.37258 22.6274 4 16 4C9.37258 4 4 9.37258 4 16C4 22.6274 9.37258 28 16 28Z' stroke='%2329ABE2' stroke-width='2'/%3E%3Cpath d='M11 16L17 10M11 16L17 22M11 16H21' stroke='%2329ABE2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+   .privacy-policy-container h1,
+.legal-notice-container h1 {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Der neue funktionale Pfeil */
+.mobile-back-arrow {
+    display: flex !important;
+    align-items: center;
     cursor: pointer;
+}
+
+.mobile-back-arrow img {
+    width: 24px;
+    height: 24px;
+}
+
+  /* Der blaue Pfeil im H1 */
+  .privacy-policy-container h1::after,
+.legal-notice-container h1::after {
+    content: none !important; /* Entfernt den nicht-klickbaren Pfeil */
+}
+
+/* --- SIDEBAR MOBILE BOTTOM BAR --- */
+
+  .sidebar {
+    position: fixed !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 80px !important; /* Höhe der unteren Leiste */
+    background-color: #2A3647 !important;
+    z-index: 999 !important;
+    padding: 0 !important;
+    /* Flexbox um alles zu zentrieren */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    visibility: visible !important;
+  }
+
+  /* 1. Das große Desktop-Logo verstecken */
+  .sidebar .sidebar-logo {
+    display: none !important;
+  }
+
+  /* 2. Den Wrapper für die Inhalte quer anordnen */
+  .sidebar-content-wrapper {
+    display: flex !important;
+    flex-direction: row !important; /* Nebeneinander */
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding: 0 20px !important; /* Abstand links/rechts */
+    height: 100% !important;
+  }
+
+  /* 3. Linker Teil: Log In Button */
+  .nav-links {
+    margin: 0 !important;
+    flex: 1; /* Nimmt Platz ein */
+    display: flex !important;
+    justify-content: flex-start !important; /* Links bündig */
+  }
+
+  .nav-links a.login-link {
+    display: flex !important;
+    flex-direction: column !important; /* Bild OBEN, Text UNTEN */
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+    color: #A8A8A8 !important;
+    gap: 4px !important; /* Abstand zwischen Pfeil und Text */
+  }
+
+  .nav-links .back-arrow-icon {
+    width: 20px !important; /* Icon etwas kleiner für Mobile Bar */
+    height: 20px !important;
+    filter: brightness(0) invert(1); /* Icon weiß machen */
+  }
+  
+  .nav-links .login-text {
+    font-size: 12px !important; /* Text klein unter das Icon */
+    line-height: 1 !important;
+  }
+
+  /* 4. Rechter Teil: Legal Links */
+  .legal-links {
+    display: flex !important;
+    flex-direction: row !important; /* Nebeneinander */
+    gap: 16px !important;
+    padding-bottom: 0 !important;
+    justify-content: flex-end !important; /* Rechts bündig */
+    align-items: center !important;
+  }
+
+  .legal-links a {
+    color: #A8A8A8 !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    white-space: nowrap !important;
+  }
+
+  .legal-links a.active {
+    color: #29abe2 !important;
+    font-weight: bold !important;
   }
 }

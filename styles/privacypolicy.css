@@ -46,6 +46,34 @@
   border-radius: 50%;
 }
 
+.mobile-back-arrow {
+    display: none;
+}
+
+.sidebar-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+/* Legal Links auf Desktop ganz nach unten schieben */
+.sidebar-content-wrapper .legal-links {
+    margin-top: auto; /* Schiebt es ans Ende des Flex-Containers */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 16px; /* Abstand zum unteren Rand */
+}
+
+/* Auf Desktop wollen wir Log In Text NEBEN dem Icon (Standard) */
+.nav-links a.login-link {
+    display: flex;
+    align-items: center;
+    flex-direction: row; /* Nebeneinander auf Desktop */
+    gap: 10px;
+}
+
 
 @media (max-width: 1024px) {
   .privacy-policy-container {
