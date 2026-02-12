@@ -44,11 +44,21 @@
 
     <main class="main-content">
       <header class="dashboard-header">
-        <span>Kanban Project Management Tool</span>
+        <a href="summaryuser.html" class="logo-mobile-link d-none-desktop">
+          <img
+            src="./assets/img/favicon.svg"
+            alt="Join Logo"
+            class="mobile-logo"
+          />
+        </a>
+
+        <span class="d-none-mobile">Kanban Project Management Tool</span>
+
         <div class="header-icons">
-          <a href="help.html" class="help-link">
+          <a href="help.html" class="help-link d-none-mobile">
             <img src="./assets/summary-page/help.svg" alt="Help" />
           </a>
+
           <div class="user-menu-container">
             <div
               class="user-initials"
@@ -56,18 +66,6 @@
               onclick="toggleUserMenu()"
             >
               G
-            </div>
-            <div class="user-dropdown" id="user-dropdown">
-              <a href="legalnotice.html">Legal Notice</a>
-              <a href="privacypolicy.html">Privacy Policy</a>
-              <a
-                href="#"
-                onclick="
-                  handleLogout();
-                  return false;
-                "
-                >Log out</a
-              >
             </div>
           </div>
         </div>
