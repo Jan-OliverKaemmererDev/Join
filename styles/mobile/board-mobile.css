@@ -6,11 +6,6 @@
     overflow-x: hidden;
   }
 
-  /* 1. Sidebar ausblenden */
-  .sidebar {
-    display: none;
-  }
-
   /* 2. Header anpassen (Logo links, Profil rechts) */
   .dashboard-header {
     position: fixed;
@@ -181,57 +176,71 @@
     width: 100%;
   }
 
-  /* Bottom Navigation */
-  .d-none-desktop {
-    display: flex !important;
+  /* Mobile Nav ausblenden (wird durch Sidebar ersetzt) */
+  .mobile-nav {
+    display: none !important;
   }
 
-  .mobile-nav {
+  /* --- Bottom Navigation (Repurposed Sidebar) --- */
+  .sidebar {
+    display: flex !important;
     position: fixed;
+    flex-direction: row;
     bottom: 0;
     left: 0;
-    width: 100%;
+    right: 0;
+    top: auto;
     height: 80px;
+    width: 100%;
+    padding: 0;
     background-color: #2a3647;
-    display: flex;
-    justify-content: space-around;
+    z-index: 1001;
+    justify-content: center;
     align-items: center;
-    z-index: 1000;
-    padding: 0 16px;
-    padding-bottom: env(safe-area-inset-bottom);
   }
 
-  .nav-item {
-    display: flex;
+  .sidebar > img,
+  .legal-links {
+    display: none;
+  }
+
+  .nav-links {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    gap: 0;
+  }
+
+  .nav-links a {
     flex-direction: column;
+    padding: 8px;
+    font-size: 12px;
+    gap: 4px;
+    color: #a8a8a8;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 10px;
-    gap: 4px;
-    padding: 8px 5px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-    width: auto;
-    height: auto;
+    width: 25%;
   }
 
-  .nav-item img {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
-    filter: brightness(0) invert(1);
+  .nav-links a img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1) opacity(0.6);
   }
 
-  .nav-item.active {
+  .nav-links a.active {
+    background-color: #091931;
+    border-radius: 12px;
     color: white;
-    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .nav-links a.active img {
+    filter: brightness(0) invert(1) opacity(1);
+  }
+
+  .nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
-  }
-
-  .nav-item:hover {
-    background-color: rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -264,19 +273,5 @@
 
   .task-description {
     font-size: 12px;
-  }
-
-  .mobile-nav {
-    height: 80px;
-  }
-
-  .nav-item {
-    font-size: 10px;
-    gap: 4px;
-  }
-
-  .nav-item img {
-    width: 32px;
-    height: 32px;
   }
 }
