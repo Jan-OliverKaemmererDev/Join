@@ -27,18 +27,6 @@ function initLegalNotice() {
       </div>
     `;
 
-    const contentTitle = document.querySelector("h1");
-    if (contentTitle) {
-      // Prüfen, ob Pfeil schon da ist, um Dopplung zu vermeiden
-      if (!contentTitle.querySelector(".mobile-back-arrow")) {
-        contentTitle.innerHTML += `
-            <a href="index.html" class="mobile-back-arrow">
-              <img src="./assets/icons/arrow-left-blue.png" alt="Back">
-            </a>
-          `;
-      }
-    }
-
     if (headerIcons) headerIcons.style.display = "none";
   } else {
     document.body.classList.add("is-logged-in");
@@ -46,6 +34,19 @@ function initLegalNotice() {
       displayGuestInitials();
     } else {
       displayUserInitials(currentUser.name);
+    }
+  }
+
+  const contentTitle = document.querySelector("h1");
+  if (contentTitle) {
+    if (!contentTitle.querySelector(".mobile-back-arrow")) {
+      const backHref =
+        isPublic || !currentUser ? "index.html" : "summaryuser.html";
+      contentTitle.innerHTML += `
+          <a href="${backHref}" class="mobile-back-arrow">
+            <img src="./assets/icons/arrow-left-blue.png" alt="Back">
+          </a>
+        `;
     }
   }
 }
