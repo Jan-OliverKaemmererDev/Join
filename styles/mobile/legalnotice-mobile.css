@@ -193,18 +193,19 @@
     justify-content: center;
     gap: 16px;
     padding-bottom: 16px; /* Etwas Abstand vom unteren Rand */
-}
+    padding-right: 0px;
+  }
 
-.legal-links a {
-    color: #A8A8A8; /* Farbe anpassen falls nötig */
+  .legal-links a {
+    color: #a8a8a8; /* Farbe anpassen falls nötig */
     text-decoration: none;
     font-size: 14px;
-}
+  }
 
-.legal-links a.active {
+  .legal-links a.active {
     color: #29abe2; /* Join-Blau für aktiven Link */
     font-weight: bold;
-}
+  }
 
   /* 4. LEGAL NOTICE CONTENT ANPASSUNGEN */
   .legal-notice-container {
@@ -219,33 +220,33 @@
     align-items: center !important;
   }
 
-   .privacy-policy-container h1,
-.legal-notice-container h1 {
+  .privacy-policy-container h1,
+  .legal-notice-container h1 {
     position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+  }
 
-/* Der neue funktionale Pfeil */
-.mobile-back-arrow {
+  /* Der neue funktionale Pfeil */
+  .mobile-back-arrow {
     display: flex !important;
     align-items: center;
     cursor: pointer;
-}
+  }
 
-.mobile-back-arrow img {
+  .mobile-back-arrow img {
     width: 24px;
     height: 24px;
-}
+  }
 
   /* Der blaue Pfeil im H1 */
   .privacy-policy-container h1::after,
-.legal-notice-container h1::after {
+  .legal-notice-container h1::after {
     content: none !important; /* Entfernt den nicht-klickbaren Pfeil */
-}
+  }
 
-/* --- SIDEBAR MOBILE BOTTOM BAR --- */
+  /* --- SIDEBAR MOBILE BOTTOM BAR --- */
 
   .sidebar {
     position: fixed !important;
@@ -254,7 +255,7 @@
     left: 0 !important;
     width: 100% !important;
     height: 80px !important; /* Höhe der unteren Leiste */
-    background-color: #2A3647 !important;
+    background-color: #2a3647 !important;
     z-index: 999 !important;
     padding: 0 !important;
     /* Flexbox um alles zu zentrieren */
@@ -294,7 +295,7 @@
     align-items: center !important;
     justify-content: center !important;
     text-decoration: none !important;
-    color: #A8A8A8 !important;
+    color: #a8a8a8 !important;
     gap: 4px !important; /* Abstand zwischen Pfeil und Text */
   }
 
@@ -303,7 +304,7 @@
     height: 20px !important;
     filter: brightness(0) invert(1); /* Icon weiß machen */
   }
-  
+
   .nav-links .login-text {
     font-size: 12px !important; /* Text klein unter das Icon */
     line-height: 1 !important;
@@ -313,21 +314,30 @@
   .legal-links {
     display: flex !important;
     flex-direction: row !important; /* Nebeneinander */
-    gap: 16px !important;
+    gap: 8px !important;
     padding-bottom: 0 !important;
     justify-content: flex-end !important; /* Rechts bündig */
     align-items: center !important;
+    height: 100% !important; /* Volle Höhe der Sidebar */
   }
 
   .legal-links a {
-    color: #A8A8A8 !important;
+    color: #cdcdcd !important;
     text-decoration: none !important;
     font-size: 14px !important;
     white-space: nowrap !important;
+    padding: 0 15px !important; /* Padding nur links/rechts */
+    transition: all 0.2s ease;
+    height: 80% !important; /* Etwas kleiner als die Sidebar für den Button-Look */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 16px !important;
   }
 
   .legal-links a.active {
-    color: #29abe2 !important;
-    font-weight: bold !important;
+    background-color: #091931 !important;
+    color: white !important;
+    font-weight: 400 !important;
   }
 }
