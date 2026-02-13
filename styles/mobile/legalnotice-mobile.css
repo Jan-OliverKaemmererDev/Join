@@ -39,7 +39,7 @@
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 0 20px !important;
+    padding: 0 16px !important;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
     z-index: 1100 !important;
   }
@@ -52,8 +52,8 @@
   .dashboard-header::before {
     content: "";
     display: block;
-    width: 40px;
-    height: 48px;
+    width: 32px !important;
+    height: 38px !important;
     background-image: url("../../assets/login-screen/join-logo.png");
     background-size: contain;
     background-repeat: no-repeat;
@@ -63,7 +63,7 @@
   .header-icons {
     display: flex;
     align-items: center !important;
-    gap: 15px !important;
+    gap: 12px !important;
   }
 
   .help-link {
@@ -72,8 +72,8 @@
 
   /* Der Kreis mit den Initialen (MM/SM) nach rechts */
   .user-initials {
-    width: 40px !important;
-    height: 40px !important;
+    width: 32px !important;
+    height: 32px !important;
     border: 2px solid #2a3647 !important;
     border-radius: 50% !important;
     display: flex !important;
@@ -83,6 +83,7 @@
     color: #29abe2 !important;
     background-color: white;
     cursor: pointer;
+    font-size: 14px !important;
   }
 
   /* 3. BOTTOM NAVIGATION (Ehemals Sidebar) */
@@ -110,11 +111,9 @@
   .nav-links {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-between !important;
+    justify-content: space-around !important;
     align-items: center !important;
     width: 100% !important;
-    max-width: 428px !important;
-    margin: 0 auto !important;
     height: 80px !important;
   }
 
@@ -124,19 +123,30 @@
     align-items: center !important;
     justify-content: center !important;
     gap: 4px !important;
-    color: white !important;
+    color: #a8a8a8 !important;
     text-decoration: none !important;
-    font-size: 10px !important;
+    font-size: 12px !important;
     flex: 0 0 auto !important;
-    width: auto !important;
+    width: 20% !important;
     height: auto !important;
-    padding: 8px 5px !important;
+    padding: 8px !important;
   }
 
   .nav-links img {
-    width: 32px !important;
-    height: 32px !important;
+    width: 24px !important;
+    height: 24px !important;
     margin: 0 !important;
+    filter: brightness(0) invert(1) opacity(0.6) !important;
+  }
+
+  .nav-links a.active {
+    background-color: #091931 !important;
+    border-radius: 12px !important;
+    color: white !important;
+  }
+
+  .nav-links a.active img {
+    filter: brightness(0) invert(1) opacity(1) !important;
   }
 
   .nav-links .login-icon {
@@ -339,5 +349,15 @@
     background-color: #091931 !important;
     color: white !important;
     font-weight: 400 !important;
+  }
+
+  /* Verstecke Legal Links in der mobilen Bottom-Nav wenn eingeloggt */
+  body.is-logged-in .legal-links {
+    display: none !important;
+  }
+
+  /* Korrektur der Verteilung der Nav-Links wenn eingeloggt */
+  body.is-logged-in .nav-links {
+    justify-content: space-between !important;
   }
 }

@@ -20,18 +20,18 @@ function initPrivacyPolicy() {
           </div>
           
           <div class="legal-links">
-            <a href="privacypolicy.html" class="${window.location.pathname.includes('privacypolicy') ? 'active' : ''}">Privacy Policy</a>
-            <a href="legalnotice.html" class="${window.location.pathname.includes('legalnotice') ? 'active' : ''}">Legal notice</a>
+            <a href="privacypolicy.html" class="${window.location.pathname.includes("privacypolicy") ? "active" : ""}">Privacy Policy</a>
+            <a href="legalnotice.html" class="${window.location.pathname.includes("legalnotice") ? "active" : ""}">Legal notice</a>
           </div>
           
       </div>
     `;
 
-    const contentTitle = document.querySelector('h1');
+    const contentTitle = document.querySelector("h1");
     if (contentTitle) {
       // Prüfen, ob Pfeil schon da ist, um Dopplung zu vermeiden
-      if (!contentTitle.querySelector('.mobile-back-arrow')) {
-          contentTitle.innerHTML += `
+      if (!contentTitle.querySelector(".mobile-back-arrow")) {
+        contentTitle.innerHTML += `
             <a href="index.html" class="mobile-back-arrow">
               <img src="./assets/icons/arrow-left-blue.png" alt="Back">
             </a>
@@ -41,6 +41,7 @@ function initPrivacyPolicy() {
 
     if (headerIcons) headerIcons.style.display = "none";
   } else {
+    document.body.classList.add("is-logged-in");
     if (currentUser.isGuest) {
       displayGuestInitials();
     } else {
