@@ -96,18 +96,42 @@ const findContactById = (id) => contacts.find((c) => c.id === id) || null;
 function showContactDetails(id) {
   const contact = findContactById(id);
   if (!contact) return;
-  document.getElementById("contact-details-content").innerHTML =
-    getContactDetailsTemplate(contact);
+
+  const container = document.getElementById("contact-details-view");
+  const content = document.getElementById("contact-details-content");
+
+  // Hier holen wir uns den Header
+  const headerStatic = document.querySelector(".details-header-static");
+
+  // Wir nutzen die neue Template-Funktion (aus der vorherigen Antwort)
+  // Falls du die Funktion noch nicht hast, nutze deine alte getContactDetailsTemplate(contact)
+  // Aber wichtig ist der Unterschied Desktop/Mobile
+  if (window.innerWidth > 780) {
+    content.innerHTML = getDesktopContactDetailsTemplate(contact);
+  } else {
+    content.innerHTML = getMobileContactDetailsTemplate(contact);
+  }
+
+  // Aktiven Kontakt in der Liste markieren
   document.querySelectorAll(".contact-item").forEach((item) => {
     item.classList.toggle(
       "active",
       parseInt(item.getAttribute("data-id")) === id,
     );
   });
+
+  // Desktop & Mobile Sichtbarkeit steuern
   if (window.innerWidth <= 780) {
     document
       .querySelector(".contact-details-container")
       .classList.add("show-mobile");
+  } else {
+    container.classList.add("visible");
+
+    // --- NEU: Header nach oben schieben ---
+    if (headerStatic) {
+      headerStatic.classList.add("slide-up");
+    }
   }
 }
 
