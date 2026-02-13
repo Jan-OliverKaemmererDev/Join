@@ -20,6 +20,7 @@
   .add-task-section h1 {
     font-size: 47px;
     font-weight: 700;
+    margin-top: 16px;
     margin-bottom: 24px;
   }
 
@@ -93,7 +94,7 @@
   }
 
   .priority-btn {
-    padding: 8px 4px;
+    padding: 14px 4px;
     font-size: 14px;
     flex: 1;
     gap: 6px;
@@ -104,6 +105,10 @@
     height: 10px;
   }
 
+  .priority-btn.active img {
+    filter: brightness(0) invert(1);
+  }
+
   /* --- Sticky Form Actions --- */
   .form-footer {
     position: fixed;
@@ -111,8 +116,8 @@
     left: 0;
     right: 0;
     background-color: #f6f7f8;
-    padding: 16px;
-    border-top: none;
+    padding: 16px 0;
+    border-top: 1px solid #d1d1d1;
     z-index: 900;
     display: flex;
     justify-content: center;
@@ -127,22 +132,63 @@
     width: 100%;
     max-width: 400px;
     display: flex;
-    gap: 12px;
+    gap: 32px;
+    padding-right: 16px;
+    padding-left: 72px;
   }
 
   .btn-clear,
   .btn-create {
-    flex: 1;
-    padding: 12px 0;
+    padding: 12px 10px;
     font-size: 16px;
     font-weight: 700;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    height: 48px;
+    height: 56px;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
   }
 
   .btn-clear {
-    border: 1px solid #2a3647;
+    background-color: white !important;
+    color: #2a3647 !important;
+    border: 1px solid #2a3647 !important;
+    flex: 0 0 110px !important;
+  }
+
+  .btn-create {
+    background-color: #2a3647 !important;
+    color: white !important;
+    border: none !important;
+    flex: 1 !important;
+  }
+
+  .btn-clear svg,
+  .btn-create svg {
+    display: none !important;
+  }
+
+  .btn-clear::after {
+    content: "";
+    width: 24px;
+    height: 24px;
+    background-image: url("../../assets/icons/clear-X-icon.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+  }
+
+  .btn-create::after {
+    content: "";
+    width: 24px;
+    height: 24px;
+    background-image: url("../../assets/icons/check-create-icon.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
   }
 
   /* --- Bottom Navigation (Repurposed Sidebar) --- */
