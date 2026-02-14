@@ -24,7 +24,7 @@ function initBoard() {
  * Richtet den Event-Listener für hinzugefügte Tasks ein
  */
 function setupTaskAddedListener() {
-  window.addEventListener("taskAdded", function() {
+  window.addEventListener("taskAdded", function () {
     closeAddTaskOverlay();
     loadTasks();
     renderTasks();
@@ -245,7 +245,7 @@ function startDragging(id, ev) {
  * Beendet das Drag-and-Drop
  */
 function endDragging() {
-  setTimeout(function() {
+  setTimeout(function () {
     isDragging = false;
   }, 0);
 }
@@ -586,7 +586,7 @@ function handleTouchEnd(ev) {
   }
   touchDragElement = null;
   touchDragTaskId = null;
-  setTimeout(function() { isDragging = false; }, 0);
+  setTimeout(function () { isDragging = false; }, 0);
 }
 
 

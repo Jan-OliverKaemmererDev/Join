@@ -157,42 +157,40 @@
     gap: 16px;
   }
 
-  /* Add Task Overlay - Fullscreen auf Mobile */
+  /* Add Task Overlay - Floating Card auf Mobile */
   .overlay-container#add-task-overlay {
-    background-color: #f6f7f8;
+    background-color: rgba(0, 0, 0, 0.3);
     z-index: 1100;
+    padding: 24px 24px 104px 24px;
+    box-sizing: border-box;
   }
 
   .overlay-container#add-task-overlay .overlay-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative;
     transform: none !important;
-    max-width: none;
-    max-height: none;
-    border-radius: 0;
-    box-shadow: none;
-    background-color: #f6f7f8;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: white;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 0;
   }
 
+  /* --- Close Button Bar --- */
   .overlay-close-container {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
-    height: 80px;
     background: white;
-    z-index: 1101;
-    padding: 0 16px;
+    z-index: 2;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 20px 20px 0 0;
+    border-bottom: 1px solid #eee;
   }
 
   .overlay-close-button {
@@ -208,16 +206,18 @@
     justify-content: center;
   }
 
+  /* --- Overlay Title --- */
   .add-task-title {
-    font-size: 47px;
+    font-size: 28px;
     font-weight: 700;
     margin: 0;
-    padding: 96px 16px 16px 16px;
+    padding: 16px 20px 8px 20px;
     color: #000;
   }
 
+  /* --- Form Layout --- */
   #add-task-form {
-    padding: 0 16px 160px 16px;
+    padding: 0 20px 12px 20px;
   }
 
   .form-container {
@@ -231,12 +231,13 @@
     gap: 16px;
   }
 
+  /* --- Form Groups --- */
   .overlay-content .form-group {
-    gap: 4px;
+    gap: 6px;
   }
 
   .overlay-content .form-group label {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 400;
     color: #2a3647;
   }
@@ -244,11 +245,13 @@
   .overlay-content .form-group input,
   .overlay-content .form-group textarea,
   .overlay-content .form-group select {
-    font-size: 16px;
-    padding: 10px 12px;
+    font-size: 15px;
+    padding: 10px 14px;
     border: 1px solid #d1d1d1;
     border-radius: 10px;
     background-color: #fff;
+    box-sizing: border-box;
+    width: 100%;
   }
 
   .overlay-content .form-group textarea {
@@ -256,17 +259,17 @@
     resize: vertical;
   }
 
-  /* Priority Buttons */
+  /* --- Priority Buttons --- */
   .overlay-content .priority-buttons {
     flex-direction: row;
     gap: 8px;
   }
 
   .overlay-content .priority-btn {
-    padding: 12px 4px;
+    padding: 12px 6px;
     font-size: 14px;
     flex: 1;
-    gap: 4px;
+    gap: 6px;
   }
 
   .overlay-content .priority-btn img {
@@ -278,7 +281,7 @@
     filter: brightness(0) invert(1);
   }
 
-  /* Category und Subtasks auf Mobile ausblenden */
+  /* --- Category und Subtasks auf Mobile ausblenden --- */
   .overlay-content .form-group:has(#category) {
     display: none;
   }
@@ -287,16 +290,15 @@
     display: none;
   }
 
-  /* Form Footer - Fixed oberhalb der Navigation */
+  /* --- Form Footer - Sticky am unteren Rand der Karte --- */
   .overlay-content .form-footer {
-    position: fixed;
-    bottom: 80px;
-    left: 0;
-    right: 0;
-    background-color: #f6f7f8;
-    padding: 12px 0;
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    padding: 12px 20px;
     border-top: 1px solid #d1d1d1;
-    z-index: 1101;
+    border-radius: 0 0 20px 20px;
+    z-index: 2;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -308,16 +310,15 @@
 
   .overlay-content .form-actions {
     width: 100%;
-    max-width: 400px;
     display: flex;
     gap: 16px;
-    padding: 0 16px;
+    padding: 0;
   }
 
   .overlay-content .btn-clear,
   .overlay-content .btn-create {
-    padding: 12px 10px;
-    font-size: 16px;
+    padding: 10px 12px;
+    font-size: 15px;
     font-weight: 700;
     border-radius: 10px;
     display: flex;
