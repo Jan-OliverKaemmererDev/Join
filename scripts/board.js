@@ -357,6 +357,7 @@ function openAddTaskOverlay() {
  */
 function closeAddTaskOverlay() {
   document.getElementById("add-task-overlay").classList.remove("active");
+  resetFormToAddMode();
 }
 
 
@@ -647,4 +648,92 @@ function removeAllHighlights() {
   for (let i = 0; i < lists.length; i++) {
     lists[i].classList.remove("drag-over");
   }
+}
+
+
+/**
+ * Bearbeitet einen vorhandenen Task
+ * @param {number} taskId - Die ID des zu bearbeitenden Tasks
+ */
+function editTask(taskId) {
+  const task = findTask(taskId);
+  if (!task) return;
+  closeTaskDetails();
+  fillFormWithTaskData(task);
+  openAddTaskOverlay();
+  setupFormForEdit(taskId);
+}
+
+
+/**
+ * Füllt das Formular mit den Daten eines Tasks
+ * @param {Object} task - Das Task-Objekt
+ */
+function fillFormWithTaskData(task) {
+  document.getElementById("title").value = task.title;
+  document.getElementById("description").value = task.description;
+  document.getElementById("due-date").value = task.dueDate;
+  document.getElementById("assigned-to").value = task.assignedTo || "";
+  document.getElementById("category").value = task.category;
+  selectPriority(task.priority);
+  if (task.subtasks && task.subtasks.length > 0) {
+    subtasks = JSON.parse(JSON.stringify(task.subtasks));
+  } else {
+    subtasks = [];
+  }
+  renderSubtasks();
+  validateForm();
+}
+
+
+/**
+ * Konfiguriert das Formular für die Bearbeitung
+ * @param {number} taskId - Die ID des zu bearbeitenden Tasks
+ */
+function setupFormForEdit(taskId) {
+  const form = document.getElementById("add-task-form");
+  const submitBtn = document.getElementById("create-task-btn");
+  const title = document.querySelector(".add-task-title");
+  title.textContent = "Edit Task";
+  submitBtn.textContent = "Save Changes";
+  form.onsubmit = function (event) {
+    event.preventDefault();
+    updateTask(taskId);
+  };
+}
+
+
+/**
+ * Aktualisiert einen vorhandenen Task
+ * @param {number} taskId - Die ID des zu aktualisierenden Tasks
+ */
+function updateTask(taskId) {
+  const taskIndex = findTaskById(taskId);
+  if (taskIndex === -1) return;
+  tasks[taskIndex].title = document.getElementById("title").value.trim();
+  tasks[taskIndex].description = document.getElementById("description").value.trim();
+  tasks[taskIndex].dueDate = document.getElementById("due-date").value;
+  tasks[taskIndex].priority = selectedPriority;
+  tasks[taskIndex].assignedTo = document.getElementById("assigned-to").value;
+  tasks[taskIndex].category = document.getElementById("category").value;
+  tasks[taskIndex].subtasks = JSON.parse(JSON.stringify(subtasks));
+  saveTasks();
+  renderTasks();
+  resetFormToAddMode();
+  closeAddTaskOverlay();
+  showToast("Task updated successfully");
+}
+
+
+/**
+ * Setzt das Formular zurück in den Add-Modus
+ */
+function resetFormToAddMode() {
+  const form = document.getElementById("add-task-form");
+  const submitBtn = document.getElementById("create-task-btn");
+  const title = document.querySelector(".add-task-title");
+  title.textContent = "Add Task";
+  submitBtn.textContent = "Create Task";
+  form.onsubmit = handleAddTask;
+  clearForm();
 }
