@@ -10,7 +10,7 @@
  */
 function getTaskCardTemplate(task, categoryClass, categoryLabel, progressHtml, assigneesHtml, priorityIcon) {
   return `
-    <div class="task-card" draggable="true" ondragstart="startDragging(${task.id})" onclick="openTaskDetails(${task.id})">
+    <div class="task-card" draggable="true" data-task-id="${task.id}" ondragstart="startDragging(${task.id}, event)" ondragend="endDragging()" onclick="openTaskDetails(${task.id})">
       <div class="category-tag ${categoryClass}">${categoryLabel}</div>
       <h3 class="task-title">${task.title}</h3>
       <p class="task-description">${task.description}</p>

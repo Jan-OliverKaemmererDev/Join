@@ -1,5 +1,11 @@
 let tasks = [];
 let currentDraggedTaskId = null;
+let isDragging = false;
+let touchDragElement = null;
+let touchDragClone = null;
+let touchStartX = 0;
+let touchStartY = 0;
+let touchDragTaskId = null;
 
 
 /**
@@ -10,6 +16,7 @@ function initBoard() {
   renderTasks();
   checkUser();
   setupTaskAddedListener();
+  initTouchDragDrop();
 }
 
 
@@ -222,9 +229,25 @@ function getPriorityIcon(priority) {
 /**
  * Startet das Drag-and-Drop für einen Task
  * @param {number} id - Die ID des Tasks
+ * @param {Event} ev - Das Drag-Event
  */
-function startDragging(id) {
+function startDragging(id, ev) {
+  isDragging = true;
   currentDraggedTaskId = id;
+  if (ev && ev.dataTransfer) {
+    ev.dataTransfer.setData("text/plain", String(id));
+    ev.dataTransfer.effectAllowed = "move";
+  }
+}
+
+
+/**
+ * Beendet das Drag-and-Drop
+ */
+function endDragging() {
+  setTimeout(function() {
+    isDragging = false;
+  }, 0);
 }
 
 
@@ -293,6 +316,12 @@ function moveTo(status) {
 function drop(ev, status) {
   ev.preventDefault();
   removeHighlight(status + "-list");
+  if (currentDraggedTaskId === null && ev.dataTransfer) {
+    const data = ev.dataTransfer.getData("text/plain");
+    if (data) {
+      currentDraggedTaskId = Number(data);
+    }
+  }
   moveTo(status);
 }
 
@@ -313,6 +342,13 @@ function saveTasks() {
  */
 function openAddTaskOverlay() {
   document.getElementById("add-task-overlay").classList.add("active");
+  if (window.innerWidth <= 780) {
+    const categoryEl = document.getElementById("category");
+    if (categoryEl && !categoryEl.value) {
+      categoryEl.value = "technical";
+    }
+    validateForm();
+  }
 }
 
 
@@ -344,6 +380,7 @@ function findTask(taskId) {
  * @param {number} taskId - Die ID des Tasks
  */
 function openTaskDetails(taskId) {
+  if (isDragging) return;
   const task = findTask(taskId);
   if (!task) return;
   const content = document.getElementById("task-details-content");
@@ -447,5 +484,167 @@ function filterCard(card, query) {
     card.style.display = "flex";
   } else {
     card.style.display = "none";
+  }
+}
+
+
+/**
+ * Initialisiert Touch-Drag-and-Drop für mobile Geräte
+ */
+function initTouchDragDrop() {
+  document.addEventListener("touchstart", handleTouchStart, { passive: true });
+  document.addEventListener("touchmove", handleTouchMove, { passive: false });
+  document.addEventListener("touchend", handleTouchEnd);
+}
+
+
+/**
+ * Behandelt den Touchstart auf einer Task-Karte
+ * @param {TouchEvent} ev - Das Touch-Event
+ */
+function handleTouchStart(ev) {
+  const card = ev.target.closest(".task-card");
+  if (!card) return;
+  const touch = ev.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+  touchDragTaskId = getTaskIdFromCard(card);
+  touchDragElement = card;
+}
+
+
+/**
+ * Liest die Task-ID aus dem data-Attribut einer Karte
+ * @param {HTMLElement} card - Das Task-Karten-Element
+ * @returns {number|null} Die Task-ID oder null
+ */
+function getTaskIdFromCard(card) {
+  const id = card.getAttribute("data-task-id");
+  return id ? Number(id) : null;
+}
+
+
+/**
+ * Behandelt die Touchmove-Events während des Drags
+ * @param {TouchEvent} ev - Das Touch-Event
+ */
+function handleTouchMove(ev) {
+  if (!touchDragElement) return;
+  const touch = ev.touches[0];
+  const deltaX = Math.abs(touch.clientX - touchStartX);
+  const deltaY = Math.abs(touch.clientY - touchStartY);
+  if (!touchDragClone && (deltaX > 10 || deltaY > 10)) {
+    createTouchDragClone(touch);
+  }
+  if (touchDragClone) {
+    ev.preventDefault();
+    touchDragClone.style.left = (touch.clientX - touchDragClone.offsetWidth / 2) + "px";
+    touchDragClone.style.top = (touch.clientY - 30) + "px";
+    highlightColumnUnderTouch(touch.clientX, touch.clientY);
+  }
+}
+
+
+/**
+ * Erstellt einen visuellen Klon der Karte für den Touch-Drag
+ * @param {Touch} touch - Das Touch-Objekt
+ */
+function createTouchDragClone(touch) {
+  touchDragClone = touchDragElement.cloneNode(true);
+  touchDragClone.style.position = "fixed";
+  touchDragClone.style.zIndex = "10000";
+  touchDragClone.style.width = touchDragElement.offsetWidth + "px";
+  touchDragClone.style.opacity = "0.8";
+  touchDragClone.style.pointerEvents = "none";
+  touchDragClone.style.transform = "rotate(3deg)";
+  document.body.appendChild(touchDragClone);
+  touchDragElement.style.opacity = "0.3";
+  isDragging = true;
+}
+
+
+/**
+ * Behandelt das Touchend-Event und führt den Drop aus
+ * @param {TouchEvent} ev - Das Touch-Event
+ */
+function handleTouchEnd(ev) {
+  if (!touchDragElement) return;
+  if (touchDragClone) {
+    const touch = ev.changedTouches[0];
+    const column = getColumnUnderPoint(touch.clientX, touch.clientY);
+    if (column && touchDragTaskId !== null) {
+      currentDraggedTaskId = touchDragTaskId;
+      const status = getStatusFromColumnId(column.id);
+      if (status) {
+        moveTo(status);
+      }
+    }
+    touchDragClone.remove();
+    touchDragClone = null;
+    touchDragElement.style.opacity = "";
+    removeAllHighlights();
+  }
+  touchDragElement = null;
+  touchDragTaskId = null;
+  setTimeout(function() { isDragging = false; }, 0);
+}
+
+
+/**
+ * Findet die Board-Spalte unter einem bestimmten Punkt
+ * @param {number} x - X-Koordinate
+ * @param {number} y - Y-Koordinate
+ * @returns {HTMLElement|null} Das Spalten-Element oder null
+ */
+function getColumnUnderPoint(x, y) {
+  const columns = document.querySelectorAll(".board-column");
+  for (let i = 0; i < columns.length; i++) {
+    const rect = columns[i].getBoundingClientRect();
+    if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+      return columns[i];
+    }
+  }
+  return null;
+}
+
+
+/**
+ * Gibt den Status-String für eine Spalten-ID zurück
+ * @param {string} columnId - Die HTML-ID der Spalte
+ * @returns {string|null} Der Status-String oder null
+ */
+function getStatusFromColumnId(columnId) {
+  if (columnId === "column-todo") return "todo";
+  if (columnId === "column-inprogress") return "inprogress";
+  if (columnId === "column-awaitfeedback") return "awaitfeedback";
+  if (columnId === "column-done") return "done";
+  return null;
+}
+
+
+/**
+ * Hebt die Spalte unter dem Touch-Punkt hervor
+ * @param {number} x - X-Koordinate
+ * @param {number} y - Y-Koordinate
+ */
+function highlightColumnUnderTouch(x, y) {
+  removeAllHighlights();
+  const column = getColumnUnderPoint(x, y);
+  if (column) {
+    const list = column.querySelector(".task-list");
+    if (list) {
+      list.classList.add("drag-over");
+    }
+  }
+}
+
+
+/**
+ * Entfernt alle Drag-Hervorhebungen
+ */
+function removeAllHighlights() {
+  const lists = document.querySelectorAll(".task-list");
+  for (let i = 0; i < lists.length; i++) {
+    lists[i].classList.remove("drag-over");
   }
 }

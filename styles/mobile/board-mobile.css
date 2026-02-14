@@ -157,23 +157,215 @@
     gap: 16px;
   }
 
-  /* Add Task Overlay */
-  .add-task-overlay-card {
-    width: 90vw;
-    padding: 24px 16px;
-    max-width: 500px;
+  /* Add Task Overlay - Fullscreen auf Mobile */
+  .overlay-container#add-task-overlay {
+    background-color: #f6f7f8;
+    z-index: 1100;
+  }
+
+  .overlay-container#add-task-overlay .overlay-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: none !important;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: #f6f7f8;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+  }
+
+  .overlay-close-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: white;
+    z-index: 1101;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .overlay-close-button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    font-size: 24px;
+    color: #2a3647;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .add-task-title {
-    font-size: 32px;
+    font-size: 47px;
+    font-weight: 700;
+    margin: 0;
+    padding: 96px 16px 16px 16px;
+    color: #000;
+  }
+
+  #add-task-form {
+    padding: 0 16px 160px 16px;
   }
 
   .form-container {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 0;
   }
 
   .form-column {
     width: 100%;
+    gap: 16px;
+  }
+
+  .overlay-content .form-group {
+    gap: 4px;
+  }
+
+  .overlay-content .form-group label {
+    font-size: 16px;
+    font-weight: 400;
+    color: #2a3647;
+  }
+
+  .overlay-content .form-group input,
+  .overlay-content .form-group textarea,
+  .overlay-content .form-group select {
+    font-size: 16px;
+    padding: 10px 12px;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+
+  .overlay-content .form-group textarea {
+    min-height: 60px;
+    resize: vertical;
+  }
+
+  /* Priority Buttons */
+  .overlay-content .priority-buttons {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .overlay-content .priority-btn {
+    padding: 12px 4px;
+    font-size: 14px;
+    flex: 1;
+    gap: 4px;
+  }
+
+  .overlay-content .priority-btn img {
+    width: 14px;
+    height: 10px;
+  }
+
+  .overlay-content .priority-btn.active img {
+    filter: brightness(0) invert(1);
+  }
+
+  /* Category und Subtasks auf Mobile ausblenden */
+  .overlay-content .form-group:has(#category) {
+    display: none;
+  }
+
+  .overlay-content .form-group:has(.subtask-input-wrapper) {
+    display: none;
+  }
+
+  /* Form Footer - Fixed oberhalb der Navigation */
+  .overlay-content .form-footer {
+    position: fixed;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    background-color: #f6f7f8;
+    padding: 12px 0;
+    border-top: 1px solid #d1d1d1;
+    z-index: 1101;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .overlay-content .required-note {
+    display: none;
+  }
+
+  .overlay-content .form-actions {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    gap: 16px;
+    padding: 0 16px;
+  }
+
+  .overlay-content .btn-clear,
+  .overlay-content .btn-create {
+    padding: 12px 10px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .overlay-content .btn-clear {
+    background-color: white !important;
+    color: #2a3647 !important;
+    border: 1px solid #2a3647 !important;
+    flex: 0 0 110px !important;
+  }
+
+  .overlay-content .btn-create {
+    background-color: #2a3647 !important;
+    color: white !important;
+    border: none !important;
+    flex: 1 !important;
+  }
+
+  .overlay-content .btn-clear svg,
+  .overlay-content .btn-create svg {
+    display: none !important;
+  }
+
+  .overlay-content .btn-clear::after {
+    content: "";
+    width: 24px;
+    height: 24px;
+    background-image: url("../../assets/icons/clear-X-icon.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
+  }
+
+  .overlay-content .btn-create::after {
+    content: "";
+    width: 24px;
+    height: 24px;
+    background-image: url("../../assets/icons/check-create-icon.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: inline-block;
   }
 
   /* Mobile Nav ausblenden (wird durch Sidebar ersetzt) */
@@ -194,7 +386,7 @@
     width: 100%;
     padding: 0;
     background-color: #2a3647;
-    z-index: 1001;
+    z-index: 1102;
     justify-content: center;
     align-items: center;
   }
