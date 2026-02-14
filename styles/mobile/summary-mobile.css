@@ -331,6 +331,7 @@
     justify-content: center;
     z-index: 2000;
     gap: 8px;
+    text-align: center;
   }
 
   .greeting-container.fade-out {
@@ -354,6 +355,7 @@
     font-weight: 400;
     color: #2a3647;
     margin: 0;
+    text-align: center;
   }
 
   .greeting-container h1 {
@@ -361,5 +363,6 @@
     font-weight: 700;
     color: #29abe2;
     margin: 0;
+    text-align: center;
   }
 }
