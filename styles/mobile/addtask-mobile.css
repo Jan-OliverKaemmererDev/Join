@@ -166,29 +166,10 @@
     flex: 1 !important;
   }
 
-  .btn-clear svg,
-  .btn-create svg {
-    display: none !important;
-  }
-
-  .btn-clear::after {
-    content: "";
+  .btn-clear img,
+  .btn-create img {
     width: 24px;
     height: 24px;
-    background-image: url("../../assets/icons/clear-X-icon.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    display: inline-block;
-  }
-
-  .btn-create::after {
-    content: "";
-    width: 24px;
-    height: 24px;
-    background-image: url("../../assets/icons/check-create-icon.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    display: inline-block;
   }
 
   /* --- Bottom Navigation (Repurposed Sidebar) --- */
