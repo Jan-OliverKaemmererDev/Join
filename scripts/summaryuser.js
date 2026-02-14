@@ -266,7 +266,20 @@ function checkMobileGreeting() {
           greetingContainer.classList.remove("mobile-greeting-overlay");
           greetingContainer.classList.remove("fade-out");
         }, 600);
-      }, 2000);
+      }, 600);
     }
   }
+}
+
+/**
+ * Leitet den Benutzer zur Board-Seite weiter mit einer kurzen Animation
+ * @param {Event} event - Das Klick-Event
+ */
+function redirectToBoard(event) {
+  const card = event.currentTarget;
+  card.classList.add("card-clicked");
+
+  setTimeout(() => {
+    window.location.href = "board.html";
+  }, 200);
 }

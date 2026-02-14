@@ -77,7 +77,10 @@
 
         <div class="summary-container">
           <div class="metrics-grid">
-            <div class="metric-card card-small">
+            <div
+              class="metric-card card-small"
+              onclick="redirectToBoard(event)"
+            >
               <div class="icon-badge">
                 <img
                   src="./assets/summary-page/edit-icon-summary.svg"
@@ -89,7 +92,10 @@
                 <p>To-do</p>
               </div>
             </div>
-            <div class="metric-card card-small">
+            <div
+              class="metric-card card-small"
+              onclick="redirectToBoard(event)"
+            >
               <div class="icon-badge">
                 <img
                   src="./assets/summary-page/check-icon-summary.svg"
@@ -101,7 +107,10 @@
                 <p>Done</p>
               </div>
             </div>
-            <div class="metric-card card-large">
+            <div
+              class="metric-card card-large"
+              onclick="redirectToBoard(event)"
+            >
               <div class="urgent-info">
                 <div class="icon-badge">
                   <img
@@ -119,15 +128,24 @@
                 <p>Upcoming Deadline</p>
               </div>
             </div>
-            <div class="metric-card card-square">
+            <div
+              class="metric-card card-square"
+              onclick="redirectToBoard(event)"
+            >
               <b id="count-board">5</b>
               <p>Tasks in Board</p>
             </div>
-            <div class="metric-card card-square">
+            <div
+              class="metric-card card-square"
+              onclick="redirectToBoard(event)"
+            >
               <b id="count-progress">2</b>
               <p>Tasks In Progress</p>
             </div>
-            <div class="metric-card card-square">
+            <div
+              class="metric-card card-square"
+              onclick="redirectToBoard(event)"
+            >
               <b id="count-awaiting">2</b>
               <p>Awaiting Feedback</p>
             </div>
