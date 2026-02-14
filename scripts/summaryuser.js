@@ -247,11 +247,18 @@ function checkMobileGreeting() {
   const showGreeting = sessionStorage.getItem("showJoinGreeting");
   const isMobile = window.innerWidth <= 780;
 
-  if (showGreeting === "true" && isMobile) {
+  if (showGreeting !== "true") {
+    return;
+  }
+
+  // Consume the login greeting flag on first page load after login.
+  // This prevents showing the welcome overlay again on reload.
+  sessionStorage.removeItem("showJoinGreeting");
+
+  if (isMobile) {
     const greetingContainer = document.querySelector(".greeting-container");
     if (greetingContainer) {
       greetingContainer.classList.add("mobile-greeting-overlay");
-      sessionStorage.removeItem("showJoinGreeting");
 
       setTimeout(() => {
         greetingContainer.classList.add("fade-out");
