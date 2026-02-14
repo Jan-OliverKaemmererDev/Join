@@ -6,29 +6,30 @@
     <link rel="icon" type="image/svg+xml" href="./assets/img/favicon.svg" />
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="./styles/summary.css" />
-    <link rel="stylesheet" href="./styles/mobile/style-mobile.css" />
-    <link rel="stylesheet" href="./styles/mobile/summary-mobile.css" />
     <title>Join - Summary</title>
   </head>
   <body onload="initSummaryUser()">
+    <div id="mobile-greeting-overlay" class="mobile-greeting-overlay d-none">
+      <div class="greeting-content">
+        <span id="mobile-greeting-text"></span>
+        <h1 id="mobile-user-name"></h1>
+      </div>
+    </div>
+
     <nav class="sidebar">
       <img src="./assets/main-page/join-logo-white.svg" alt="Join Logo" />
       <div class="nav-links">
         <a href="summaryuser.html" class="active">
-          <img src="./assets/summary-page/summary-icon.svg" alt="" />
-          Summary
+          <img src="./assets/summary-page/summary-icon.svg" alt="" /> Summary
         </a>
         <a href="addtask.html">
-          <img src="./assets/summary-page/add-task-icon.svg" alt="" />
-          Add Task
+          <img src="./assets/summary-page/add-task-icon.svg" alt="" /> Add Task
         </a>
         <a href="board.html">
-          <img src="./assets/summary-page/board-icon.svg" alt="" />
-          Board
+          <img src="./assets/summary-page/board-icon.svg" alt="" /> Board
         </a>
         <a href="contacts.html">
-          <img src="./assets/summary-page/contacts-icon.svg" alt="" />
-          Contacts
+          <img src="./assets/summary-page/contacts-icon.svg" alt="" /> Contacts
         </a>
       </div>
       <div class="legal-links">
@@ -38,6 +39,15 @@
     </nav>
 
     <main class="main-content">
+      <header class="mobile-header">
+        <img
+          src="./assets/main-page/join-logo-dark.svg"
+          alt="Join Logo"
+          class="mobile-logo"
+        />
+        <div class="user-initials-mobile" onclick="toggleUserMenu()">SM</div>
+      </header>
+
       <header class="dashboard-header">
         <span>Kanban Project Management Tool</span>
         <div class="header-icons">
@@ -55,7 +65,14 @@
             <div class="user-dropdown" id="user-dropdown">
               <a href="legalnotice.html">Legal Notice</a>
               <a href="privacypolicy.html">Privacy Policy</a>
-              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+              <a
+                href="#"
+                onclick="
+                  handleLogout();
+                  return false;
+                "
+                >Log out</a
+              >
             </div>
           </div>
         </div>
@@ -64,39 +81,51 @@
       <section class="summary-section">
         <div class="summary-title">
           <h1>Join 360</h1>
-          <div class="vertical-line"></div>
+          <div class="title-divider"></div>
           <span>Key Metrics at a Glance</span>
         </div>
 
         <div class="summary-container">
           <div class="metrics-grid">
             <div class="metric-card card-small">
-              <img src="./assets/icons/edit-icon.png" alt="To-do icon" />
-              <div>
+              <div class="icon-circle dark">
+                <img src="./assets/icons/edit-icon.png" alt="" />
+              </div>
+              <div class="metric-info">
                 <b id="count-todo">1</b>
                 <p>To-do</p>
               </div>
             </div>
+
             <div class="metric-card card-small">
-              <img src="./assets/icons/check-icon.png" alt="Done icon" />
-              <div>
+              <div class="icon-circle dark">
+                <img src="./assets/icons/check-create-icon.svg" alt="" />
+              </div>
+              <div class="metric-info">
                 <b id="count-done">1</b>
                 <p>Done</p>
               </div>
             </div>
+
             <div class="metric-card card-large">
-              <div class="urgent-info">
-                <img src="./assets/icons/urgent-icon.png" alt="Urgent icon" />
-                <div>
+              <div class="urgent-left">
+                <img
+                  src="./assets/icons/urgent-icon.png"
+                  alt=""
+                  class="urgent-icon"
+                />
+                <div class="metric-info">
                   <b id="count-urgent">1</b>
                   <p>Urgent</p>
                 </div>
               </div>
-              <div class="deadline-info">
-                <b id="next-deadline">October 16, 2022</b>
+              <div class="urgent-divider"></div>
+              <div class="urgent-right">
+                <b id="next-deadline">October 16, 2026</b>
                 <p>Upcoming Deadline</p>
               </div>
             </div>
+
             <div class="metric-card card-square">
               <b id="count-board">5</b>
               <p>Tasks in Board</p>
@@ -118,6 +147,26 @@
         </div>
       </section>
     </main>
+
+    <nav class="mobile-bottom-nav">
+      <a href="summaryuser.html" class="nav-item active">
+        <img src="./assets/summary-page/summary-icon.svg" alt="" />
+        <span>Summary</span>
+      </a>
+      <a href="addtask.html" class="nav-item">
+        <img src="./assets/summary-page/add-task-icon.svg" alt="" />
+        <span>Add Task</span>
+      </a>
+      <a href="board.html" class="nav-item">
+        <img src="./assets/summary-page/board-icon.svg" alt="" />
+        <span>Board</span>
+      </a>
+      <a href="contacts.html" class="nav-item">
+        <img src="./assets/summary-page/contacts-icon.svg" alt="" />
+        <span>Contacts</span>
+      </a>
+    </nav>
+
     <script src="./scripts/auth.js"></script>
     <script src="./scripts/user-initials.js"></script>
     <script src="./script.js"></script>

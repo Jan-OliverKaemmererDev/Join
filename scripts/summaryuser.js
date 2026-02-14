@@ -1,217 +1,153 @@
 /**
- * Initialisiert die Summary-Seite für angemeldete Benutzer
+ * Haupt-Initialisierung der Summary-Seite.
  */
 function initSummaryUser() {
-  const currentUser = getCurrentUser();
-  if (!currentUser) {
-    window.location.href = "index.html";
-    return;
-  }
-  updateUserName(currentUser);
-  updateUserInitials(currentUser);
-  updateGreeting();
-  updateTaskMetrics(currentUser);
+  // 1. Nutzerdaten abrufen (Versucht den Namen aus dem Speicher zu laden)
+  const user = getLoggedInUser();
+
+  // 2. UI-Elemente mit Nutzerdaten und Metriken füllen
+  updateUserUI(user);
+  renderSummaryMetrics();
+
+  // 3. Mobile Animation steuern
+  handleMobileAnimation(user.name);
+
+  // 4. Interaktivität: Karten klickbar machen (Weiterleitung zum Board)
+  setupCardNavigation();
 }
 
-
 /**
- * Aktualisiert den Benutzernamen auf der Seite
- * @param {Object} user - Das Benutzer-Objekt
+ * Holt den eingeloggten Nutzer aus dem LocalStorage oder nutzt einen Fallback.
  */
-function updateUserName(user) {
-  const userNameElement = document.getElementById("user-name");
-  if (userNameElement) {
-    userNameElement.textContent = user.name;
+function getLoggedInUser() {
+  const userData = localStorage.getItem("currentUser");
+  if (userData) {
+    return JSON.parse(userData);
   }
+  // Fallback für die Entwicklung
+  return { name: "Sofia Müller", initials: "SM" };
 }
 
-
 /**
- * Aktualisiert die Benutzer-Initialen im Header
- * @param {Object} user - Das Benutzer-Objekt
+ * Aktualisiert Namen, Begrüßung und Initialen.
+ * Das Datum wird hier nicht mehr gesetzt.
  */
-function updateUserInitials(user) {
-  const initialsElement = document.getElementById("user-initials");
-  if (initialsElement) {
-    const initials = getInitials(user.name);
-    initialsElement.textContent = initials;
+function updateUserUI(user) {
+  const greeting = getGreetingText();
+
+  // Namen setzen (Desktop & Mobile)
+  if (document.getElementById("user-name")) {
+    document.getElementById("user-name").innerText = user.name;
   }
+  if (document.getElementById("mobile-user-name")) {
+    document.getElementById("mobile-user-name").innerText = user.name;
+  }
+
+  // Begrüßungstext setzen
+  if (document.getElementById("greeting-text")) {
+    document.getElementById("greeting-text").innerText = greeting;
+  }
+  if (document.getElementById("mobile-greeting-text")) {
+    document.getElementById("mobile-greeting-text").innerText = greeting;
+  }
+
+  // Initialen in den Headern setzen (Desktop & Mobile)
+  const initialsElements = [
+    document.getElementById("user-initials"),
+    document.querySelector(".user-initials-mobile"),
+  ];
+  initialsElements.forEach((el) => {
+    if (el) el.innerText = user.initials;
+  });
 }
 
-
 /**
- * Generiert Initialen aus einem Namen
- * @param {string} name - Der vollständige Name
- * @returns {string} Die generierten Initialen
+ * Ermittelt die passende Begrüßung basierend auf der Uhrzeit.
  */
-function getInitials(name) {
-  const parts = name.trim().split(" ");
-  if (parts.length === 1) {
-    return parts[0].substring(0, 2).toUpperCase();
-  } else {
-    const firstInitial = parts[0].charAt(0);
-    const lastInitial = parts[parts.length - 1].charAt(0);
-    return (firstInitial + lastInitial).toUpperCase();
-  }
-}
-
-
-/**
- * Aktualisiert die Begrüßungsnachricht basierend auf der Tageszeit
- */
-function updateGreeting() {
+function getGreetingText() {
   const hour = new Date().getHours();
-  let greeting = "Good evening,";
-  if (hour < 12) {
-    greeting = "Good morning,";
-  } else if (hour < 18) {
-    greeting = "Good afternoon,";
-  }
-  const greetingElement = document.getElementById("greeting-text");
-  if (greetingElement) {
-    greetingElement.textContent = greeting;
-  }
+  if (hour < 12) return "Good morning,";
+  if (hour < 18) return "Good afternoon,";
+  return "Good evening,";
 }
 
-
 /**
- * Aktualisiert die Task-Metriken auf der Summary-Seite
- * @param {Object} user - Das Benutzer-Objekt
+ * Füllt die Metriken (Zahlen) in die Karten.
+ * Hier kannst du einen statischen Termin für die Deadline eintragen.
  */
-function updateTaskMetrics(user) {
-  const userTasks = getUserTasks(user.id);
-  const metrics = calculateTaskMetrics(userTasks);
-  document.getElementById("count-todo").textContent = metrics.todo;
-  document.getElementById("count-done").textContent = metrics.done;
-  document.getElementById("count-urgent").textContent = metrics.urgent;
-  document.getElementById("count-board").textContent = metrics.board;
-  document.getElementById("count-progress").textContent = metrics.progress;
-  document.getElementById("count-awaiting").textContent = metrics.awaiting;
-  const deadlineElement = document.getElementById("next-deadline");
-  if (metrics.nextDeadline) {
-    deadlineElement.textContent = metrics.nextDeadline;
-  } else {
-    deadlineElement.textContent = "No upcoming deadline";
-  }
-}
-
-
-/**
- * Ruft die Tasks eines Benutzers ab
- * @param {string} userId - Die ID des Benutzers
- * @returns {Array} Array mit den Tasks des Benutzers
- */
-function getUserTasks(userId) {
-  const tasksKey = "join_tasks_" + userId;
-  const tasksJson = localStorage.getItem(tasksKey);
-  if (tasksJson) {
-    return JSON.parse(tasksJson);
-  }
-  return [];
-}
-
-
-/**
- * Berechnet die Task-Metriken aus einem Task-Array
- * @param {Array} tasks - Array mit Tasks
- * @returns {Object} Objekt mit berechneten Metriken
- */
-function calculateTaskMetrics(tasks) {
+function renderSummaryMetrics() {
   const metrics = {
-    todo: 0,
-    done: 0,
-    urgent: 0,
-    board: 0,
-    progress: 0,
-    awaiting: 0,
-    nextDeadline: null,
+    todo: 1,
+    done: 1,
+    urgent: 1,
+    board: 5,
+    progress: 2,
+    awaiting: 2,
+    deadline: "October 16, 2022", // Hier kannst du ein festes Datum eintragen
   };
-  if (!tasks || tasks.length === 0) {
-    return metrics;
-  }
-  let nearestDeadline = null;
-  for (let i = 0; i < tasks.length; i++) {
-    const task = tasks[i];
-    processTaskStatus(task, metrics);
-    countUrgentTasks(task, metrics);
-    trackNearestDeadline(task, nearestDeadline);
-  }
-  metrics.board = tasks.length;
-  if (nearestDeadline) {
-    metrics.nextDeadline = formatDeadline(nearestDeadline);
-  }
-  return metrics;
-}
 
+  const metricMapping = {
+    "count-todo": metrics.todo,
+    "count-done": metrics.done,
+    "count-urgent": metrics.urgent,
+    "count-board": metrics.board,
+    "count-progress": metrics.progress,
+    "count-awaiting": metrics.awaiting,
+    "next-deadline": metrics.deadline,
+  };
 
-/**
- * Verarbeitet den Status eines Tasks und aktualisiert die Metriken
- * @param {Object} task - Das Task-Objekt
- * @param {Object} metrics - Das Metriken-Objekt
- */
-function processTaskStatus(task, metrics) {
-  switch (task.status) {
-    case "todo":
-      metrics.todo++;
-      break;
-    case "done":
-      metrics.done++;
-      break;
-    case "inprogress":
-      metrics.progress++;
-      break;
-    case "awaitfeedback":
-      metrics.awaiting++;
-      break;
-  }
-}
-
-
-/**
- * Zählt dringende Tasks in den Metriken
- * @param {Object} task - Das Task-Objekt
- * @param {Object} metrics - Das Metriken-Objekt
- */
-function countUrgentTasks(task, metrics) {
-  if (task.priority === "urgent") {
-    metrics.urgent++;
-  }
-}
-
-
-/**
- * Verfolgt die nächste Deadline
- * @param {Object} task - Das Task-Objekt
- * @param {string|null} nearestDeadline - Die aktuell nächste Deadline
- * @returns {string|null} Die aktualisierte nächste Deadline
- */
-function trackNearestDeadline(task, nearestDeadline) {
-  if (task.dueDate) {
-    const taskDate = new Date(task.dueDate);
-    if (!nearestDeadline || taskDate < new Date(nearestDeadline)) {
-      nearestDeadline = task.dueDate;
+  for (const [id, value] of Object.entries(metricMapping)) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.innerText = value;
     }
   }
-  return nearestDeadline;
 }
 
-
 /**
- * Formatiert eine Deadline für die Anzeige
- * @param {string} deadline - Die Deadline als String
- * @returns {string} Die formatierte Deadline
+ * Steuert das Ein- und Ausblenden des Mobile-Overlays.
  */
-function formatDeadline(deadline) {
-  const date = new Date(deadline);
-  const options = { year: "numeric", month: "long", day: "numeric" };
-  return date.toLocaleDateString("en-US", options);
+function handleMobileAnimation(userName) {
+  const overlay = document.getElementById("mobile-greeting-overlay");
+  if (!overlay) return;
+
+  if (window.innerWidth <= 780) {
+    const greeting = getGreetingText();
+    document.getElementById("mobile-greeting-text").innerText = greeting;
+    document.getElementById("mobile-user-name").innerText = userName;
+
+    overlay.classList.remove("d-none");
+
+    setTimeout(() => {
+      overlay.classList.add("fade-out");
+      setTimeout(() => {
+        overlay.classList.add("d-none");
+      }, 800);
+    }, 1500);
+  } else {
+    overlay.classList.add("d-none");
+  }
 }
 
+/**
+ * Macht die Karten klickbar für die Navigation zum Board.
+ */
+function setupCardNavigation() {
+  const cards = document.querySelectorAll(".metric-card");
+  cards.forEach((card) => {
+    card.style.cursor = "pointer";
+    card.onclick = () => {
+      window.location.href = "board.html";
+    };
+  });
+}
 
 /**
- * Meldet den Benutzer ab und leitet zur Login-Seite
+ * Toggelt das User-Menü Dropdown.
  */
-function logoutFromSummary() {
-  logoutUser();
-  window.location.href = "index.html";
+function toggleUserMenu() {
+  const dropdown = document.getElementById("user-dropdown");
+  if (dropdown) {
+    dropdown.classList.toggle("show");
+  }
 }
