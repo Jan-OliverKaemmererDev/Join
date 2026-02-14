@@ -12,6 +12,63 @@
   }
 
   .sidebar {
+    display: flex !important;
+    position: fixed;
+    flex-direction: row;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    height: 80px;
+    width: 100%;
+    padding: 0;
+    background-color: #2a3647;
+    z-index: 1001;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sidebar > img,
+  .legal-links {
+    display: none;
+  }
+
+  .nav-links {
+    flex-direction: row !important;
+    width: 100%;
+    justify-content: space-around;
+    gap: 0;
+  }
+
+  .nav-links a {
+    flex-direction: column !important;
+    padding: 8px;
+    font-size: 12px;
+    gap: 4px;
+    color: #a8a8a8;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+    text-decoration: none;
+  }
+
+  .nav-links a img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1) opacity(0.6);
+  }
+
+  .nav-links a.active {
+    background-color: #091931;
+    border-radius: 12px;
+    color: white;
+  }
+
+  .nav-links a.active img {
+    filter: brightness(0) invert(1) opacity(1);
+  }
+
+  .mobile-nav {
     display: none !important;
   }
 
@@ -79,7 +136,7 @@
     justify-content: center;
 
     font-weight: 600;
-    color: #2a3647;
+    color: rgba(41, 171, 226, 1);
     font-size: 14px;
   }
 
@@ -201,49 +258,6 @@
     padding: 0 !important;
     transform: none !important;
     top: 0;
-  }
-
-  /* ================= BOTTOM NAV ================= */
-
-  .mobile-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    height: 80px;
-    background-color: #2a3647;
-
-    display: flex !important;
-    justify-content: space-around;
-    align-items: center;
-
-    padding: 0 10px;
-    z-index: 1000;
-  }
-
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-
-    color: #cdcdcd;
-    text-decoration: none;
-    font-size: 10px;
-
-    padding: 8px 6px;
-    border-radius: 10px;
-  }
-
-  .nav-item img {
-    width: 28px;
-    height: 28px;
-  }
-
-  .nav-item.active {
-    background-color: #091931;
-    color: white;
   }
 
   /* ================= DIALOG ================= */
@@ -393,21 +407,6 @@
     width: 24px;
     height: 24px;
     filter: brightness(0) invert(1); /* Macht das Icon weiß */
-  }
-
-  /* Korrektur für die Bottom-Nav damit sie wie im Bild aussieht */
-  .mobile-nav {
-    background-color: #2a3647;
-    height: 80px;
-  }
-
-  .nav-item span {
-    font-size: 12px;
-  }
-
-  .nav-item.active {
-    background-color: #091931;
-    border-radius: 12px;
   }
 
   .contact-menu-box {
