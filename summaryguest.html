@@ -55,7 +55,14 @@
             <div class="user-dropdown" id="user-dropdown">
               <a href="legalnotice.html">Legal Notice</a>
               <a href="privacypolicy.html">Privacy Policy</a>
-              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+              <a
+                href="#"
+                onclick="
+                  handleLogout();
+                  return false;
+                "
+                >Log out</a
+              >
             </div>
           </div>
         </div>
@@ -71,14 +78,24 @@
         <div class="summary-container">
           <div class="metrics-grid">
             <div class="metric-card card-small">
-              <img src="./assets/icons/edit-icon.png" alt="To-do tasks icon" />
+              <div class="icon-badge">
+                <img
+                  src="./assets/summary-page/edit-icon-summary.svg"
+                  alt="To-do tasks icon"
+                />
+              </div>
               <div>
                 <b id="count-todo">1</b>
                 <p>To-do</p>
               </div>
             </div>
             <div class="metric-card card-small">
-              <img src="./assets/icons/check-icon.png" alt="Done tasks icon" />
+              <div class="icon-badge">
+                <img
+                  src="./assets/summary-page/check-icon-summary.svg"
+                  alt="Done tasks icon"
+                />
+              </div>
               <div>
                 <b id="count-done">1</b>
                 <p>Done</p>
@@ -86,7 +103,12 @@
             </div>
             <div class="metric-card card-large">
               <div class="urgent-info">
-                <img src="./assets/icons/urgent-icon.png" alt="Urgent tasks icon" />
+                <div class="icon-badge">
+                  <img
+                    src="./assets/summary-page/urgent-icon-summary.svg"
+                    alt="Urgent tasks icon"
+                  />
+                </div>
                 <div>
                   <b id="count-urgent">1</b>
                   <p>Urgent</p>
@@ -123,6 +145,6 @@
     <script src="./script.js"></script>
     <script src="./scripts/side-menu.js"></script>
     <script src="./scripts/user-menu.js"></script>
-    <script src="./summary.js"></script>
+    <script src="./scripts/summaryuser.js"></script>
   </body>
 </html>

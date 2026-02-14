@@ -51,6 +51,7 @@
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .metric-card:hover {
@@ -61,11 +62,12 @@
 
 .metric-card b {
   font-size: 48px;
+  line-height: 1.2;
 }
 
 .metric-card p {
   font-size: 20px;
-  margin: 5px 0 0 0;
+  margin: 0;
 }
 
 .sidebar {
@@ -83,53 +85,60 @@
   box-sizing: border-box;
 }
 
-.icon-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: var(--sidebar-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.icon-circle img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-}
-
 .card-small {
   flex-direction: row;
   gap: 20px;
   padding: 25px;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }
 
-.card-small img {
+.icon-badge {
   width: 60px;
   height: 60px;
-  object-fit: contain;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
   flex-shrink: 0;
+}
+
+.card-small .icon-badge {
+  background-color: var(--sidebar-color);
+}
+
+.icon-badge img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  transition: all 0.2s ease-in-out;
+}
+
+.metric-card.card-small:hover .icon-badge {
+  background-color: white !important;
+}
+
+.metric-card.card-small:hover .icon-badge img {
+  /* Filter to convert icon color to #273447 */
+  filter: brightness(0) saturate(100%) invert(18%) sepia(12%) saturate(1450%)
+    hue-rotate(178deg) brightness(96%) contrast(91%);
 }
 
 .card-small div {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  align-items: center;
 }
 
 .card-small b {
   font-size: 48px;
   display: block;
-  line-height: 1;
 }
 
 .card-small p {
   font-size: 20px;
-  margin: 0;
   white-space: nowrap;
 }
 
@@ -161,10 +170,8 @@
   gap: 20px;
 }
 
-.urgent-info img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
+.urgent-info .icon-badge {
+  background-color: #ff3d00;
 }
 
 .urgent-info b {
@@ -173,7 +180,6 @@
 
 .urgent-info p {
   font-size: 20px;
-  margin: 5px 0 0 0;
 }
 
 .deadline-info {
