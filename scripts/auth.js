@@ -11,7 +11,6 @@ const GUEST_USER = {
   isGuest: true,
 };
 
-
 /**
  * Initialisiert das Authentifizierungssystem
  */
@@ -25,7 +24,6 @@ function initAuth() {
   }
 }
 
-
 /**
  * Ruft alle registrierten Benutzer ab
  * @returns {Array} Array mit allen Benutzern
@@ -35,7 +33,6 @@ function getUsers() {
   return usersJson ? JSON.parse(usersJson) : [];
 }
 
-
 /**
  * Speichert Benutzer im LocalStorage
  * @param {Array} users - Array mit Benutzern
@@ -43,7 +40,6 @@ function getUsers() {
 function saveUsers(users) {
   localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
 }
-
 
 /**
  * Prüft ob eine E-Mail bereits existiert
@@ -60,7 +56,6 @@ function emailExists(users, email) {
   return false;
 }
 
-
 /**
  * Registriert einen neuen Benutzer
  * @param {string} name - Der Name des Benutzers
@@ -72,14 +67,20 @@ function signUpUser(name, email, password) {
   try {
     const users = getUsers();
     if (emailExists(users, email)) {
-      return createErrorResult("duplicate-email", "Diese E-Mail-Adresse ist bereits registriert");
+      return createErrorResult(
+        "duplicate-email",
+        "Diese E-Mail-Adresse ist bereits registriert",
+      );
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return createErrorResult("invalid-email", "Ungültige E-Mail-Adresse");
     }
     if (password.length < 6) {
-      return createErrorResult("weak-password", "Das Passwort ist zu schwach (mindestens 6 Zeichen)");
+      return createErrorResult(
+        "weak-password",
+        "Das Passwort ist zu schwach (mindestens 6 Zeichen)",
+      );
     }
     const newUser = createNewUser(name, email, password);
     users.push(newUser);
@@ -88,10 +89,12 @@ function signUpUser(name, email, password) {
     return { success: true, message: "Registrierung erfolgreich" };
   } catch (error) {
     console.error("Signup error:", error);
-    return createErrorResult("unknown", "Ein Fehler ist aufgetreten: " + error.message);
+    return createErrorResult(
+      "unknown",
+      "Ein Fehler ist aufgetreten: " + error.message,
+    );
   }
 }
-
 
 /**
  * Erstellt ein neues Benutzer-Objekt
@@ -111,7 +114,6 @@ function createNewUser(name, email, password) {
   };
 }
 
-
 /**
  * Erstellt ein Fehler-Ergebnis-Objekt
  * @param {string} error - Der Fehlertyp
@@ -121,7 +123,6 @@ function createNewUser(name, email, password) {
 function createErrorResult(error, message) {
   return { success: false, error: error, message: message };
 }
-
 
 /**
  * Sucht einen Benutzer anhand der E-Mail-Adresse
@@ -137,7 +138,6 @@ function findUserByEmail(users, email) {
   }
   return null;
 }
-
 
 /**
  * Meldet einen Benutzer an
@@ -156,15 +156,21 @@ function loginUser(email, password) {
       return createErrorResult("wrong-password", "Falsches Passwort");
     }
     const sessionUser = createSessionUser(user);
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(sessionUser));
+    localStorage.setItem(
+      STORAGE_KEYS.CURRENT_USER,
+      JSON.stringify(sessionUser),
+    );
+    sessionStorage.setItem("showJoinGreeting", "true");
     console.log("User logged in:", email);
     return { success: true, user: sessionUser };
   } catch (error) {
     console.error("Login error:", error);
-    return createErrorResult("unknown", "Ein Fehler ist aufgetreten: " + error.message);
+    return createErrorResult(
+      "unknown",
+      "Ein Fehler ist aufgetreten: " + error.message,
+    );
   }
 }
-
 
 /**
  * Erstellt ein Session-User-Objekt ohne sensible Daten
@@ -180,7 +186,6 @@ function createSessionUser(user) {
   };
 }
 
-
 /**
  * Meldet einen Gast-Benutzer an
  * @returns {Object} Ergebnis-Objekt mit success und user
@@ -188,14 +193,17 @@ function createSessionUser(user) {
 function guestLoginUser() {
   try {
     localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(GUEST_USER));
+    sessionStorage.setItem("showJoinGreeting", "true");
     console.log("Guest logged in");
     return { success: true, user: GUEST_USER };
   } catch (error) {
     console.error("Guest login error:", error);
-    return createErrorResult("unknown", "Ein Fehler ist aufgetreten: " + error.message);
+    return createErrorResult(
+      "unknown",
+      "Ein Fehler ist aufgetreten: " + error.message,
+    );
   }
 }
-
 
 /**
  * Ruft den aktuell angemeldeten Benutzer ab
@@ -206,7 +214,6 @@ function getCurrentUser() {
   return userJson ? JSON.parse(userJson) : null;
 }
 
-
 /**
  * Meldet den aktuellen Benutzer ab
  */
@@ -215,7 +222,6 @@ function logoutUser() {
   console.log("User logged out");
 }
 
-
 /**
  * Prüft ob ein Benutzer angemeldet ist
  * @returns {boolean} True wenn ein Benutzer angemeldet ist
@@ -223,6 +229,5 @@ function logoutUser() {
 function isLoggedIn() {
   return getCurrentUser() !== null;
 }
-
 
 initAuth();

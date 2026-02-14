@@ -11,6 +11,7 @@ function initSummaryUser() {
   updateUserInitials(currentUser);
   updateGreeting();
   updateTaskMetrics(currentUser);
+  checkMobileGreeting();
 }
 
 /**
@@ -57,12 +58,18 @@ function getInitials(name) {
  */
 function updateGreeting() {
   const hour = new Date().getHours();
-  let greeting = "Good evening,";
+  const currentUser = getCurrentUser();
+  const isGuest = currentUser && currentUser.id === "guest";
+
+  let greeting = "Good evening";
   if (hour < 12) {
-    greeting = "Good morning,";
+    greeting = "Good morning";
   } else if (hour < 18) {
-    greeting = "Good afternoon,";
+    greeting = "Good afternoon";
   }
+
+  greeting += isGuest ? "!" : ",";
+
   const greetingElement = document.getElementById("greeting-text");
   if (greetingElement) {
     greetingElement.textContent = greeting;
@@ -229,6 +236,30 @@ function renderTaskMetrics() {
     const element = document.getElementById(id);
     if (element) {
       element.innerText = value;
+    }
+  }
+}
+
+/**
+ * Überprüft, ob die mobile Begrüßungs-Animation angezeigt werden soll
+ */
+function checkMobileGreeting() {
+  const showGreeting = sessionStorage.getItem("showJoinGreeting");
+  const isMobile = window.innerWidth <= 780;
+
+  if (showGreeting === "true" && isMobile) {
+    const greetingContainer = document.querySelector(".greeting-container");
+    if (greetingContainer) {
+      greetingContainer.classList.add("mobile-greeting-overlay");
+      sessionStorage.removeItem("showJoinGreeting");
+
+      setTimeout(() => {
+        greetingContainer.classList.add("fade-out");
+        setTimeout(() => {
+          greetingContainer.classList.remove("mobile-greeting-overlay");
+          greetingContainer.classList.remove("fade-out");
+        }, 600);
+      }, 2000);
     }
   }
 }

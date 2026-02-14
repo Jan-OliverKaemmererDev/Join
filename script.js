@@ -1,9 +1,7 @@
 /**
  * Initialisiert die Login-Seite
  */
-function initLogin() {
-}
-
+function initLogin() {}
 
 /**
  * Verarbeitet den Login-Vorgang
@@ -22,7 +20,6 @@ function handleLogin(event) {
   }
 }
 
-
 /**
  * Führt einen Gast-Login durch
  */
@@ -35,7 +32,6 @@ function guestLogin() {
     showLoginError(result.message);
   }
 }
-
 
 /**
  * Zeigt eine Login-Fehlermeldung an
@@ -55,11 +51,10 @@ function showLoginError(message) {
   }
   errorMsg.textContent = message;
   errorMsg.style.display = "block";
-  setTimeout(function() {
+  setTimeout(function () {
     errorMsg.style.display = "none";
   }, 5000);
 }
-
 
 /**
  * Schaltet die Sichtbarkeit des Passworts um
@@ -77,7 +72,6 @@ function togglePasswordVisibility(inputId, iconElement) {
   }
 }
 
-
 /**
  * Initialisiert die Summary-Seite für angemeldete Benutzer
  */
@@ -91,11 +85,12 @@ function initSummary() {
   }
 }
 
-
 /**
  * Initialisiert die Summary-Seite für Gast-Benutzer
  */
 function initSummaryGuest() {
   initSideMenu("summary");
   displayGuestInitials();
+  updateGreeting();
+  checkMobileGreeting();
 }
