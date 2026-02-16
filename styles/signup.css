@@ -1,7 +1,7 @@
 .logo-top-left {
   position: fixed;
   top: 37px;
-  left: 37px;
+  left: max(37px, calc(50% - 683px));
   width: 100px;
   z-index: 50;
 }
