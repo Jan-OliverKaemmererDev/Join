@@ -1,8 +1,18 @@
-const STORAGE_KEYS = {
-  USERS: "join_users",
-  CURRENT_USER: "join_current_user",
-  GUEST_ACCOUNT: "join_guest_initialized",
-};
+/**
+ * Wartet darauf, dass Firebase initialisiert ist
+ * @returns {Promise} Wird aufgelöst, wenn Firebase bereit ist
+ */
+function waitForFirebase() {
+  return new Promise(function (resolve) {
+    if (window.firebaseReady) {
+      resolve();
+      return;
+    }
+    window.addEventListener("firebaseReady", function () {
+      resolve();
+    });
+  });
+}
 
 const GUEST_USER = {
   id: "guest",
@@ -11,197 +21,223 @@ const GUEST_USER = {
   isGuest: true,
 };
 
-/**
- * Initialisiert das Authentifizierungssystem
- */
-function initAuth() {
-  if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([]));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.GUEST_ACCOUNT)) {
-    localStorage.setItem(STORAGE_KEYS.GUEST_ACCOUNT, "true");
-    console.log("Guest account initialized");
-  }
-}
+const DEFAULT_CONTACTS = [
+  {
+    id: 1,
+    name: "Anja Schulz",
+    email: "schulz@hotmail.com",
+    phone: "+49 1111 11 111 1",
+    color: "#AB47BC",
+    initials: "AS",
+  },
+  {
+    id: 2,
+    name: "Anton Mayer",
+    email: "antonm@gmail.com",
+    phone: "+49 1111 11 111 1",
+    color: "#FF9800",
+    initials: "AM",
+  },
+  {
+    id: 3,
+    name: "Benedikt Ziegler",
+    email: "benedikt@gmail.com",
+    phone: "+49 1111 11 111 1",
+    color: "#5C6BC0",
+    initials: "BZ",
+  },
+  {
+    id: 4,
+    name: "David Eisenberg",
+    email: "davidberg@gmail.com",
+    phone: "+49 1111 11 111 1",
+    color: "#F06292",
+    initials: "DE",
+  },
+  {
+    id: 5,
+    name: "Eva Fischer",
+    email: "eva@gmail.com",
+    phone: "+49 1111 11 111 1",
+    color: "#FFCA28",
+    initials: "EF",
+  },
+  {
+    id: 6,
+    name: "Emmanuel Mauer",
+    email: "emmanuelma@gmail.com",
+    phone: "+49 1111 11 111 1",
+    color: "#26A69A",
+    initials: "EM",
+  },
+  {
+    id: 7,
+    name: "Marcel Bauer",
+    email: "bauer@gmail.com",
+    phone: "+49 1111 11 111 1",
+    color: "#6A1B9A",
+    initials: "MB",
+  },
+];
 
 /**
- * Ruft alle registrierten Benutzer ab
- * @returns {Array} Array mit allen Benutzern
- */
-function getUsers() {
-  const usersJson = localStorage.getItem(STORAGE_KEYS.USERS);
-  return usersJson ? JSON.parse(usersJson) : [];
-}
-
-/**
- * Speichert Benutzer im LocalStorage
- * @param {Array} users - Array mit Benutzern
- */
-function saveUsers(users) {
-  localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-}
-
-/**
- * Prüft ob eine E-Mail bereits existiert
- * @param {Array} users - Array mit Benutzern
- * @param {string} email - Die zu prüfende E-Mail-Adresse
- * @returns {boolean} True wenn E-Mail existiert
- */
-function emailExists(users, email) {
-  for (let i = 0; i < users.length; i++) {
-    if (users[i].email.toLowerCase() === email.toLowerCase()) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * Registriert einen neuen Benutzer
+ * Registriert einen neuen Benutzer über Firebase Authentication
  * @param {string} name - Der Name des Benutzers
  * @param {string} email - Die E-Mail-Adresse
  * @param {string} password - Das Passwort
  * @returns {Object} Ergebnis-Objekt mit success und message
  */
-function signUpUser(name, email, password) {
+async function signUpUser(name, email, password) {
   try {
-    const users = getUsers();
-    if (emailExists(users, email)) {
-      return createErrorResult(
-        "duplicate-email",
-        "Diese E-Mail-Adresse ist bereits registriert",
-      );
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return createErrorResult("invalid-email", "Ungültige E-Mail-Adresse");
-    }
-    if (password.length < 6) {
-      return createErrorResult(
-        "weak-password",
-        "Das Passwort ist zu schwach (mindestens 6 Zeichen)",
-      );
-    }
-    const newUser = createNewUser(name, email, password);
-    users.push(newUser);
-    saveUsers(users);
+    const userCredential = await window.fbCreateUser(
+      window.firebaseAuth,
+      email,
+      password,
+    );
+    const user = userCredential.user;
+    await window.fbUpdateProfile(user, { displayName: name });
+    await saveUserProfile(user.uid, name, email);
+    await initDefaultContacts(user.uid);
     console.log("User registered successfully:", email);
     return { success: true, message: "Registrierung erfolgreich" };
   } catch (error) {
     console.error("Signup error:", error);
-    return createErrorResult(
-      "unknown",
-      "Ein Fehler ist aufgetreten: " + error.message,
-    );
+    return handleFirebaseError(error);
   }
 }
 
 /**
- * Erstellt ein neues Benutzer-Objekt
+ * Speichert das Benutzerprofil in Firestore
+ * @param {string} uid - Die Firebase User-ID
  * @param {string} name - Der Name des Benutzers
  * @param {string} email - Die E-Mail-Adresse
- * @param {string} password - Das Passwort
- * @returns {Object} Das neue Benutzer-Objekt
  */
-function createNewUser(name, email, password) {
-  return {
-    id: Date.now().toString(),
+async function saveUserProfile(uid, name, email) {
+  const userRef = window.fbDoc(window.firebaseDb, "users", uid);
+  await window.fbSetDoc(userRef, {
     name: name,
     email: email,
-    password: password,
-    createdAt: new Date().toISOString(),
     isGuest: false,
-  };
+    createdAt: new Date().toISOString(),
+  });
 }
 
 /**
- * Erstellt ein Fehler-Ergebnis-Objekt
- * @param {string} error - Der Fehlertyp
- * @param {string} message - Die Fehlermeldung
- * @returns {Object} Das Fehler-Objekt
+ * Schreibt die Standard-Kontakte für einen neuen Benutzer in Firestore
+ * @param {string} uid - Die Firebase User-ID
  */
-function createErrorResult(error, message) {
-  return { success: false, error: error, message: message };
-}
-
-/**
- * Sucht einen Benutzer anhand der E-Mail-Adresse
- * @param {Array} users - Array mit Benutzern
- * @param {string} email - Die gesuchte E-Mail-Adresse
- * @returns {Object|null} Der gefundene Benutzer oder null
- */
-function findUserByEmail(users, email) {
-  for (let i = 0; i < users.length; i++) {
-    if (users[i].email.toLowerCase() === email.toLowerCase()) {
-      return users[i];
-    }
+async function initDefaultContacts(uid) {
+  for (let i = 0; i < DEFAULT_CONTACTS.length; i++) {
+    const contact = DEFAULT_CONTACTS[i];
+    const contactRef = window.fbDoc(
+      window.firebaseDb,
+      "users",
+      uid,
+      "contacts",
+      String(contact.id),
+    );
+    await window.fbSetDoc(contactRef, {
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
+      color: contact.color,
+      initials: contact.initials,
+    });
   }
-  return null;
 }
 
 /**
- * Meldet einen Benutzer an
+ * Meldet einen Benutzer über Firebase Authentication an
  * @param {string} email - Die E-Mail-Adresse
  * @param {string} password - Das Passwort
  * @returns {Object} Ergebnis-Objekt mit success und user
  */
-function loginUser(email, password) {
+async function loginUser(email, password) {
   try {
-    const users = getUsers();
-    const user = findUserByEmail(users, email);
-    if (!user) {
-      return createErrorResult("user-not-found", "Benutzer nicht gefunden");
-    }
-    if (user.password !== password) {
-      return createErrorResult("wrong-password", "Falsches Passwort");
-    }
-    const sessionUser = createSessionUser(user);
-    localStorage.setItem(
-      STORAGE_KEYS.CURRENT_USER,
-      JSON.stringify(sessionUser),
+    const userCredential = await window.fbSignIn(
+      window.firebaseAuth,
+      email,
+      password,
     );
+    const user = userCredential.user;
+    const profile = await loadUserProfile(user.uid);
+    const userName =
+      profile.name !== "User" ? profile.name : user.displayName || profile.name;
+    const userEmail = profile.email || user.email;
+    if (profile.name === "User" || !profile.email) {
+      await saveUserProfile(user.uid, userName, userEmail);
+      await initDefaultContacts(user.uid);
+    }
+    const sessionUser = {
+      id: user.uid,
+      name: userName,
+      email: userEmail,
+      isGuest: false,
+    };
+    sessionStorage.setItem("join_current_user", JSON.stringify(sessionUser));
     sessionStorage.setItem("showJoinGreeting", "true");
     console.log("User logged in:", email);
     return { success: true, user: sessionUser };
   } catch (error) {
     console.error("Login error:", error);
-    return createErrorResult(
-      "unknown",
-      "Ein Fehler ist aufgetreten: " + error.message,
-    );
+    return handleFirebaseError(error);
   }
 }
 
 /**
- * Erstellt ein Session-User-Objekt ohne sensible Daten
- * @param {Object} user - Das vollständige Benutzer-Objekt
- * @returns {Object} Das Session-User-Objekt
+ * Lädt das Benutzerprofil aus Firestore
+ * @param {string} uid - Die Firebase User-ID
+ * @returns {Object} Das Benutzerprofil
  */
-function createSessionUser(user) {
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    isGuest: false,
-  };
+async function loadUserProfile(uid) {
+  const userRef = window.fbDoc(window.firebaseDb, "users", uid);
+  const docSnap = await window.fbGetDoc(userRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  }
+  return { name: "User", email: "" };
 }
 
 /**
- * Meldet einen Gast-Benutzer an
+ * Meldet einen Gast-Benutzer über Firebase Anonymous Auth an
  * @returns {Object} Ergebnis-Objekt mit success und user
  */
-function guestLoginUser() {
+async function guestLoginUser() {
   try {
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(GUEST_USER));
+    const userCredential = await window.fbSignInAnon(window.firebaseAuth);
+    const user = userCredential.user;
+    const guestSession = {
+      id: user.uid,
+      name: "Gast",
+      email: "guest@join.com",
+      isGuest: true,
+    };
+    await ensureGuestProfile(user.uid);
+    sessionStorage.setItem("join_current_user", JSON.stringify(guestSession));
     sessionStorage.setItem("showJoinGreeting", "true");
-    console.log("Guest logged in");
-    return { success: true, user: GUEST_USER };
+    console.log("Guest logged in with uid:", user.uid);
+    return { success: true, user: guestSession };
   } catch (error) {
     console.error("Guest login error:", error);
-    return createErrorResult(
-      "unknown",
-      "Ein Fehler ist aufgetreten: " + error.message,
-    );
+    return handleFirebaseError(error);
+  }
+}
+
+/**
+ * Stellt sicher, dass ein Gast-Profil in Firestore existiert
+ * @param {string} uid - Die Firebase User-ID des Gasts
+ */
+async function ensureGuestProfile(uid) {
+  const userRef = window.fbDoc(window.firebaseDb, "users", uid);
+  const docSnap = await window.fbGetDoc(userRef);
+  if (!docSnap.exists()) {
+    await window.fbSetDoc(userRef, {
+      name: "Gast",
+      email: "guest@join.com",
+      isGuest: true,
+      createdAt: new Date().toISOString(),
+    });
+    await initDefaultContacts(uid);
   }
 }
 
@@ -210,15 +246,20 @@ function guestLoginUser() {
  * @returns {Object|null} Der aktuelle Benutzer oder null
  */
 function getCurrentUser() {
-  const userJson = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+  const userJson = sessionStorage.getItem("join_current_user");
   return userJson ? JSON.parse(userJson) : null;
 }
 
 /**
  * Meldet den aktuellen Benutzer ab
  */
-function logoutUser() {
-  localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+async function logoutUser() {
+  try {
+    await window.fbSignOut(window.firebaseAuth);
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
+  sessionStorage.removeItem("join_current_user");
   console.log("User logged out");
 }
 
@@ -230,4 +271,51 @@ function isLoggedIn() {
   return getCurrentUser() !== null;
 }
 
-initAuth();
+/**
+ * Erstellt ein Fehler-Ergebnis-Objekt aus einem Firebase-Fehler
+ * @param {Object} error - Das Firebase Error-Objekt
+ * @returns {Object} Das Fehler-Objekt
+ */
+function handleFirebaseError(error) {
+  let message = "Ein Fehler ist aufgetreten";
+  let errorCode = error.code || "unknown";
+  switch (error.code) {
+    case "auth/email-already-in-use":
+      message = "Diese E-Mail-Adresse ist bereits registriert";
+      errorCode = "duplicate-email";
+      break;
+    case "auth/invalid-email":
+      message = "Ungültige E-Mail-Adresse";
+      errorCode = "invalid-email";
+      break;
+    case "auth/weak-password":
+      message = "Das Passwort ist zu schwach (mindestens 6 Zeichen)";
+      errorCode = "weak-password";
+      break;
+    case "auth/user-not-found":
+      message = "Benutzer nicht gefunden";
+      errorCode = "user-not-found";
+      break;
+    case "auth/wrong-password":
+      message = "Falsches Passwort";
+      errorCode = "wrong-password";
+      break;
+    case "auth/invalid-credential":
+      message = "E-Mail oder Passwort ist falsch";
+      errorCode = "invalid-credential";
+      break;
+    default:
+      message = "Ein Fehler ist aufgetreten: " + error.message;
+  }
+  return { success: false, error: errorCode, message: message };
+}
+
+/**
+ * Erstellt ein Fehler-Ergebnis-Objekt
+ * @param {string} error - Der Fehlertyp
+ * @param {string} message - Die Fehlermeldung
+ * @returns {Object} Das Fehler-Objekt
+ */
+function createErrorResult(error, message) {
+  return { success: false, error: error, message: message };
+}

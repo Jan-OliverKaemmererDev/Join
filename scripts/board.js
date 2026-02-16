@@ -7,18 +7,17 @@ let touchStartX = 0;
 let touchStartY = 0;
 let touchDragTaskId = null;
 
-
 /**
  * Initialisiert das Board und lädt die Tasks
  */
-function initBoard() {
-  loadTasks();
+async function initBoard() {
+  await waitForFirebase();
+  await loadTasks();
   renderTasks();
   checkUser();
   setupTaskAddedListener();
   initTouchDragDrop();
 }
-
 
 /**
  * Richtet den Event-Listener für hinzugefügte Tasks ein
@@ -26,11 +25,11 @@ function initBoard() {
 function setupTaskAddedListener() {
   window.addEventListener("taskAdded", function () {
     closeAddTaskOverlay();
-    loadTasks();
-    renderTasks();
+    loadTasks().then(function () {
+      renderTasks();
+    });
   });
 }
-
 
 /**
  * Überprüft ob ein Benutzer angemeldet ist
@@ -46,22 +45,29 @@ function checkUser() {
   }
 }
 
-
 /**
- * Lädt die Tasks des aktuellen Benutzers aus dem LocalStorage
+ * Lädt die Tasks des aktuellen Benutzers aus Firestore
  */
-function loadTasks() {
+async function loadTasks() {
   const currentUser = getCurrentUser();
   if (!currentUser) return;
-  const tasksKey = "join_tasks_" + currentUser.id;
-  const tasksJson = localStorage.getItem(tasksKey);
-  if (tasksJson) {
-    tasks = JSON.parse(tasksJson);
-  } else {
+  try {
+    const tasksRef = window.fbCollection(
+      window.firebaseDb,
+      "users",
+      currentUser.id,
+      "tasks",
+    );
+    const snapshot = await window.fbGetDocs(tasksRef);
+    tasks = [];
+    snapshot.forEach(function (doc) {
+      tasks.push(doc.data());
+    });
+  } catch (error) {
+    console.error("Error loading tasks:", error);
     tasks = [];
   }
 }
-
 
 /**
  * Leert alle Board-Spalten
@@ -72,7 +78,6 @@ function clearAllColumns() {
   document.getElementById("awaitfeedback-list").innerHTML = "";
   document.getElementById("done-list").innerHTML = "";
 }
-
 
 /**
  * Rendert alle Tasks auf dem Board
@@ -86,7 +91,6 @@ function renderTasks() {
   }
   renderAllEmptyStates(counts);
 }
-
 
 /**
  * Rendert eine einzelne Task-Karte
@@ -103,7 +107,6 @@ function renderTaskCard(task, counts) {
   }
 }
 
-
 /**
  * Rendert Empty-States für alle leeren Spalten
  * @param {Object} counts - Die Zähl-Objekt mit Task-Anzahlen pro Status
@@ -111,10 +114,13 @@ function renderTaskCard(task, counts) {
 function renderAllEmptyStates(counts) {
   renderEmptyState("todo", counts.todo, "No tasks To do");
   renderEmptyState("inprogress", counts.inprogress, "No tasks In progress");
-  renderEmptyState("awaitfeedback", counts.awaitfeedback, "No tasks Await feedback");
+  renderEmptyState(
+    "awaitfeedback",
+    counts.awaitfeedback,
+    "No tasks Await feedback",
+  );
   renderEmptyState("done", counts.done, "No tasks Done");
 }
-
 
 /**
  * Rendert einen Empty-State für eine Spalte
@@ -129,7 +135,6 @@ function renderEmptyState(status, count, message) {
   }
 }
 
-
 /**
  * Generiert das HTML für eine Task-Karte
  * @param {Object} task - Das Task-Objekt
@@ -141,9 +146,15 @@ function generateTaskCardHtml(task) {
   const progressHtml = generateProgressHtml(task);
   const priorityIcon = getPriorityIcon(task.priority);
   const assigneesHtml = generateAssigneesHtml(task);
-  return getTaskCardTemplate(task, categoryClass, categoryLabel, progressHtml, assigneesHtml, priorityIcon);
+  return getTaskCardTemplate(
+    task,
+    categoryClass,
+    categoryLabel,
+    progressHtml,
+    assigneesHtml,
+    priorityIcon,
+  );
 }
-
 
 /**
  * Gibt die CSS-Klasse für eine Kategorie zurück
@@ -151,9 +162,10 @@ function generateTaskCardHtml(task) {
  * @returns {string} Die CSS-Klasse
  */
 function getCategoryClass(category) {
-  return category === "user-story" ? "category-user-story" : "category-technical";
+  return category === "user-story"
+    ? "category-user-story"
+    : "category-technical";
 }
-
 
 /**
  * Gibt das Label für eine Kategorie zurück
@@ -163,7 +175,6 @@ function getCategoryClass(category) {
 function getCategoryLabel(category) {
   return category === "user-story" ? "User Story" : "Technical Task";
 }
-
 
 /**
  * Generiert das HTML für den Fortschrittsbalken
@@ -178,7 +189,6 @@ function generateProgressHtml(task) {
   }
   return "";
 }
-
 
 /**
  * Zählt die abgeschlossenen Subtasks
@@ -195,7 +205,6 @@ function countCompletedSubtasks(subtasks) {
   return count;
 }
 
-
 /**
  * Generiert das HTML für zugewiesene Benutzer
  * @param {Object} task - Das Task-Objekt
@@ -208,7 +217,6 @@ function generateAssigneesHtml(task) {
   }
   return "";
 }
-
 
 /**
  * Gibt das Icon für eine Priorität zurück
@@ -225,7 +233,6 @@ function getPriorityIcon(priority) {
   }
 }
 
-
 /**
  * Startet das Drag-and-Drop für einen Task
  * @param {number} id - Die ID des Tasks
@@ -240,7 +247,6 @@ function startDragging(id, ev) {
   }
 }
 
-
 /**
  * Beendet das Drag-and-Drop
  */
@@ -250,7 +256,6 @@ function endDragging() {
   }, 0);
 }
 
-
 /**
  * Erlaubt das Ablegen eines Tasks
  * @param {Event} ev - Das Drag-Event
@@ -258,7 +263,6 @@ function endDragging() {
 function allowDrop(ev) {
   ev.preventDefault();
 }
-
 
 /**
  * Hebt eine Drop-Zone hervor
@@ -268,7 +272,6 @@ function highlight(id) {
   document.getElementById(id).classList.add("drag-over");
 }
 
-
 /**
  * Entfernt die Hervorhebung einer Drop-Zone
  * @param {string} id - Die ID der Drop-Zone
@@ -276,7 +279,6 @@ function highlight(id) {
 function removeHighlight(id) {
   document.getElementById(id).classList.remove("drag-over");
 }
-
 
 /**
  * Findet den Index eines Tasks anhand der ID
@@ -292,21 +294,19 @@ function findTaskById(taskId) {
   return -1;
 }
 
-
 /**
  * Verschiebt einen Task zu einem neuen Status
  * @param {string} status - Der neue Status
  */
-function moveTo(status) {
+async function moveTo(status) {
   const taskIndex = findTaskById(currentDraggedTaskId);
   if (taskIndex !== -1) {
     tasks[taskIndex].status = status;
-    saveTasks();
+    await saveTasks();
     renderTasks();
   }
   currentDraggedTaskId = null;
 }
-
 
 /**
  * Behandelt das Drop-Event für einen Task
@@ -325,17 +325,28 @@ function drop(ev, status) {
   moveTo(status);
 }
 
-
 /**
- * Speichert alle Tasks im LocalStorage
+ * Speichert alle Tasks in Firestore
  */
-function saveTasks() {
+async function saveTasks() {
   const currentUser = getCurrentUser();
   if (!currentUser) return;
-  const tasksKey = "join_tasks_" + currentUser.id;
-  localStorage.setItem(tasksKey, JSON.stringify(tasks));
+  try {
+    for (let i = 0; i < tasks.length; i++) {
+      const task = tasks[i];
+      const taskRef = window.fbDoc(
+        window.firebaseDb,
+        "users",
+        currentUser.id,
+        "tasks",
+        String(task.id),
+      );
+      await window.fbSetDoc(taskRef, task);
+    }
+  } catch (error) {
+    console.error("Error saving tasks:", error);
+  }
 }
-
 
 /**
  * Öffnet das Add-Task-Overlay
@@ -351,7 +362,6 @@ function openAddTaskOverlay() {
   }
 }
 
-
 /**
  * Schließt das Add-Task-Overlay
  */
@@ -359,7 +369,6 @@ function closeAddTaskOverlay() {
   document.getElementById("add-task-overlay").classList.remove("active");
   resetFormToAddMode();
 }
-
 
 /**
  * Findet einen Task anhand der ID
@@ -375,7 +384,6 @@ function findTask(taskId) {
   return null;
 }
 
-
 /**
  * Öffnet die Task-Detailansicht
  * @param {number} taskId - Die ID des Tasks
@@ -389,10 +397,15 @@ function openTaskDetails(taskId) {
   const priorityIcon = getPriorityIcon(task.priority);
   const categoryClass = getCategoryClass(task.category);
   const categoryLabel = getCategoryLabel(task.category);
-  content.innerHTML = getTaskDetailsTemplate(task, subtasksHtml, priorityIcon, categoryClass, categoryLabel);
+  content.innerHTML = getTaskDetailsTemplate(
+    task,
+    subtasksHtml,
+    priorityIcon,
+    categoryClass,
+    categoryLabel,
+  );
   document.getElementById("task-details-overlay").classList.add("active");
 }
-
 
 /**
  * Generiert das HTML für die Subtasks-Liste
@@ -408,7 +421,6 @@ function buildSubtasksHtml(task) {
   return subtasksHtml;
 }
 
-
 /**
  * Schließt die Task-Detailansicht
  */
@@ -416,33 +428,44 @@ function closeTaskDetails() {
   document.getElementById("task-details-overlay").classList.remove("active");
 }
 
-
 /**
  * Schaltet den Status eines Subtasks um
  * @param {number} taskId - Die ID des Tasks
  * @param {number} subtaskIndex - Der Index des Subtasks
  */
-function toggleSubtask(taskId, subtaskIndex) {
+async function toggleSubtask(taskId, subtaskIndex) {
   const task = findTask(taskId);
   if (task) {
-    task.subtasks[subtaskIndex].completed = !task.subtasks[subtaskIndex].completed;
-    saveTasks();
+    task.subtasks[subtaskIndex].completed =
+      !task.subtasks[subtaskIndex].completed;
+    await saveTasks();
     renderTasks();
   }
 }
-
 
 /**
  * Löscht einen Task
  * @param {number} taskId - Die ID des zu löschenden Tasks
  */
-function deleteTask(taskId) {
+async function deleteTask(taskId) {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
+  try {
+    const taskRef = window.fbDoc(
+      window.firebaseDb,
+      "users",
+      currentUser.id,
+      "tasks",
+      String(taskId),
+    );
+    await window.fbDeleteDoc(taskRef);
+  } catch (error) {
+    console.error("Error deleting task:", error);
+  }
   tasks = filterOutTask(taskId);
-  saveTasks();
   renderTasks();
   closeTaskDetails();
 }
-
 
 /**
  * Filtert einen Task aus dem Tasks-Array
@@ -459,7 +482,6 @@ function filterOutTask(taskId) {
   return filtered;
 }
 
-
 /**
  * Durchsucht Tasks anhand einer Suchanfrage
  */
@@ -471,7 +493,6 @@ function searchTasks() {
     filterCard(card, query);
   }
 }
-
 
 /**
  * Filtert eine Task-Karte basierend auf der Suchanfrage
@@ -488,7 +509,6 @@ function filterCard(card, query) {
   }
 }
 
-
 /**
  * Initialisiert Touch-Drag-and-Drop für mobile Geräte
  */
@@ -497,7 +517,6 @@ function initTouchDragDrop() {
   document.addEventListener("touchmove", handleTouchMove, { passive: false });
   document.addEventListener("touchend", handleTouchEnd);
 }
-
 
 /**
  * Behandelt den Touchstart auf einer Task-Karte
@@ -513,7 +532,6 @@ function handleTouchStart(ev) {
   touchDragElement = card;
 }
 
-
 /**
  * Liest die Task-ID aus dem data-Attribut einer Karte
  * @param {HTMLElement} card - Das Task-Karten-Element
@@ -523,7 +541,6 @@ function getTaskIdFromCard(card) {
   const id = card.getAttribute("data-task-id");
   return id ? Number(id) : null;
 }
-
 
 /**
  * Behandelt die Touchmove-Events während des Drags
@@ -539,12 +556,12 @@ function handleTouchMove(ev) {
   }
   if (touchDragClone) {
     ev.preventDefault();
-    touchDragClone.style.left = (touch.clientX - touchDragClone.offsetWidth / 2) + "px";
-    touchDragClone.style.top = (touch.clientY - 30) + "px";
+    touchDragClone.style.left =
+      touch.clientX - touchDragClone.offsetWidth / 2 + "px";
+    touchDragClone.style.top = touch.clientY - 30 + "px";
     highlightColumnUnderTouch(touch.clientX, touch.clientY);
   }
 }
-
 
 /**
  * Erstellt einen visuellen Klon der Karte für den Touch-Drag
@@ -562,7 +579,6 @@ function createTouchDragClone(touch) {
   touchDragElement.style.opacity = "0.3";
   isDragging = true;
 }
-
 
 /**
  * Behandelt das Touchend-Event und führt den Drop aus
@@ -587,9 +603,10 @@ function handleTouchEnd(ev) {
   }
   touchDragElement = null;
   touchDragTaskId = null;
-  setTimeout(function () { isDragging = false; }, 0);
+  setTimeout(function () {
+    isDragging = false;
+  }, 0);
 }
-
 
 /**
  * Findet die Board-Spalte unter einem bestimmten Punkt
@@ -601,13 +618,17 @@ function getColumnUnderPoint(x, y) {
   const columns = document.querySelectorAll(".board-column");
   for (let i = 0; i < columns.length; i++) {
     const rect = columns[i].getBoundingClientRect();
-    if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+    if (
+      x >= rect.left &&
+      x <= rect.right &&
+      y >= rect.top &&
+      y <= rect.bottom
+    ) {
       return columns[i];
     }
   }
   return null;
 }
-
 
 /**
  * Gibt den Status-String für eine Spalten-ID zurück
@@ -621,7 +642,6 @@ function getStatusFromColumnId(columnId) {
   if (columnId === "column-done") return "done";
   return null;
 }
-
 
 /**
  * Hebt die Spalte unter dem Touch-Punkt hervor
@@ -639,7 +659,6 @@ function highlightColumnUnderTouch(x, y) {
   }
 }
 
-
 /**
  * Entfernt alle Drag-Hervorhebungen
  */
@@ -649,7 +668,6 @@ function removeAllHighlights() {
     lists[i].classList.remove("drag-over");
   }
 }
-
 
 /**
  * Bearbeitet einen vorhandenen Task
@@ -663,7 +681,6 @@ function editTask(taskId) {
   openAddTaskOverlay();
   setupFormForEdit(taskId);
 }
-
 
 /**
  * Füllt das Formular mit den Daten eines Tasks
@@ -685,7 +702,6 @@ function fillFormWithTaskData(task) {
   validateForm();
 }
 
-
 /**
  * Konfiguriert das Formular für die Bearbeitung
  * @param {number} taskId - Die ID des zu bearbeitenden Tasks
@@ -702,28 +718,28 @@ function setupFormForEdit(taskId) {
   };
 }
 
-
 /**
  * Aktualisiert einen vorhandenen Task
  * @param {number} taskId - Die ID des zu aktualisierenden Tasks
  */
-function updateTask(taskId) {
+async function updateTask(taskId) {
   const taskIndex = findTaskById(taskId);
   if (taskIndex === -1) return;
   tasks[taskIndex].title = document.getElementById("title").value.trim();
-  tasks[taskIndex].description = document.getElementById("description").value.trim();
+  tasks[taskIndex].description = document
+    .getElementById("description")
+    .value.trim();
   tasks[taskIndex].dueDate = document.getElementById("due-date").value;
   tasks[taskIndex].priority = selectedPriority;
   tasks[taskIndex].assignedTo = document.getElementById("assigned-to").value;
   tasks[taskIndex].category = document.getElementById("category").value;
   tasks[taskIndex].subtasks = JSON.parse(JSON.stringify(subtasks));
-  saveTasks();
+  await saveTasks();
   renderTasks();
   resetFormToAddMode();
   closeAddTaskOverlay();
   showToast("Task updated successfully");
 }
-
 
 /**
  * Setzt das Formular zurück in den Add-Modus

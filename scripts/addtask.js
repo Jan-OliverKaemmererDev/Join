@@ -4,7 +4,8 @@ let subtasks = [];
 /**
  * Initialisiert die Add-Task-Seite
  */
-function initAddTask() {
+async function initAddTask() {
+  await waitForFirebase();
   const currentUser = getCurrentUser();
   if (!currentUser) {
     window.location.href = "index.html";
@@ -176,7 +177,7 @@ function validateForm() {
  * Verarbeitet das Hinzufügen eines neuen Tasks
  * @param {Event} event - Das Submit-Event des Formulars
  */
-function handleAddTask(event) {
+async function handleAddTask(event) {
   event.preventDefault();
   const currentUser = getCurrentUser();
   if (!currentUser) {
@@ -184,7 +185,7 @@ function handleAddTask(event) {
     return;
   }
   const task = buildTask(currentUser);
-  saveTask(currentUser.id, task);
+  await saveTask(currentUser.id, task);
   showToast("Task added to board");
   dispatchTaskAddedEvent(task);
   clearForm();
@@ -237,29 +238,24 @@ function dispatchTaskAddedEvent(task) {
 }
 
 /**
- * Speichert einen Task im LocalStorage
+ * Speichert einen Task in Firestore
  * @param {string} userId - Die ID des Benutzers
  * @param {Object} task - Das zu speichernde Task-Objekt
  */
-function saveTask(userId, task) {
-  const tasksKey = "join_tasks_" + userId;
-  let tasks = loadExistingTasks(tasksKey);
-  tasks.push(task);
-  localStorage.setItem(tasksKey, JSON.stringify(tasks));
-  console.log("Task saved:", task);
-}
-
-/**
- * Lädt existierende Tasks aus dem LocalStorage
- * @param {string} tasksKey - Der LocalStorage-Key für die Tasks
- * @returns {Array} Array mit den geladenen Tasks
- */
-function loadExistingTasks(tasksKey) {
-  const tasksJson = localStorage.getItem(tasksKey);
-  if (tasksJson) {
-    return JSON.parse(tasksJson);
+async function saveTask(userId, task) {
+  try {
+    const taskRef = window.fbDoc(
+      window.firebaseDb,
+      "users",
+      userId,
+      "tasks",
+      String(task.id),
+    );
+    await window.fbSetDoc(taskRef, task);
+    console.log("Task saved:", task);
+  } catch (error) {
+    console.error("Error saving task:", error);
   }
-  return [];
 }
 
 /**

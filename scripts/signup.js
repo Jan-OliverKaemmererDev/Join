@@ -5,7 +5,6 @@ function initSignup() {
   checkFormValidity();
 }
 
-
 /**
  * Überprüft die Gültigkeit des Registrierungs-Formulars
  */
@@ -19,13 +18,13 @@ function checkFormValidity() {
   btn.disabled = !(name && email && pass && confirm && privacy);
 }
 
-
 /**
  * Verarbeitet die Benutzerregistrierung
  * @param {Event} event - Das Submit-Event des Formulars
  */
 async function handleRegistration(event) {
   event.preventDefault();
+  await waitForFirebase();
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
   const pass = document.getElementById("password").value;
@@ -34,7 +33,7 @@ async function handleRegistration(event) {
     showPasswordError();
     return;
   }
-  const result = signUpUser(name, email, pass);
+  const result = await signUpUser(name, email, pass);
   if (result.success) {
     console.log("Benutzer erfolgreich registriert:", email);
     showSuccessMessageAndRedirect();
@@ -44,7 +43,6 @@ async function handleRegistration(event) {
   }
 }
 
-
 /**
  * Zeigt eine Passwort-Fehlermeldung an
  */
@@ -52,7 +50,6 @@ function showPasswordError() {
   const errorMsg = document.getElementById("error-message");
   errorMsg.classList.remove("d-none");
 }
-
 
 /**
  * Verarbeitet Registrierungsfehler und zeigt entsprechende Meldungen
@@ -76,14 +73,13 @@ function handleRegistrationError(result) {
   errorMsg.classList.remove("d-none");
 }
 
-
 /**
  * Zeigt eine Erfolgsmeldung an und leitet zur Login-Seite weiter
  */
 function showSuccessMessageAndRedirect() {
   const msg = document.getElementById("success-message");
   msg.classList.remove("d-none");
-  setTimeout(function() {
+  setTimeout(function () {
     window.location.href = "index.html";
   }, 3000);
 }

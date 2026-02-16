@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./styles/addtask.css" />
     <link rel="stylesheet" href="./styles/mobile/style-mobile.css" />
     <link rel="stylesheet" href="./styles/mobile/board-mobile.css" />
-    
+
     <title>Join - Board</title>
   </head>
   <body onload="initBoard()">
@@ -57,14 +57,20 @@
             <div class="user-dropdown" id="user-dropdown">
               <a href="legalnotice.html">Legal Notice</a>
               <a href="privacypolicy.html">Privacy Policy</a>
-              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+              <a
+                href="#"
+                onclick="
+                  handleLogout();
+                  return false;
+                "
+                >Log out</a
+              >
             </div>
           </div>
         </div>
       </header>
 
       <section class="board-container">
-        
         <div class="board-header">
           <h1>Board</h1>
           <div class="board-actions">
@@ -96,7 +102,6 @@
           </div>
         </div>
 
-        
         <div class="board-columns">
           <div
             class="board-column"
@@ -120,9 +125,7 @@
                 </svg>
               </div>
             </div>
-            <div class="task-list" id="todo-list">
-              
-            </div>
+            <div class="task-list" id="todo-list"></div>
           </div>
 
           <div
@@ -203,28 +206,21 @@
       </section>
     </main>
 
-    
     <div class="overlay-container" id="add-task-overlay">
       <div
         class="overlay-content add-task-overlay-card"
         onclick="event.stopPropagation()"
       >
         <div class="overlay-close-container">
-          <button
-            onclick="closeAddTaskOverlay()"
-            class="overlay-close-button"
-          >
+          <button onclick="closeAddTaskOverlay()" class="overlay-close-button">
             &times;
           </button>
         </div>
 
-        <h1 class="add-task-title">
-          Add Task
-        </h1>
+        <h1 class="add-task-title">Add Task</h1>
 
         <form id="add-task-form" onsubmit="handleAddTask(event)">
           <div class="form-container">
-            
             <div class="form-column">
               <div class="form-group">
                 <label for="title">Title<span class="required">*</span></label>
@@ -260,7 +256,6 @@
               </div>
             </div>
 
-            
             <div class="form-column">
               <div class="form-group">
                 <label>Priority</label>
@@ -271,7 +266,11 @@
                     data-priority="urgent"
                     onclick="selectPriority('urgent')"
                   >
-                    Urgent <img src="./assets/icons/urgent-iconAddTask.png" alt="Urgent" />
+                    Urgent
+                    <img
+                      src="./assets/icons/urgent-iconAddTask.png"
+                      alt="Urgent"
+                    />
                   </button>
                   <button
                     type="button"
@@ -279,7 +278,11 @@
                     data-priority="medium"
                     onclick="selectPriority('medium')"
                   >
-                    Medium <img src="./assets/icons/medium-iconAddTask.png" alt="Medium" />
+                    Medium
+                    <img
+                      src="./assets/icons/medium-iconAddTask.png"
+                      alt="Medium"
+                    />
                   </button>
                   <button
                     type="button"
@@ -287,7 +290,8 @@
                     data-priority="low"
                     onclick="selectPriority('low')"
                   >
-                    Low <img src="./assets/icons/low-iconAddTask.png" alt="Low" />
+                    Low
+                    <img src="./assets/icons/low-iconAddTask.png" alt="Low" />
                   </button>
                 </div>
               </div>
@@ -356,7 +360,6 @@
       </div>
     </div>
 
-    
     <div
       class="overlay-container"
       id="task-details-overlay"
@@ -366,9 +369,7 @@
         class="overlay-content task-details-card"
         id="task-details-content"
         onclick="event.stopPropagation()"
-      >
-        
-      </div>
+      ></div>
     </div>
 
     <!-- Mobile Navigation -->
@@ -391,6 +392,7 @@
       </a>
     </div>
 
+    <script type="module" src="./scripts/firebase-init.js"></script>
     <script src="./scripts/auth.js"></script>
     <script src="./scripts/user-initials.js"></script>
     <script src="./script.js"></script>

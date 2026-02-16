@@ -1,7 +1,8 @@
 /**
  * Initialisiert die Summary-Seite für angemeldete Benutzer
  */
-function initSummaryUser() {
+async function initSummaryUser() {
+  await waitForFirebase();
   const currentUser = getCurrentUser();
   if (!currentUser) {
     window.location.href = "index.html";
@@ -10,7 +11,7 @@ function initSummaryUser() {
   updateUserName(currentUser);
   updateUserInitials(currentUser);
   updateGreeting();
-  updateTaskMetrics(currentUser);
+  await updateTaskMetrics(currentUser);
   checkMobileGreeting();
 }
 
@@ -59,7 +60,7 @@ function getInitials(name) {
 function updateGreeting() {
   const hour = new Date().getHours();
   const currentUser = getCurrentUser();
-  const isGuest = currentUser && currentUser.id === "guest";
+  const isGuest = currentUser && currentUser.isGuest === true;
 
   let greeting = "Good evening";
   if (hour < 12) {
@@ -80,8 +81,8 @@ function updateGreeting() {
  * Aktualisiert die Task-Metriken auf der Summary-Seite
  * @param {Object} user - Das Benutzer-Objekt
  */
-function updateTaskMetrics(user) {
-  const userTasks = getUserTasks(user.id);
+async function updateTaskMetrics(user) {
+  const userTasks = await getUserTasks(user.id);
   const metrics = calculateTaskMetrics(userTasks);
   document.getElementById("count-todo").textContent = metrics.todo;
   document.getElementById("count-done").textContent = metrics.done;
@@ -98,17 +99,28 @@ function updateTaskMetrics(user) {
 }
 
 /**
- * Ruft die Tasks eines Benutzers ab
+ * Ruft die Tasks eines Benutzers aus Firestore ab
  * @param {string} userId - Die ID des Benutzers
  * @returns {Array} Array mit den Tasks des Benutzers
  */
-function getUserTasks(userId) {
-  const tasksKey = "join_tasks_" + userId;
-  const tasksJson = localStorage.getItem(tasksKey);
-  if (tasksJson) {
-    return JSON.parse(tasksJson);
+async function getUserTasks(userId) {
+  try {
+    const tasksRef = window.fbCollection(
+      window.firebaseDb,
+      "users",
+      userId,
+      "tasks",
+    );
+    const snapshot = await window.fbGetDocs(tasksRef);
+    const tasks = [];
+    snapshot.forEach(function (doc) {
+      tasks.push(doc.data());
+    });
+    return tasks;
+  } catch (error) {
+    console.error("Error loading tasks:", error);
+    return [];
   }
-  return [];
 }
 
 /**
@@ -223,13 +235,13 @@ function initSummary() {
  */
 function renderTaskMetrics() {
   const elements = {
-    "count-todo": "1",
-    "count-done": "1",
-    "count-urgent": "1",
-    "count-board": "5",
-    "count-progress": "2",
-    "count-awaiting": "2",
-    "next-deadline": "October 16, 2022",
+    "count-todo": "0",
+    "count-done": "0",
+    "count-urgent": "0",
+    "count-board": "0",
+    "count-progress": "0",
+    "count-awaiting": "0",
+    "next-deadline": "No upcoming deadline",
   };
 
   for (const [id, value] of Object.entries(elements)) {

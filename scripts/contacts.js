@@ -1,67 +1,38 @@
-let contacts = [
-  {
-    id: 1,
-    name: "Anja Schulz",
-    email: "schulz@hotmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#AB47BC",
-    initials: "AS",
-  },
-  {
-    id: 2,
-    name: "Anton Mayer",
-    email: "antonm@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#FF9800",
-    initials: "AM",
-  },
-  {
-    id: 3,
-    name: "Benedikt Ziegler",
-    email: "benedikt@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#5C6BC0",
-    initials: "BZ",
-  },
-  {
-    id: 4,
-    name: "David Eisenberg",
-    email: "davidberg@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#F06292",
-    initials: "DE",
-  },
-  {
-    id: 5,
-    name: "Eva Fischer",
-    email: "eva@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#FFCA28",
-    initials: "EF",
-  },
-  {
-    id: 6,
-    name: "Emmanuel Mauer",
-    email: "emmanuelma@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#26A69A",
-    initials: "EM",
-  },
-  {
-    id: 7,
-    name: "Marcel Bauer",
-    email: "bauer@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#6A1B9A",
-    initials: "MB",
-  },
-];
+let contacts = [];
 
-const initContacts = () => {
+const initContacts = async () => {
+  await waitForFirebase();
   initSideMenu("contacts");
+  await loadContactsFromFirestore();
   renderContactList();
   checkUser();
 };
+
+/**
+ * Lädt Kontakte aus Firestore für den aktuellen Benutzer
+ */
+async function loadContactsFromFirestore() {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
+  try {
+    const contactsRef = window.fbCollection(
+      window.firebaseDb,
+      "users",
+      currentUser.id,
+      "contacts",
+    );
+    const snapshot = await window.fbGetDocs(contactsRef);
+    contacts = [];
+    snapshot.forEach(function (doc) {
+      const data = doc.data();
+      data.id = doc.id;
+      contacts.push(data);
+    });
+  } catch (error) {
+    console.error("Error loading contacts:", error);
+    contacts = [];
+  }
+}
 
 const sortContacts = () =>
   contacts.sort((a, b) => a.name.localeCompare(b.name));
@@ -91,7 +62,8 @@ function renderContactList() {
   });
 }
 
-const findContactById = (id) => contacts.find((c) => c.id === id) || null;
+const findContactById = (id) =>
+  contacts.find((c) => String(c.id) === String(id)) || null;
 
 function showContactDetails(id) {
   const contact = findContactById(id);
@@ -116,7 +88,7 @@ function showContactDetails(id) {
   document.querySelectorAll(".contact-item").forEach((item) => {
     item.classList.toggle(
       "active",
-      parseInt(item.getAttribute("data-id")) === id,
+      item.getAttribute("data-id") === String(id),
     );
   });
 
@@ -178,11 +150,14 @@ function closeAddContactDialog() {
   }, 300);
 }
 
-function createContact(e) {
+async function createContact(e) {
   e.preventDefault();
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
   const name = document.getElementById("new-contact-name").value;
+  const contactId = String(Date.now());
   const newContact = {
-    id: Date.now(),
+    id: contactId,
     name,
     email: document.getElementById("new-contact-email").value,
     phone: document.getElementById("new-contact-phone").value,
@@ -191,28 +166,68 @@ function createContact(e) {
     ],
     initials: getInitials(name),
   };
+  try {
+    const contactRef = window.fbDoc(
+      window.firebaseDb,
+      "users",
+      currentUser.id,
+      "contacts",
+      contactId,
+    );
+    await window.fbSetDoc(contactRef, newContact);
+  } catch (error) {
+    console.error("Error creating contact:", error);
+  }
   contacts.push(newContact);
   renderContactList();
   closeAddContactDialog();
   showSuccessAlert();
 }
 
-function saveContact(e, id) {
+async function saveContact(e, id) {
   e.preventDefault();
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
   const c = findContactById(id);
   if (!c) return;
   c.name = document.getElementById("edit-contact-name").value;
   c.email = document.getElementById("edit-contact-email").value;
   c.phone = document.getElementById("edit-contact-phone").value;
   c.initials = getInitials(c.name);
+  try {
+    const contactRef = window.fbDoc(
+      window.firebaseDb,
+      "users",
+      currentUser.id,
+      "contacts",
+      String(id),
+    );
+    await window.fbSetDoc(contactRef, c);
+  } catch (error) {
+    console.error("Error saving contact:", error);
+  }
   renderContactList();
   document.getElementById("contact-details-content").innerHTML =
     getContactDetailsTemplate(c);
   closeAddContactDialog();
 }
 
-function deleteContact(id) {
-  contacts = contacts.filter((c) => c.id !== id);
+async function deleteContact(id) {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
+  try {
+    const contactRef = window.fbDoc(
+      window.firebaseDb,
+      "users",
+      currentUser.id,
+      "contacts",
+      String(id),
+    );
+    await window.fbDeleteDoc(contactRef);
+  } catch (error) {
+    console.error("Error deleting contact:", error);
+  }
+  contacts = contacts.filter((c) => String(c.id) !== String(id));
   renderContactList();
   closeContactDetails();
 }

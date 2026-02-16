@@ -7,11 +7,12 @@ function initLogin() {}
  * Verarbeitet den Login-Vorgang
  * @param {Event} event - Das Submit-Event des Login-Formulars
  */
-function handleLogin(event) {
+async function handleLogin(event) {
   event.preventDefault();
+  await waitForFirebase();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  const result = loginUser(email, password);
+  const result = await loginUser(email, password);
   if (result.success) {
     console.log("Login erfolgreich:", result.user.name);
     window.location.href = "summaryuser.html";
@@ -23,8 +24,9 @@ function handleLogin(event) {
 /**
  * Führt einen Gast-Login durch
  */
-function guestLogin() {
-  const result = guestLoginUser();
+async function guestLogin() {
+  await waitForFirebase();
+  const result = await guestLoginUser();
   if (result.success) {
     console.log("Gast-Login erfolgreich");
     window.location.href = "summaryguest.html";
