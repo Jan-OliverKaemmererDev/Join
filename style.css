@@ -106,6 +106,7 @@ body {
 }
 
 form {
+  align-items: center;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -130,12 +131,14 @@ input:focus {
 }
 
 #email {
+  width: 450px;
   background-image: url("./assets/login-screen/mail.svg");
   background-repeat: no-repeat;
   background-position: right 21px center;
 }
 
 #password {
+  width: 450px;
   background-image: url("./assets/login-screen/lock.svg");
   background-repeat: no-repeat;
   background-position: right 21px center;
@@ -173,6 +176,7 @@ button:hover {
   border-radius: 8px;
   font-size: 21px;
   flex: 1;
+  height: 50px;
 }
 
 .btn-light {
@@ -183,6 +187,8 @@ button:hover {
   border-radius: 8px;
   font-size: 21px;
   flex: 1;
+  height: 50px;
+  width: 250px;
 }
 
 .toast-message {
