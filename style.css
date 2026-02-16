@@ -250,7 +250,7 @@ button:hover {
   padding: 64px 0;
   position: fixed;
   top: 0;
-  left: 0;
+  left: max(0px, calc(50% - 836px));
   justify-content: flex-start;
   z-index: 100;
   box-sizing: border-box;
@@ -313,8 +313,8 @@ button:hover {
 }
 
 .main-content {
-  margin-left: 232px;
-  width: calc(100% - 232px);
+  margin-left: max(232px, calc(50% - 604px));
+  max-width: 1440px;
   height: 100vh;
   overflow-y: auto;
 }
