@@ -1,6 +1,6 @@
 .legal-notice-container {
   padding: 80px;
-  max-width: 1000px;
+  max-width: 1440px;
   margin: 0 auto;
 }
 
@@ -55,40 +55,38 @@
   text-decoration: underline;
 }
 
-
 .back-arrow-icon {
   width: 24px;
   height: 24px;
 }
 
 .mobile-back-arrow {
-    display: none;
+  display: none;
 }
 
 .sidebar-content-wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 }
 
 /* Legal Links auf Desktop ganz nach unten schieben */
 .sidebar-content-wrapper .legal-links {
-    margin-top: auto; /* Schiebt es ans Ende des Flex-Containers */
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-bottom: 16px; /* Abstand zum unteren Rand */
+  margin-top: auto; /* Schiebt es ans Ende des Flex-Containers */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 16px; /* Abstand zum unteren Rand */
 }
 
 /* Auf Desktop wollen wir Log In Text NEBEN dem Icon (Standard) */
 .nav-links a.login-link {
-    display: flex;
-    align-items: center;
-    flex-direction: row; /* Nebeneinander auf Desktop */
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: row; /* Nebeneinander auf Desktop */
+  gap: 10px;
 }
-
 
 @media (max-width: 1024px) {
   .legal-notice-container {
