@@ -99,6 +99,10 @@
   margin: 0;
 }
 
+.login-card {
+  margin-top: 150px;
+}
+
 .center-button {
   display: flex;
   justify-content: center;
