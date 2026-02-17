@@ -442,8 +442,8 @@ body::after {
   content: '';
   position: fixed;
   top: 0;
+  left: calc(50% + 834px);
   right: 0;
-  width: max(0px, calc(50% - 836px));
   height: 80px;
   background: white;
   z-index: 10;
