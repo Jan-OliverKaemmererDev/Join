@@ -591,3 +591,18 @@ body {
   filter: brightness(0) invert(1);
   width: 20px;
 }
+
+.sidebar {
+  height: 100vh;
+  width: 232px;
+  background-color: rgba(42, 54, 71, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 64px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  justify-content: flex-start;
+  z-index: 100;
+  box-sizing: border-box;
+}
