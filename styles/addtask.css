@@ -235,6 +235,7 @@
   justify-content: space-between;
   padding-top: 20px;
   border-top: 1px solid #d1d1d1;
+  width: 750px;
 }
 
 .required-note {
