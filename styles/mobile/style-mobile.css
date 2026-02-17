@@ -6,6 +6,7 @@
   aside,
   #sidebar {
     display: none !important;
+    box-shadow: none;
   }
 
   .main-content,

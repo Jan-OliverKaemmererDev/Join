@@ -263,6 +263,7 @@ button:hover {
   justify-content: flex-start;
   z-index: 100;
   box-sizing: border-box;
+  box-shadow: -9999px 0 0 9999px var(--dark-blue);
 }
 
 .sidebar > img {
@@ -434,4 +435,18 @@ button:hover {
 /* Standardmäßig ausblenden */
 .mobile-nav {
   display: none;
+}
+
+/* Header-Farbe rechts über 1440px-Grenze hinaus ausdehnen */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: max(0px, calc(50% - 836px));
+  height: 80px;
+  background: white;
+  z-index: 10;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
 }

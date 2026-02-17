@@ -405,6 +405,7 @@
     z-index: 1102;
     justify-content: center;
     align-items: center;
+    box-shadow: none;
   }
 
   .sidebar > img,
