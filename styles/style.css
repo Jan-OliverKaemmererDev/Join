@@ -1,17 +1,8 @@
-:root {
-  --dark-blue: #2a3647;
-  --light-blue: #29abe2;
-  --bg-color: #f6f7f8;
-  --white: #ffffff;
-  --font-main: "Inter", sans-serif;
-}
+/* =============================================
+   STYLE.CSS – Layout, Seiten & Komponenten
+   ============================================= */
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-main);
-  background-color: var(--bg-color);
-}
+/* ---- Login-Seite: Animation ---- */
 
 .animation-container {
   position: fixed;
@@ -58,6 +49,8 @@ body {
     pointer-events: none;
   }
 }
+
+/* ---- Login-Seite: Layout ---- */
 
 .login-header {
   display: flex;
@@ -114,55 +107,23 @@ body {
   margin: 15px 0 35px 0;
 }
 
-form {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-}
-
-input {
-  border: 1px solid #d1d1d1;
-  border-radius: 10px;
-  padding: 12px 21px;
-  padding-right: 50px;
-  font-size: 20px;
-  outline: none;
-  width: 100%;
-  box-sizing: border-box;
-  transition: border 100ms;
-  cursor: pointer;
-}
-
-input:focus {
-  border: 1px solid var(--light-blue);
-}
+/* ---- Login-Seite: Spezifische Inputs ---- */
 
 #email {
   width: 450px;
-  background-image: url("./assets/login-screen/mail.svg");
+  background-image: url("../assets/login-screen/mail.svg");
   background-repeat: no-repeat;
   background-position: right 21px center;
 }
 
 #password {
   width: 450px;
-  background-image: url("./assets/login-screen/lock.svg");
+  background-image: url("../assets/login-screen/lock.svg");
   background-repeat: no-repeat;
   background-position: right 21px center;
 }
 
-button {
-  cursor: pointer;
-  border: unset;
-  font-weight: 700;
-  transition: all 100ms;
-}
-
-button:hover {
-  filter: brightness(1.2);
-}
+/* ---- Login-Seite: Buttons ---- */
 
 .btn-signup {
   background-color: var(--dark-blue);
@@ -200,27 +161,7 @@ button:hover {
   width: 250px;
 }
 
-.toast-message {
-  position: fixed;
-  bottom: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--dark-blue);
-  color: white;
-  padding: 20px 40px;
-  border-radius: 20px;
-  z-index: 200;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  transition: bottom 0.5s ease-in-out;
-}
-
-.toast-message:not(.d-none) {
-  bottom: 75%;
-}
-
-.d-none {
-  display: none;
-}
+/* ---- Login-Seite: Footer & Signup ---- */
 
 .mobile-signup {
   display: none;
@@ -247,8 +188,9 @@ button:hover {
 .login-footer a:hover {
   color: var(--light-blue);
   text-shadow: 0 0 0.5px var(--light-blue);
-  /* font-weight: 700; */
 }
+
+/* ---- Sidebar Navigation ---- */
 
 .sidebar {
   height: 100vh;
@@ -322,12 +264,16 @@ button:hover {
   font-weight: 700;
 }
 
+/* ---- Dashboard Layout ---- */
+
 .main-content {
   margin-left: max(232px, calc(50% - 604px));
   max-width: 1440px;
   height: 100vh;
   overflow-y: auto;
 }
+
+/* ---- Dashboard Header ---- */
 
 .dashboard-header {
   height: 80px;
@@ -432,12 +378,14 @@ button:hover {
   height: 100%;
 }
 
-/* Standardmäßig ausblenden */
+/* ---- Mobile Navigation (standardmäßig ausgeblendet) ---- */
+
 .mobile-nav {
   display: none;
 }
 
-/* Header-Farbe rechts über 1440px-Grenze hinaus ausdehnen */
+/* ---- Header-Farbe rechts über 1440px-Grenze hinaus ausdehnen ---- */
+
 body::after {
   content: '';
   position: fixed;
