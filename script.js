@@ -90,9 +90,11 @@ function initSummary() {
 /**
  * Initialisiert die Summary-Seite für Gast-Benutzer
  */
-function initSummaryGuest() {
+async function initSummaryGuest() {
+  await waitForFirebase();
   initSideMenu("summary");
   displayGuestInitials();
   updateGreeting();
+  await updateTaskMetrics(GUEST_USER);
   checkMobileGreeting();
 }

@@ -146,7 +146,9 @@ function calculateTaskMetrics(tasks) {
     const task = tasks[i];
     processTaskStatus(task, metrics);
     countUrgentTasks(task, metrics);
-    trackNearestDeadline(task, nearestDeadline);
+    if (task.status !== "done") {
+      nearestDeadline = trackNearestDeadline(task, nearestDeadline);
+    }
   }
   metrics.board = tasks.length;
   if (nearestDeadline) {
