@@ -1,4 +1,20 @@
 /* ============================= */
+/* UTILITY KLASSEN               */
+/* ============================= */
+
+@media (min-width: 781px) {
+  .d-none-desktop {
+    display: none !important;
+  }
+}
+
+@media (max-width: 780px) {
+  .d-none-mobile {
+    display: none !important;
+  }
+}
+
+/* ============================= */
 /* RESPONSIVE DESIGN: MOBILE     */
 /* 320px – 780px                 */
 /* ============================= */
@@ -7,7 +23,6 @@
   /* --- BASIS LAYOUT --- */
 
   body {
-    /* Kein overflow hidden, damit Scrollen funktioniert */
     overflow-y: auto;
   }
 
@@ -81,7 +96,6 @@
 
   /* ================= HEADER ================= */
 
-  /* --- Header --- */
   .dashboard-header {
     position: fixed;
     top: 0;
@@ -99,32 +113,18 @@
 
   .header-content {
     display: flex !important;
-    justify-content: flex-end !important;
+    justify-content: space-between !important;
     width: 100% !important;
     padding: 0 !important;
+    align-items: center;
   }
 
   .dashboard-header span {
     display: none;
   }
 
-  .dashboard-header::before {
-    content: "";
-    display: block;
-    width: 32px;
-    height: 38px;
-    background-image: url("../../assets/login-screen/join-logo.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
   .header-icons {
     gap: 12px;
-  }
-
-  .help-link {
-    display: none;
   }
 
   .user-initials {
@@ -142,7 +142,6 @@
   /* ================= CONTACTS ================= */
 
   .contacts-container {
-    /* Um Platz für Header und Bottom Nav schaffen */
     margin-top: 80px;
     margin-bottom: 80px;
     height: calc(100vh - 160px);
@@ -212,11 +211,9 @@
     height: 56px;
     background-color: #2a3647;
     border-radius: 50%;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
     z-index: 900;
     cursor: pointer;
@@ -232,13 +229,13 @@
   .contact-details-container {
     display: none;
     position: fixed;
-    top: 80px; /* unter Header */
+    top: 80px;
     left: 0;
     right: 0;
-    bottom: 80px; /* über Bottom Nav */
-    background-color: #f6f7f8;
+    bottom: 80px;
+    background-color: #f6f7f8 !important;
     z-index: 950;
-    padding: 24px;
+    padding: 32px 16px !important;
     overflow-y: auto;
   }
 
@@ -259,42 +256,8 @@
     top: 0;
   }
 
-  /* ================= DIALOG ================= */
+  /* ================= MOBILE CONTACT DETAIL ANSICHT ================= */
 
-  .slide-in-dialog {
-    flex-direction: column !important;
-    width: 100% !important;
-    height: 100% !important;
-    border-radius: 0 !important;
-    max-width: 100vw !important;
-    top: 0 !important;
-    left: 0 !important;
-    z-index: 2000;
-  }
-
-  .dialog-left {
-    width: 100% !important;
-    height: 35% !important;
-    padding: 32px 24px !important;
-  }
-
-  .dialog-right {
-    width: 100% !important;
-    height: 65% !important;
-    padding: 40px 16px !important;
-  }
-
-  .contact-form-avatar {
-    top: 35% !important;
-    margin-top: -32px !important;
-  }
-
-  .contact-details-container {
-    background-color: #f6f7f8 !important; /* Hellgrauer Hintergrund wie im Bild */
-    padding: 32px 16px !important;
-  }
-
-  /* Oben: Contacts + Untertitel + Pfeil */
   .details-header-mobile {
     display: flex;
     justify-content: space-between;
@@ -330,7 +293,6 @@
     margin-top: 15px;
   }
 
-  /* Kontakt Header: Avatar + Name */
   .contact-view-title {
     display: flex;
     align-items: center;
@@ -358,7 +320,6 @@
     color: #000;
   }
 
-  /* Information Sektion */
   .info-headline-container {
     margin-bottom: 25px;
     font-size: 20px;
@@ -385,10 +346,11 @@
     color: #000;
   }
 
-  /* Floating Menu Button (Drei Punkte) */
+  /* ================= FLOATING MENU BUTTON ================= */
+
   .mobile-menu-btn {
     position: fixed;
-    bottom: 100px; /* Über der Bottom-Nav */
+    bottom: 100px;
     right: 16px;
     width: 56px;
     height: 56px;
@@ -405,23 +367,21 @@
   .mobile-menu-btn img {
     width: 24px;
     height: 24px;
-    filter: brightness(0) invert(1); /* Macht das Icon weiß */
+    filter: brightness(0) invert(1);
   }
 
   .contact-menu-box {
     position: absolute;
-    bottom: 70px; /* Erscheint über dem 3-Punkte-Button */
+    bottom: 70px;
     right: 0;
     background-color: white;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
-    border-radius: 20px 20px 0px 20px; /* Spezielle Abrundung wie im Bild */
+    border-radius: 20px 20px 0px 20px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 4px;
     min-width: 120px;
-
-    /* Animation zum Einblenden */
     transform: translateY(10px);
     opacity: 0;
     pointer-events: none;
@@ -453,98 +413,39 @@
   .menu-item img {
     width: 18px;
     height: 18px;
-    filter: none !important; /* Icons sollen dunkel bleiben */
+    filter: none !important;
   }
 
-  /* Container-Anpassung */
-  .edit-contact-mobile {
-    background-color: #2a3647 !important; /* Dunkler Header */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start !important;
+  /* ================= DIALOG ================= */
+
+  .slide-in-dialog {
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    max-width: 100vw !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 2000;
   }
 
-  .dialog-header-blue {
-    padding: 66px 24px;
-    position: relative;
-    background-color: #2a3647;
-    height: 35%;
+  .dialog-left {
+    width: 100% !important;
+    height: 35% !important;
+    padding: 32px 24px !important;
   }
 
-  .dialog-title-white {
-    color: white;
-    font-size: 47px;
-    margin: 0;
+  .dialog-right {
+    width: 100% !important;
+    height: 65% !important;
+    padding: 40px 16px !important;
   }
 
-  .btn-close-white {
-    position: absolute;
-    right: 5px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
+  .contact-form-avatar {
+    top: 35% !important;
+    margin-top: -32px !important;
   }
 
-  /* Weißer Bereich unten */
-  .dialog-content-white {
-    background-color: white;
-    flex: 1;
-    border-radius: 30px 30px 0 0;
-    padding: 80px 16px 24px 16px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* Zentrierter Avatar auf der Kante */
-  .contact-form-avatar-center {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px solid white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 47px;
-    color: white;
-    position: absolute;
-    top: -60px; /* Hälftig überlappend */
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Buttons wie im Screenshot */
-  .form-actions-mobile {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 32px;
-  }
-
-  .btn-delete-outline {
-    padding: 12px 24px;
-    background: white;
-    border: 1px solid #2a3647;
-    border-radius: 10px;
-    color: #2a3647;
-    font-size: 16px;
-  }
-
-  .btn-save-dark {
-    padding: 12px 24px;
-    background: #2a3647;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 16px;
-    font-weight: 700;
-  }
-
-  /* Das Haupt-Overlay-Element (ID in deiner App meist "add-contact-overlay") */
   #add-contact-overlay {
     position: fixed;
     top: 0;
@@ -552,21 +453,19 @@
     width: 100vw;
     height: 100vh;
     z-index: 3000 !important;
-    background-color: rgba(0, 0, 0, 0); /* Durchsichtig */
+    background-color: rgba(0, 0, 0, 0);
     display: flex;
     justify-content: center;
     align-items: center;
-
-    /* Die entscheidenden Zeilen: */
-    pointer-events: none; /* Klicks gehen durch das Overlay hindurch zur Liste */
+    pointer-events: none;
     opacity: 0;
     transition: background-color 0.2s ease-in-out;
   }
 
   #add-contact-overlay.active {
-    pointer-events: auto; /* Jetzt kann man den Dialog bedienen */
+    pointer-events: auto;
     opacity: 1;
-    background-color: rgba(0, 0, 0, 0.2); /* Sanfter Abdunklungseffekt */
+    background-color: rgba(0, 0, 0, 0.2);
   }
 
   .edit-contact-mobile-overlay {
@@ -576,17 +475,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    /* Damit das Fenster auch wirklich erscheint, wenn das Parent aktiv ist */
     pointer-events: auto;
-  }
-
-  .edit-contact-mobile-overlay {
-    width: 100%;
-    height: 100%;
-    background-color: #2a3647; /* Header-Farbe */
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
   }
 
   .dialog-header-blue {
@@ -642,7 +531,9 @@
     font-size: 47px;
     color: white;
     position: absolute;
-    top: -60px; /* Mittig auf der Kante */
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
   }
 
@@ -658,6 +549,7 @@
     display: flex;
     justify-content: center;
     gap: 16px;
+    width: 100%;
     margin-top: 32px;
   }
 
@@ -680,7 +572,6 @@
     font-weight: 700;
   }
 
-  /* Styling für die Input-Gruppen im Dialog */
   .input-group {
     position: relative;
     width: 100%;
@@ -689,7 +580,6 @@
   .input-group input {
     width: 100%;
     padding: 12px 21px;
-    gap: 10px;
     border-radius: 10px;
     border: 1px solid #d1d1d1;
     font-size: 20px;
@@ -703,13 +593,5 @@
     transform: translateY(-50%);
     width: 20px;
     height: 20px;
-  }
-
-  /* Der Create-Button zentriert */
-  .form-actions-mobile {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: 32px;
   }
 }
