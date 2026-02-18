@@ -3,6 +3,20 @@
  */
 function toggleUserMenu() {
   const dropdown = document.getElementById("user-dropdown");
+
+  // Help-Link nur mobile hinzufügen
+  if (
+    window.innerWidth <= 780 &&
+    !document.getElementById("dropdown-help-link")
+  ) {
+    const helpLink = document.createElement("a");
+    helpLink.id = "dropdown-help-link";
+    helpLink.href = "help.html";
+    helpLink.textContent = "Help";
+    helpLink.className = "dropdown-help-mobile";
+    dropdown.insertBefore(helpLink, dropdown.firstChild);
+  }
+
   dropdown.classList.toggle("active");
 }
 

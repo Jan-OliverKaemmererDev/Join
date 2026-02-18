@@ -16,8 +16,12 @@
   }
 }
 
-/* Mobile Logo Standard */
+/* Standards außerhalb Media Query */
 .mobile-logo {
+  display: none;
+}
+
+.dropdown-help-mobile {
   display: none;
 }
 
