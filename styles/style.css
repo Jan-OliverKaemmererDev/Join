@@ -201,11 +201,10 @@
   padding: 64px 0;
   position: fixed;
   top: 0;
-  left: max(0px, calc(50% - 836px));
+  left: 0;
   justify-content: flex-start;
   z-index: 100;
   box-sizing: border-box;
-  box-shadow: -9999px 0 0 9999px var(--dark-blue);
 }
 
 .sidebar > img {
@@ -267,8 +266,9 @@
 /* ---- Dashboard Layout ---- */
 
 .main-content {
-  margin-left: max(232px, calc(50% - 604px));
-  max-width: 1440px;
+  margin-left: 232px;
+  width: calc(100% - 232px);
+  max-width: none;
   height: 100vh;
   overflow-y: auto;
 }
@@ -279,10 +279,22 @@
   height: 80px;
   background: white;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-content {
+  display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 1440px;
+  box-sizing: border-box;
 }
 
 .dashboard-header > span {
@@ -382,19 +394,4 @@
 
 .mobile-nav {
   display: none;
-}
-
-/* ---- Header-Farbe rechts über 1440px-Grenze hinaus ausdehnen ---- */
-
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: calc(50% + 834px);
-  right: 0;
-  height: 80px;
-  background: white;
-  z-index: 10;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-  pointer-events: none;
 }

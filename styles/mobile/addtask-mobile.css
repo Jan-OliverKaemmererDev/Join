@@ -35,9 +35,16 @@
     z-index: 1000;
     background: white;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: space-between;
+  }
+
+  .header-content {
+    display: flex !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+    padding: 0 !important;
   }
 
   .dashboard-header span {
@@ -67,6 +74,12 @@
     width: 32px;
     height: 32px;
     font-size: 14px;
+    border: 2px solid #2a3647;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
   }
 
   /* --- Form Elements --- */
@@ -203,14 +216,14 @@
   }
 
   .nav-links {
-    flex-direction: row;
+    flex-direction: row !important;
     width: 100%;
     justify-content: space-around;
     gap: 0;
   }
 
   .nav-links a {
-    flex-direction: column;
+    flex-direction: column !important;
     padding: 8px;
     font-size: 12px;
     gap: 4px;
@@ -218,6 +231,7 @@
     align-items: center;
     justify-content: center;
     width: 25%;
+    text-decoration: none;
   }
 
   .nav-links a img {
@@ -234,10 +248,5 @@
 
   .nav-links a.active img {
     filter: brightness(0) invert(1) opacity(1);
-  }
-
-  .nav-links a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
   }
 }

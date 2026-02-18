@@ -100,7 +100,7 @@
   padding: 64px 0;
   position: fixed;
   top: 0;
-  left: max(0px, calc(50% - 836px));
+  left: 0;
   justify-content: flex-start;
   z-index: 100;
   box-sizing: border-box;

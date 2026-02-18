@@ -40,20 +40,29 @@
 
     <main class="main-content">
       <header class="dashboard-header">
-        <span>Kanban Project Management Tool</span>
-        <div class="header-icons">
-          <div class="user-menu-container">
-            <div
-              class="user-initials"
-              id="user-initials"
-              onclick="toggleUserMenu()"
-            >
-              SM
-            </div>
-            <div class="user-dropdown" id="user-dropdown">
-              <a href="legalnotice.html">Legal Notice</a>
-              <a href="privacypolicy.html">Privacy Policy</a>
-              <a href="#" onclick="handleLogout(); return false;">Log out</a>
+        <div class="header-content">
+          <span>Kanban Project Management Tool</span>
+          <div class="header-icons">
+            <div class="user-menu-container">
+              <div
+                class="user-initials"
+                id="user-initials"
+                onclick="toggleUserMenu()"
+              >
+                SM
+              </div>
+              <div class="user-dropdown" id="user-dropdown">
+                <a href="legalnotice.html">Legal Notice</a>
+                <a href="privacypolicy.html">Privacy Policy</a>
+                <a
+                  href="#"
+                  onclick="
+                    handleLogout();
+                    return false;
+                  "
+                  >Log out</a
+                >
+              </div>
             </div>
           </div>
         </div>
