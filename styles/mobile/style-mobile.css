@@ -163,6 +163,11 @@
     padding-right: 45px;
   }
 
+  #email,
+  #password {
+    width: 300px;
+  }
+
   .login-actions {
     flex-direction: column;
     margin-top: 8px;
