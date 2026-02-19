@@ -98,6 +98,18 @@ function addSubtask() {
   renderSubtasks();
 }
 
+
+/**
+ * Verhindert das Absenden des Formulars bei Enter im Subtask-Feld
+ * @param {KeyboardEvent} event - Das Tastatur-Event
+ */
+function handleSubtaskKeydown(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    addSubtask();
+  }
+}
+
 /**
  * Erstellt ein Subtask-Objekt
  * @param {string} text - Der Subtask-Text
@@ -252,7 +264,6 @@ async function saveTask(userId, task) {
       String(task.id),
     );
     await window.fbSetDoc(taskRef, task);
-    console.log("Task saved:", task);
   } catch (error) {
     console.error("Error saving task:", error);
   }

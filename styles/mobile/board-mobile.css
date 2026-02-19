@@ -499,3 +499,26 @@
     font-size: 12px;
   }
 }
+
+/* --- Landscape-Modus deaktivieren auf mobilen Geräten --- */
+.landscape-block {
+  display: none;
+}
+
+@media (max-width: 780px) and (orientation: landscape) {
+  .landscape-block {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    background: #f6f7f8;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 18px;
+    color: #2a3647;
+    font-weight: 700;
+  }
+}

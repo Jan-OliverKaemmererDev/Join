@@ -193,15 +193,6 @@
           >
             <div class="column-header">
               <span>Done</span>
-              <div class="column-header-plus" onclick="openAddTaskOverlay()">
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                  <path
-                    d="M5 0V10M0 5H10"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  />
-                </svg>
-              </div>
             </div>
             <div class="task-list" id="done-list"></div>
           </div>
@@ -327,6 +318,7 @@
                     type="text"
                     id="subtask-input"
                     placeholder="Add new subtask"
+                    onkeydown="handleSubtaskKeydown(event)"
                   />
                   <button
                     type="button"
@@ -393,6 +385,11 @@
         <img src="./assets/summary-page/contacts-icon.svg" alt="" />
         <span>Contacts</span>
       </a>
+    </div>
+
+    <!-- Landscape Warning -->
+    <div class="landscape-block">
+      <p>Bitte drehe dein Gerät in den Hochformat-Modus</p>
     </div>
 
     <script type="module" src="./scripts/firebase-init.js"></script>
