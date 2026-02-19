@@ -83,10 +83,15 @@
   }
 
   /* --- Form Elements --- */
+  form {
+    align-items: center !important;
+  }
+
   .form-container {
     grid-template-columns: 1fr;
     gap: 24px;
     margin-bottom: 0;
+    width: 100%;
   }
 
   .form-group label {
@@ -133,7 +138,6 @@
   .form-footer {
     position: fixed;
     bottom: 80px;
-    left: 0;
     right: 0;
     background-color: #f6f7f8;
     padding: 16px 0;
@@ -141,7 +145,6 @@
     z-index: 900;
     display: flex;
     justify-content: center;
-    align-items: center;
   }
 
   .required-note {
@@ -150,11 +153,11 @@
 
   .form-actions {
     width: 100%;
-    max-width: 400px;
     display: flex;
+    justify-content: flex-end;
     gap: 32px;
-    padding-right: 16px;
-    padding-left: 72px;
+    padding: 0 16px;
+    box-sizing: border-box;
   }
 
   .btn-clear,
@@ -176,14 +179,16 @@
     background-color: white !important;
     color: #2a3647 !important;
     border: 1px solid #2a3647 !important;
-    flex: 0 0 110px !important;
+    width: 110px !important;
+    flex: none !important;
   }
 
   .btn-create {
     background-color: #2a3647 !important;
     color: white !important;
     border: none !important;
-    flex: 1 !important;
+    width: 183px !important;
+    flex: none !important;
   }
 
   .btn-clear img,

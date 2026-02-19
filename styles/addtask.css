@@ -11,11 +11,16 @@
   color: #000;
 }
 
+#add-task-form {
+  align-items: flex-start;
+}
+
 .form-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
   margin-bottom: 40px;
+  max-width: 1000px;
 }
 
 .form-column {
