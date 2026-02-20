@@ -172,13 +172,13 @@
   }
 
   .summary-container {
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    align-items: center !important;
     width: 100%;
   }
 
   .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 16px;
     width: 100%;
   }
 
