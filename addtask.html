@@ -154,13 +154,30 @@
               </div>
 
               <div class="form-group">
-                <label for="assigned-to">Assigned to</label>
-                <select id="assigned-to" oninput="validateForm()">
-                  <option value="">Select contacts to assign</option>
-                  <option value="user1">Sofia Müller</option>
-                  <option value="user2">Anton Mayer</option>
-                  <option value="user3">Anja Schulz</option>
-                </select>
+                <label>Assigned to</label>
+                <div class="custom-select-wrapper" id="assigned-to-wrapper">
+                  <div
+                    class="custom-select-header"
+                    onclick="toggleAssignedToDropdown()"
+                  >
+                    <span id="selected-contact-text"
+                      >Select contacts to assign</span
+                    >
+                    <div class="dropdown-arrow-icon"></div>
+                  </div>
+                  <div
+                    class="custom-select-options d-none"
+                    id="assigned-to-options"
+                  >
+                    <!-- Contacts will be rendered here -->
+                  </div>
+                </div>
+                <div
+                  id="selected-contacts-initials"
+                  class="selected-contacts-initials"
+                >
+                  <!-- Selected contact avatars will be rendered here -->
+                </div>
               </div>
 
               <div class="form-group">

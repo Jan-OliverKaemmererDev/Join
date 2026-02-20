@@ -1,5 +1,7 @@
 let selectedPriority = "medium";
 let subtasks = [];
+let allContacts = [];
+let selectedContacts = [];
 
 /**
  * Initialisiert die Add-Task-Seite
@@ -13,6 +15,7 @@ async function initAddTask() {
   }
   updateHeaderInitials(currentUser);
   setMinimumDate();
+  await loadContacts();
   validateForm();
 }
 
@@ -255,7 +258,7 @@ function buildTask(currentUser) {
     description: document.getElementById("description").value.trim(),
     dueDate: document.getElementById("due-date").value,
     priority: selectedPriority,
-    assignedTo: document.getElementById("assigned-to").value,
+    assignedTo: selectedContacts.map((c) => c.id),
     category: document.getElementById("category").value,
     subtasks: copySubtasks(),
     status: "todo",
@@ -314,6 +317,9 @@ function clearForm() {
   if (form) form.reset();
   selectPriority("medium");
   subtasks = [];
+  selectedContacts = [];
+  renderAssignedToOptions();
+  renderSelectedInitials();
   renderSubtasks();
   validateForm();
 }
@@ -355,3 +361,104 @@ function hideToastAfterDelay(toast) {
     toast.classList.add("d-none");
   }, 3000);
 }
+
+/**
+ * Lädt Kontakte aus Firestore
+ */
+async function loadContacts() {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
+  try {
+    const contactsRef = window.fbCollection(
+      window.firebaseDb,
+      "users",
+      currentUser.id,
+      "contacts",
+    );
+    const snapshot = await window.fbGetDocs(contactsRef);
+    allContacts = [];
+    snapshot.forEach((doc) => {
+      const contact = doc.data();
+      contact.id = doc.id;
+      contact.isYou = contact.email === currentUser.email;
+      allContacts.push(contact);
+    });
+    sortContactsByName();
+    renderAssignedToOptions();
+  } catch (error) {
+    console.error("Error loading contacts:", error);
+  }
+}
+
+/**
+ * Sortiert Kontakte alphabetisch
+ */
+function sortContactsByName() {
+  allContacts.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/**
+ * Rendert die Kontakt-Optionen im Dropdown
+ */
+function renderAssignedToOptions() {
+  const optionsContainer = document.getElementById("assigned-to-options");
+  if (!optionsContainer) return;
+  optionsContainer.innerHTML = "";
+  allContacts.forEach((contact) => {
+    const isSelected = selectedContacts.some((c) => c.id === contact.id);
+    optionsContainer.innerHTML += getContactOptionTemplate(contact, isSelected);
+  });
+}
+
+/**
+ * Schaltet das Dropdown-Menü um
+ */
+function toggleAssignedToDropdown() {
+  const wrapper = document.getElementById("assigned-to-wrapper");
+  const options = document.getElementById("assigned-to-options");
+  wrapper.classList.toggle("open");
+  options.classList.toggle("d-none");
+}
+
+/**
+ * Schaltet die Auswahl eines Kontakts um
+ * @param {string} contactId - Die ID des Kontakts
+ * @param {Event} event - Das Klick-Event
+ */
+function toggleContactSelection(contactId, event) {
+  event.stopPropagation();
+  const contact = allContacts.find((c) => c.id === contactId);
+  if (!contact) return;
+
+  const index = selectedContacts.findIndex((c) => c.id === contactId);
+  if (index > -1) {
+    selectedContacts.splice(index, 1);
+  } else {
+    selectedContacts.push(contact);
+  }
+
+  renderAssignedToOptions();
+  renderSelectedInitials();
+}
+
+/**
+ * Rendert die Initialen der ausgewählten Kontakte
+ */
+function renderSelectedInitials() {
+  const container = document.getElementById("selected-contacts-initials");
+  if (!container) return;
+  container.innerHTML = "";
+  selectedContacts.forEach((contact) => {
+    container.innerHTML += getSelectedContactInitialsTemplate(contact);
+  });
+}
+
+// Schließt das Dropdown bei Klick außerhalb
+document.addEventListener("click", function (event) {
+  const wrapper = document.getElementById("assigned-to-wrapper");
+  if (wrapper && !wrapper.contains(event.target)) {
+    wrapper.classList.remove("open");
+    const options = document.getElementById("assigned-to-options");
+    if (options) options.classList.add("d-none");
+  }
+});
