@@ -168,22 +168,62 @@ function createSubtask(text) {
  */
 function renderSubtasks() {
   const list = document.getElementById("subtask-list");
+  if (!list) return;
   list.innerHTML = "";
   for (let i = 0; i < subtasks.length; i++) {
-    appendSubtaskToList(list, subtasks[i]);
+    const li = document.createElement("li");
+    li.innerHTML = getSubtaskItemTemplate(subtasks[i]);
+    list.appendChild(li);
   }
 }
 
 /**
- * Fügt einen Subtask zur Liste hinzu
- * @param {HTMLElement} list - Das Listen-Element
- * @param {Object} subtask - Das Subtask-Objekt
+ * Wechselt ein Subtask in den Bearbeitungsmodus
+ * @param {number} id - Die ID des Subtasks
  */
-function appendSubtaskToList(list, subtask) {
-  const li = document.createElement("li");
-  li.className = "subtask-item";
-  li.innerHTML = getSubtaskItemTemplate(subtask);
-  list.appendChild(li);
+function editSubtask(id) {
+  const subtask = subtasks.find((s) => s.id === id);
+  if (!subtask) return;
+  const container = document.getElementById(`subtask-item-${id}`);
+  if (container && container.parentElement) {
+    container.parentElement.innerHTML = getSubtaskEditTemplate(subtask);
+    const input = document.getElementById(`subtask-input-${id}`);
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+  }
+}
+
+/**
+ * Speichert die Bearbeitung eines Subtasks
+ * @param {number} id - Die ID des Subtasks
+ */
+function saveEditSubtask(id) {
+  const input = document.getElementById(`subtask-input-${id}`);
+  if (!input) return;
+  const newText = input.value.trim();
+  if (newText === "") {
+    removeSubtask(id);
+    return;
+  }
+  const subtask = subtasks.find((s) => s.id === id);
+  if (subtask) {
+    subtask.text = newText;
+    renderSubtasks();
+  }
+}
+
+/**
+ * Verarbeitet Tasteneingaben im Subtask-Edit-Feld
+ * @param {number} id - Die ID des Subtasks
+ * @param {KeyboardEvent} event - Das Keyboard-Event
+ */
+function handleSubtaskEditKeydown(id, event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    saveEditSubtask(id);
+  } else if (event.key === "Escape") {
+    renderSubtasks();
+  }
 }
 
 /**
@@ -191,23 +231,8 @@ function appendSubtaskToList(list, subtask) {
  * @param {number} id - Die ID des zu entfernenden Subtasks
  */
 function removeSubtask(id) {
-  subtasks = filterSubtasks(id);
+  subtasks = subtasks.filter((s) => s.id !== id);
   renderSubtasks();
-}
-
-/**
- * Filtert Subtasks und entfernt den Subtask mit der angegebenen ID
- * @param {number} id - Die ID des zu entfernenden Subtasks
- * @returns {Array} Das gefilterte Subtasks-Array
- */
-function filterSubtasks(id) {
-  const filtered = [];
-  for (let i = 0; i < subtasks.length; i++) {
-    if (subtasks[i].id !== id) {
-      filtered.push(subtasks[i]);
-    }
-  }
-  return filtered;
 }
 
 /**

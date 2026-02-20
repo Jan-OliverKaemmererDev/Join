@@ -1,14 +1,38 @@
 /**
- * Generiert das HTML-Template für ein Subtask-Element
- * @param {Object} subtask - Das Subtask-Objekt mit id und text
- * @returns {string} Das HTML-Template für das Subtask-Element
+ * Generiert das HTML-Template für ein Subtask-Element (Normalansicht)
+ * @param {Object} subtask - Das Subtask-Objekt
+ * @returns {string} Das HTML-Template
  */
 function getSubtaskItemTemplate(subtask) {
   return `
-    <li class="subtask-item">
-      <span>${subtask.text}</span>
-      <button type="button" onclick="removeSubtask(${subtask.id})">×</button>
-    </li>
+    <div class="subtask-item" id="subtask-item-${subtask.id}" ondblclick="editSubtask(${subtask.id})">
+      <div class="subtask-content">
+        <span class="subtask-text">${subtask.text}</span>
+      </div>
+      <div class="subtask-icons">
+        <img src="./assets/icons/edit.svg" class="subtask-icon-small" onclick="editSubtask(${subtask.id})" alt="Edit">
+        <div class="subtask-icon-divider"></div>
+        <img src="./assets/icons/delete.svg" class="subtask-icon-small" onclick="removeSubtask(${subtask.id})" alt="Delete">
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Generiert das HTML-Template für ein Subtask-Element (Bearbeitungsmodus)
+ * @param {Object} subtask - Das Subtask-Objekt
+ * @returns {string} Das HTML-Template
+ */
+function getSubtaskEditTemplate(subtask) {
+  return `
+    <div class="subtask-item-edit">
+      <input type="text" class="subtask-edit-input" id="subtask-input-${subtask.id}" value="${subtask.text}" onkeydown="handleSubtaskEditKeydown(${subtask.id}, event)">
+      <div class="subtask-icons" style="display: flex;">
+        <img src="./assets/icons/delete.svg" class="subtask-icon-small" onclick="removeSubtask(${subtask.id})" alt="Delete">
+        <div class="subtask-icon-divider"></div>
+        <img src="./assets/icons/check-create-icon-black.svg" class="subtask-icon-small" onclick="saveEditSubtask(${subtask.id})" alt="Save">
+      </div>
+    </div>
   `;
 }
 
