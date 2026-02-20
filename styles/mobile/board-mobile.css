@@ -461,6 +461,8 @@
     background-color: #091931;
     border-radius: 12px;
     color: white;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 
   .nav-links a.active img {
