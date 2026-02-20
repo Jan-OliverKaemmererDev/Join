@@ -46,7 +46,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 18px;
   width: 352px;
   height: 56px;
 }
@@ -148,6 +148,7 @@ body {
 }
 
 .contact-email-list {
+  text-decoration: none;
   font-size: 16px;
   color: #007cee;
 }
@@ -302,18 +303,14 @@ body {
   right: auto;
   top: auto;
   height: auto;
-
   background: white;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-
   transform: translateX(200%);
   transition: transform 0.4s ease-in-out;
-
   z-index: 1000;
   display: flex;
   border-radius: 30px;
   overflow: hidden;
-
   max-width: 90vw;
 }
 
@@ -605,4 +602,8 @@ body {
   justify-content: flex-start;
   z-index: 100;
   box-sizing: border-box;
+}
+
+.info-label {
+  font-weight: bold;
 }
