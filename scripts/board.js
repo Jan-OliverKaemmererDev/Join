@@ -13,6 +13,7 @@ let touchDragTaskId = null;
 async function initBoard() {
   await waitForFirebase();
   await loadTasks();
+  await loadContacts(); // Shared from addtask.js
   renderTasks();
   checkUser();
   setupTaskAddedListener();
@@ -211,11 +212,27 @@ function countCompletedSubtasks(subtasks) {
  * @returns {string} Das HTML für die Assignees
  */
 function generateAssigneesHtml(task) {
-  if (task.assignedTo) {
-    const initials = getInitialsFromName(task.assignedTo || "U");
-    return getAssigneeBadgeTemplate(initials);
+  if (!task.assignedTo || !Array.isArray(task.assignedTo)) return "";
+  let html = "";
+  const displayCount = Math.min(task.assignedTo.length, 3);
+
+  for (let i = 0; i < displayCount; i++) {
+    const contactId = task.assignedTo[i];
+    const contact = allContacts.find((c) => c.id === contactId);
+    if (contact) {
+      const initials = getInitialsFromName(contact.name);
+      html += getAssigneeBadgeTemplate(initials, contact.color);
+    }
   }
-  return "";
+
+  if (task.assignedTo.length > 3) {
+    html += getAssigneeBadgeTemplate(
+      `+${task.assignedTo.length - 3}`,
+      "#2A3647",
+    );
+  }
+
+  return html;
 }
 
 /**
@@ -385,4 +402,3 @@ function getTaskIdFromCard(card) {
   const id = card.getAttribute("data-task-id");
   return id ? Number(id) : null;
 }
-

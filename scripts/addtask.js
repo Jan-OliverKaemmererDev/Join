@@ -45,6 +45,7 @@ function updateHeaderInitials(user) {
  * @returns {string} Die generierten Initialen
  */
 function getInitialsFromName(name) {
+  if (!name || typeof name !== "string") return "U";
   const parts = name.trim().split(" ");
   if (parts.length === 1) {
     return parts[0].substring(0, 2).toUpperCase();

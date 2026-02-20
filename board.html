@@ -291,24 +291,54 @@
               </div>
 
               <div class="form-group">
-                <label for="assigned-to">Assigned to</label>
-                <select id="assigned-to" oninput="validateForm()">
-                  <option value="">Select contacts to assign</option>
-                  <option value="Sofia Müller">Sofia Müller</option>
-                  <option value="Anton Mayer">Anton Mayer</option>
-                  <option value="Anja Schulz">Anja Schulz</option>
-                </select>
+                <label>Assigned to</label>
+                <div class="custom-select-wrapper" id="assigned-to-wrapper">
+                  <div
+                    class="custom-select-header"
+                    onclick="toggleAssignedToDropdown()"
+                  >
+                    <span>Select contacts to assign</span>
+                    <div class="dropdown-arrow-icon"></div>
+                  </div>
+                  <div class="custom-select-options" id="assigned-to-options">
+                    <!-- Contacts will be rendered here -->
+                  </div>
+                </div>
+                <div
+                  id="selected-contacts-initials"
+                  class="selected-contacts-initials"
+                ></div>
               </div>
 
               <div class="form-group">
                 <label for="category"
                   >Category<span class="required">*</span></label
                 >
-                <select id="category" oninput="validateForm()" required>
-                  <option value="">Select task category</option>
-                  <option value="technical">Technical Task</option>
-                  <option value="user-story">User Story</option>
-                </select>
+                <div class="custom-select-wrapper" id="category-wrapper">
+                  <div
+                    class="custom-select-header"
+                    onclick="toggleCategoryDropdown()"
+                  >
+                    <span id="selected-category-text"
+                      >Select task category</span
+                    >
+                    <div class="dropdown-arrow-icon"></div>
+                  </div>
+                  <div class="custom-select-options" id="category-options">
+                    <div
+                      class="contact-option"
+                      onclick="selectCategory('Technical Task', event)"
+                    >
+                      <span class="contact-name">Technical Task</span>
+                    </div>
+                    <div
+                      class="contact-option"
+                      onclick="selectCategory('User Story', event)"
+                    >
+                      <span class="contact-name">User Story</span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="form-group">
