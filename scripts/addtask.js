@@ -90,14 +90,51 @@ function addSubtask() {
   const input = document.getElementById("subtask-input");
   const subtaskText = input.value.trim();
   if (subtaskText === "") {
+    hideSubtaskIcons();
     return;
   }
   const subtask = createSubtask(subtaskText);
   subtasks.push(subtask);
   input.value = "";
   renderSubtasks();
+  hideSubtaskIcons();
 }
 
+/**
+ * Zeigt die Subtask-Icons (Clear & Save) an
+ */
+function showSubtaskIcons() {
+  const activeIcons = document.getElementById("subtask-icons-active");
+  if (activeIcons) activeIcons.classList.remove("d-none");
+}
+
+/**
+ * Blendet die Subtask-Icons (Clear & Save) aus
+ */
+function hideSubtaskIcons() {
+  const activeIcons = document.getElementById("subtask-icons-active");
+  if (activeIcons) activeIcons.classList.add("d-none");
+}
+
+/**
+ * Leert das Subtask-Eingabefeld und blendet die Icons aus
+ */
+function clearSubtaskInput() {
+  const input = document.getElementById("subtask-input");
+  if (input) input.value = "";
+  hideSubtaskIcons();
+}
+
+// Globaler Klick-Handler zum Zurücksetzen des Subtask-Inputs bei Klick außerhalb
+document.addEventListener("click", function (event) {
+  const wrapper = document.getElementById("subtask-wrapper");
+  const input = document.getElementById("subtask-input");
+  if (wrapper && input && !wrapper.contains(event.target)) {
+    if (input.value.trim() === "") {
+      hideSubtaskIcons();
+    }
+  }
+});
 
 /**
  * Verhindert das Absenden des Formulars bei Enter im Subtask-Feld
