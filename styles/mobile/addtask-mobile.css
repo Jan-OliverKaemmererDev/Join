@@ -9,8 +9,9 @@
     width: 100% !important;
     padding-top: 80px;
     padding-bottom: 200px;
-    height: auto !important;
-    overflow-y: visible !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    box-sizing: border-box;
   }
 
   .add-task-section {
