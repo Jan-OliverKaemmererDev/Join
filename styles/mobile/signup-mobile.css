@@ -1,20 +1,20 @@
 /* Mobile Styles für Sign Up */
 
 @media (min-width: 320px) and (max-width: 780px) {
-  /* Logo: top: 37px, left: 38px, width: 64px (Figma) */
+  /* Logo: top: 37px, left: 38px, width: 64px */
   .logo-top-left {
     top: 37px;
     left: 38px;
     width: 64px;
   }
 
-  /* Card startet bei top: 165.5px (Figma) → padding-top: 165px
-     Überschreibt style-mobile.css (padding: 225px 16px 0) */
+  /* Überschreibt style-mobile.css (padding: 225px 16px 0) */
   .login-main {
-    padding: 165px 16px 0;
+    padding: 120px 16px 0;
+    justify-content: flex-start;
   }
 
-  /* Karte: margin-top: 150px aus signup.css (desktop) muss auf 0 gesetzt werden */
+  /* Karte */
   .login-card {
     margin-top: 0;
     padding: 32px 24px;
@@ -33,11 +33,26 @@
     margin: 0;
   }
 
-  /* Blue underline: kleiner Abstand nach h1, 28px vor Form */
+  /* Blauer Unterstrich */
   .blue-underline {
     width: 130px;
     height: 3px;
-    margin: 4px 0 28px 0;
+    margin: 4px 0 24px 0;
+  }
+
+  /* Formular: engere Abstände damit alles in den Screen passt */
+  form {
+    gap: 12px;
+  }
+
+  /* Inputs: kompakteres Padding */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    font-size: 16px;
+    padding: 14px 48px 14px 16px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   /* Name input: width: 450px (desktop) → width: 100% */
@@ -56,9 +71,10 @@
   .privacy-policy-check {
     font-size: 14px;
     gap: 10px;
-    margin-top: 0;
+    margin-top: 4px;
     white-space: normal;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    justify-content: center;
   }
 
   .privacy-policy-check input[type="checkbox"] {
@@ -75,7 +91,7 @@
 
   /* Sign up Button */
   .center-button {
-    margin-top: 0;
+    margin-top: 4px;
   }
 
   .btn-small {
@@ -89,7 +105,7 @@
     justify-content: center;
   }
 
-  /* Footer: bottom: 22px (Figma) */
+  /* Footer: bottom: 22px */
   .login-footer {
     bottom: 22px;
   }
