@@ -206,9 +206,26 @@
         onclick="event.stopPropagation()"
       >
         <div class="close-btn-container">
-          <button type="button" title="Close add task overlay" onclick="closeAddTaskOverlay()" class="btn-close">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 12L18 18M18 6L12 12L18 6ZM12 12L6 18L12 12ZM12 12L6 6L12 12Z" stroke="#2A3647" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <button
+            type="button"
+            title="Close add task overlay"
+            onclick="closeAddTaskOverlay()"
+            class="btn-close"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 12L18 18M18 6L12 12L18 6ZM12 12L6 18L12 12ZM12 12L6 6L12 12Z"
+                stroke="#2A3647"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </button>
         </div>
@@ -302,7 +319,10 @@
                     <span>Select contacts to assign</span>
                     <div class="dropdown-arrow-icon"></div>
                   </div>
-                  <div class="custom-select-options d-none" id="assigned-to-options">
+                  <div
+                    class="custom-select-options d-none"
+                    id="assigned-to-options"
+                  >
                     <!-- Contacts will be rendered here -->
                   </div>
                 </div>
@@ -326,7 +346,10 @@
                     >
                     <div class="dropdown-arrow-icon"></div>
                   </div>
-                  <div class="custom-select-options d-none" id="category-options">
+                  <div
+                    class="custom-select-options d-none"
+                    id="category-options"
+                  >
                     <div
                       class="contact-option"
                       onclick="selectCategory('Technical Task', event)"
@@ -346,20 +369,32 @@
 
               <div class="form-group">
                 <label>Subtasks</label>
-                <div class="subtask-input-wrapper">
+                <div class="subtask-input-wrapper" id="subtask-wrapper">
                   <input
                     type="text"
                     id="subtask-input"
                     placeholder="Add new subtask"
+                    onfocus="showSubtaskIcons()"
                     onkeydown="handleSubtaskKeydown(event)"
                   />
-                  <button
-                    type="button"
-                    class="btn-add-subtask"
-                    onclick="addSubtask()"
+                  <div
+                    class="subtask-icons-active d-none"
+                    id="subtask-icons-active"
                   >
-                    +
-                  </button>
+                    <img
+                      src="./assets/icons/clear-X-icon.svg"
+                      alt="Clear"
+                      onclick="clearSubtaskInput()"
+                      class="subtask-icon"
+                    />
+                    <div class="subtask-divider"></div>
+                    <img
+                      src="./assets/icons/check-create-icon-black.svg"
+                      alt="Save"
+                      onclick="addSubtask()"
+                      class="subtask-icon"
+                    />
+                  </div>
                 </div>
                 <ul id="subtask-list" class="subtask-list"></ul>
               </div>
@@ -373,6 +408,7 @@
             <div class="form-actions">
               <button type="button" class="btn-clear" onclick="clearForm()">
                 Clear
+                <img src="./assets/icons/clear-X-icon.svg" alt="Clear" />
               </button>
               <button
                 type="submit"
@@ -381,6 +417,10 @@
                 disabled
               >
                 Create Task
+                <img
+                  src="./assets/icons/check-create-icon.svg"
+                  alt="Create Task"
+                />
               </button>
             </div>
           </div>
