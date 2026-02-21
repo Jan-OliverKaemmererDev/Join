@@ -28,10 +28,10 @@ function openTaskDetails(taskId) {
   if (isDragging) return;
   const task = findTask(taskId);
   if (!task) return;
-  document.getElementById("task-details-content").innerHTML = buildTaskDetailsHtml(task);
+  document.getElementById("task-details-content").innerHTML =
+    buildTaskDetailsHtml(task);
   document.getElementById("task-details-overlay").classList.add("active");
 }
-
 
 /**
  * Baut das vollständige HTML für die Task-Detailansicht
@@ -44,7 +44,14 @@ function buildTaskDetailsHtml(task) {
   const categoryClass = getCategoryClass(task.category);
   const categoryLabel = getCategoryLabel(task.category);
   const assignedToHtml = buildAssignedToDetailsHtml(task);
-  return getTaskDetailsTemplate(task, subtasksHtml, priorityIcon, categoryClass, categoryLabel, assignedToHtml);
+  return getTaskDetailsTemplate(
+    task,
+    subtasksHtml,
+    priorityIcon,
+    categoryClass,
+    categoryLabel,
+    assignedToHtml,
+  );
 }
 
 /**
@@ -66,6 +73,7 @@ async function toggleSubtask(taskId, subtaskIndex) {
       !task.subtasks[subtaskIndex].completed;
     await saveTasks();
     renderTasks();
+    openTaskDetails(taskId);
   }
 }
 
@@ -309,11 +317,13 @@ function fillFormWithTaskData(task) {
   loadAssigneesForEdit(task);
   document.getElementById("category").value = task.category;
   selectPriority(task.priority);
-  subtasks = task.subtasks && task.subtasks.length > 0 ? JSON.parse(JSON.stringify(task.subtasks)) : [];
+  subtasks =
+    task.subtasks && task.subtasks.length > 0
+      ? JSON.parse(JSON.stringify(task.subtasks))
+      : [];
   renderSubtasks();
   validateForm();
 }
-
 
 /**
  * Lädt die zugewiesenen Kontakte in den Formularzustand
