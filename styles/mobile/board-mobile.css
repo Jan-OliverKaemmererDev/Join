@@ -193,7 +193,7 @@
     transform: none !important;
     width: 100%;
     max-width: 100%;
-    max-height: calc(100vh - 112px);
+    max-height: calc(100vh - 120px);
     border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     background-color: white;
@@ -221,16 +221,20 @@
   }
 
   .form-container {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px;
     margin-bottom: 0;
-    display: flex;
-    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .form-column {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    gap: 16px;
+    gap: 20px;
     box-sizing: border-box;
   }
 
@@ -305,10 +309,12 @@
     padding: 12px 20px;
     border-top: 1px solid #d1d1d1;
     border-radius: 0 0 20px 20px;
-    z-index: 2;
-    display: flex;
-    justify-content: center;
+    z-index: 10;
+    display: flex !important;
+    justify-content: flex-end;
     align-items: center;
+    width: 100% !important;
+    box-sizing: border-box;
   }
 
   .overlay-content .required-note {
@@ -316,64 +322,51 @@
   }
 
   .overlay-content .form-actions {
-    width: 100%;
-    display: flex;
+    display: flex !important;
     gap: 16px;
-    padding: 0;
+    align-items: center;
+    justify-content: flex-end;
+    width: auto !important;
   }
 
   .overlay-content .btn-clear,
   .overlay-content .btn-create {
-    padding: 10px 12px;
-    font-size: 15px;
+    height: 54px;
+    padding: 0 20px;
+    font-size: 16px;
     font-weight: 700;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 48px;
     gap: 8px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    font-family: inherit;
+    transition: all 0.2s;
+    border: none;
+    box-sizing: border-box;
   }
 
   .overlay-content .btn-clear {
-    background-color: white !important;
+    background-color: #fff !important;
     color: #2a3647 !important;
-    border: 1px solid #2a3647 !important;
-    flex: 0 0 110px !important;
+    border: 1.5px solid #2a3647 !important;
+    min-width: 100px !important;
+    flex: 0 1 auto !important;
   }
 
   .overlay-content .btn-create {
     background-color: #2a3647 !important;
-    color: white !important;
-    border: none !important;
-    flex: 1 !important;
+    color: #fff !important;
+    min-width: 160px !important;
+    flex: 0 1 auto !important;
   }
 
-  .overlay-content .btn-clear svg,
-  .overlay-content .btn-create svg {
-    display: none !important;
-  }
-
-  .overlay-content .btn-clear::after {
-    content: "";
-    width: 24px;
-    height: 24px;
-    background-image: url("../../assets/icons/clear-X-icon.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    display: inline-block;
-  }
-
-  .overlay-content .btn-create::after {
-    content: "";
-    width: 24px;
-    height: 24px;
-    background-image: url("../../assets/icons/check-create-icon.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    display: inline-block;
+  .overlay-content .btn-clear img,
+  .overlay-content .btn-create img {
+    width: 22px;
+    height: 22px;
+    display: block !important;
   }
 
   /* Mobile Nav ausblenden (wird durch Sidebar ersetzt) */
