@@ -28,19 +28,23 @@ function openTaskDetails(taskId) {
   if (isDragging) return;
   const task = findTask(taskId);
   if (!task) return;
-  const content = document.getElementById("task-details-content");
+  document.getElementById("task-details-content").innerHTML = buildTaskDetailsHtml(task);
+  document.getElementById("task-details-overlay").classList.add("active");
+}
+
+
+/**
+ * Baut das vollständige HTML für die Task-Detailansicht
+ * @param {Object} task - Das Task-Objekt
+ * @returns {string} Das HTML für die Detailansicht
+ */
+function buildTaskDetailsHtml(task) {
   const subtasksHtml = buildSubtasksHtml(task);
   const priorityIcon = getPriorityIcon(task.priority);
   const categoryClass = getCategoryClass(task.category);
   const categoryLabel = getCategoryLabel(task.category);
-  content.innerHTML = getTaskDetailsTemplate(
-    task,
-    subtasksHtml,
-    priorityIcon,
-    categoryClass,
-    categoryLabel,
-  );
-  document.getElementById("task-details-overlay").classList.add("active");
+  const assignedToHtml = buildAssignedToDetailsHtml(task);
+  return getTaskDetailsTemplate(task, subtasksHtml, priorityIcon, categoryClass, categoryLabel, assignedToHtml);
 }
 
 /**
@@ -302,16 +306,23 @@ function fillFormWithTaskData(task) {
   document.getElementById("title").value = task.title;
   document.getElementById("description").value = task.description;
   document.getElementById("due-date").value = task.dueDate;
-  document.getElementById("assigned-to").value = task.assignedTo || "";
+  loadAssigneesForEdit(task);
   document.getElementById("category").value = task.category;
   selectPriority(task.priority);
-  if (task.subtasks && task.subtasks.length > 0) {
-    subtasks = JSON.parse(JSON.stringify(task.subtasks));
-  } else {
-    subtasks = [];
-  }
+  subtasks = task.subtasks && task.subtasks.length > 0 ? JSON.parse(JSON.stringify(task.subtasks)) : [];
   renderSubtasks();
   validateForm();
+}
+
+
+/**
+ * Lädt die zugewiesenen Kontakte in den Formularzustand
+ * @param {Object} task - Das Task-Objekt
+ */
+function loadAssigneesForEdit(task) {
+  selectedContacts = Array.isArray(task.assignedTo) ? [...task.assignedTo] : [];
+  renderAssignedToOptions();
+  renderSelectedInitials();
 }
 
 /**
@@ -343,7 +354,7 @@ async function updateTask(taskId) {
     .value.trim();
   tasks[taskIndex].dueDate = document.getElementById("due-date").value;
   tasks[taskIndex].priority = selectedPriority;
-  tasks[taskIndex].assignedTo = document.getElementById("assigned-to").value;
+  tasks[taskIndex].assignedTo = [...selectedContacts];
   tasks[taskIndex].category = document.getElementById("category").value;
   tasks[taskIndex].subtasks = JSON.parse(JSON.stringify(subtasks));
   await saveTasks();
@@ -364,4 +375,5 @@ function resetFormToAddMode() {
   submitBtn.textContent = "Create Task";
   form.onsubmit = handleAddTask;
   clearForm();
+  resetBoardDropdowns();
 }

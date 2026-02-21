@@ -235,6 +235,37 @@ function generateAssigneesHtml(task) {
   return html;
 }
 
+
+/**
+ * Generiert das HTML für zugewiesene Kontakte in der Detailansicht
+ * @param {Object} task - Das Task-Objekt
+ * @returns {string} Das HTML mit Kontakt-Badges und Namen
+ */
+function buildAssignedToDetailsHtml(task) {
+  if (!task.assignedTo || !Array.isArray(task.assignedTo) || task.assignedTo.length === 0) {
+    return "<span>No one</span>";
+  }
+  return buildAssigneeDetailItems(task.assignedTo);
+}
+
+
+/**
+ * Baut die HTML-Einträge für alle zugewiesenen Kontakte
+ * @param {Array} assignedIds - Array von Kontakt-IDs
+ * @returns {string} Das HTML für alle Kontakt-Einträge
+ */
+function buildAssigneeDetailItems(assignedIds) {
+  let html = "";
+  for (let i = 0; i < assignedIds.length; i++) {
+    const contact = allContacts.find((c) => c.id === assignedIds[i]);
+    if (contact) {
+      const initials = getInitialsFromName(contact.name);
+      html += getAssignedToDetailItemTemplate(initials, contact.color, contact.name);
+    }
+  }
+  return html || "<span>No one</span>";
+}
+
 /**
  * Gibt das Icon für eine Priorität zurück
  * @param {string} priority - Die Priorität

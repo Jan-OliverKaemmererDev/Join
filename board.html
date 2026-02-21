@@ -205,9 +205,11 @@
         class="overlay-content add-task-overlay-card"
         onclick="event.stopPropagation()"
       >
-        <div class="overlay-close-container">
-          <button onclick="closeAddTaskOverlay()" class="overlay-close-button">
-            &times;
+        <div class="close-btn-container">
+          <button type="button" title="Close add task overlay" onclick="closeAddTaskOverlay()" class="btn-close">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 12L18 18M18 6L12 12L18 6ZM12 12L6 18L12 12ZM12 12L6 6L12 12Z" stroke="#2A3647" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </button>
         </div>
 
@@ -300,7 +302,7 @@
                     <span>Select contacts to assign</span>
                     <div class="dropdown-arrow-icon"></div>
                   </div>
-                  <div class="custom-select-options" id="assigned-to-options">
+                  <div class="custom-select-options d-none" id="assigned-to-options">
                     <!-- Contacts will be rendered here -->
                   </div>
                 </div>
@@ -324,7 +326,7 @@
                     >
                     <div class="dropdown-arrow-icon"></div>
                   </div>
-                  <div class="custom-select-options" id="category-options">
+                  <div class="custom-select-options d-none" id="category-options">
                     <div
                       class="contact-option"
                       onclick="selectCategory('Technical Task', event)"
@@ -339,6 +341,7 @@
                     </div>
                   </div>
                 </div>
+                <input type="hidden" id="category" value="" />
               </div>
 
               <div class="form-group">
@@ -429,6 +432,7 @@
     <script src="./scripts/user-menu.js"></script>
     <script src="./scripts/templates/addtask-template.js"></script>
     <script src="./scripts/addtask.js"></script>
+    <script src="./scripts/board-form.js"></script>
     <script src="./scripts/templates/board-template.js"></script>
     <script src="./scripts/board.js"></script>
     <script src="./scripts/boardInteractions.js"></script>

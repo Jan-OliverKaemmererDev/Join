@@ -204,34 +204,6 @@
     box-sizing: border-box;
   }
 
-  /* --- Close Button Bar --- */
-  .overlay-close-container {
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 2;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    border-radius: 20px 20px 0 0;
-    border-bottom: 1px solid #eee;
-    box-sizing: border-box;
-  }
-
-  .overlay-close-button {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: none;
-    font-size: 24px;
-    color: #2a3647;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   /* --- Overlay Title --- */
   .add-task-title {
     font-size: 28px;
