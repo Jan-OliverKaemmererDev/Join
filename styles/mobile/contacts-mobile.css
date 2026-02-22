@@ -53,11 +53,14 @@
     width: 100%;
     justify-content: space-around;
     gap: 0;
+    height: 100%;
+    display: flex !important;
+    align-items: stretch;
   }
 
   .nav-links a {
     flex-direction: column !important;
-    padding: 8px;
+    padding: 0;
     font-size: 12px;
     gap: 4px;
     color: #a8a8a8;
@@ -65,6 +68,8 @@
     justify-content: center;
     width: 25%;
     text-decoration: none;
+    height: 100%;
+    display: flex;
   }
 
   .nav-links a img {
@@ -77,8 +82,7 @@
     background-color: #091931;
     border-radius: 12px;
     color: white;
-    padding-top: 16px;
-    padding-bottom: 16px;
+    height: 100%;
   }
 
   .nav-links a.active img {
@@ -103,22 +107,38 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 80px;
+    height: 72px;
     padding: 0 16px;
     z-index: 1000;
     background: white;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     display: flex !important;
     align-items: center;
-    justify-content: space-between;
+    box-sizing: border-box;
   }
 
   .header-content {
     display: flex !important;
     justify-content: space-between !important;
+    align-items: center !important;
     width: 100% !important;
     padding: 0 !important;
-    align-items: center;
+  }
+
+  .header-content::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-image: url("../../assets/login-screen/join-logo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex-shrink: 0;
+  }
+
+  .logo-mobile-link {
+    display: none !important;
   }
 
   .dashboard-header span {
@@ -130,23 +150,29 @@
   }
 
   .user-initials {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     font-size: 14px;
-    border: 2px solid #2a3647;
+    font-weight: 600;
+    border: 2px solid #091931;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    color: #29abe2;
+  }
+
+  .user-dropdown {
+    top: 66px !important;
   }
 
   /* ================= CONTACTS ================= */
 
   .contacts-container {
-    margin-top: 80px;
+    margin-top: 72px;
     margin-bottom: 80px;
-    height: calc(100vh - 160px);
+    height: calc(100vh - 152px);
     display: flex;
     flex-direction: column;
   }
@@ -231,7 +257,7 @@
   .contact-details-container {
     display: none;
     position: fixed;
-    top: 80px;
+    top: 72px;
     left: 0;
     right: 0;
     bottom: 80px;

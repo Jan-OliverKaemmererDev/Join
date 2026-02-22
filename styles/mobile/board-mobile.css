@@ -13,36 +13,38 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 80px;
+    height: 72px;
     padding: 0 16px;
     z-index: 1000;
     background: white;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     display: flex !important;
     align-items: center;
-    justify-content: space-between;
+    box-sizing: border-box;
   }
 
   .header-content {
     display: flex !important;
-    justify-content: flex-end !important;
+    justify-content: space-between !important;
+    align-items: center !important;
     width: 100% !important;
     padding: 0 !important;
   }
 
-  .dashboard-header span {
-    display: none;
-  }
-
-  .dashboard-header::before {
+  .header-content::before {
     content: "";
     display: block;
-    width: 32px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     background-image: url("../../assets/login-screen/join-logo.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    flex-shrink: 0;
+  }
+
+  .dashboard-header span {
+    display: none;
   }
 
   .header-icons {
@@ -54,21 +56,27 @@
   }
 
   .user-initials {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     font-size: 14px;
-    border: 2px solid #2a3647;
+    font-weight: 600;
+    border: 2px solid #091931;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    color: #29abe2;
+  }
+
+  .user-dropdown {
+    top: 66px !important;
   }
 
   /* 3. Main Content anpassen */
   .main-content {
     margin-left: 0;
-    padding-top: 90px;
+    padding-top: 72px;
     padding-bottom: 100px;
     height: auto;
     display: block;
@@ -402,11 +410,14 @@
     width: 100%;
     justify-content: space-around;
     gap: 0;
+    height: 100%;
+    display: flex !important;
+    align-items: stretch;
   }
 
   .nav-links a {
     flex-direction: column !important;
-    padding: 8px;
+    padding: 0;
     font-size: 12px;
     gap: 4px;
     color: #a8a8a8;
@@ -414,6 +425,8 @@
     justify-content: center;
     width: 25%;
     text-decoration: none;
+    height: 100%;
+    display: flex;
   }
 
   .nav-links a img {
@@ -426,8 +439,7 @@
     background-color: #091931;
     border-radius: 12px;
     color: white;
-    padding-top: 16px;
-    padding-bottom: 16px;
+    height: 100%;
   }
 
   .nav-links a.active img {

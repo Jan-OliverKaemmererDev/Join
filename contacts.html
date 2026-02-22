@@ -15,43 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <style>
-      /* Notwendiges CSS für das Dropdown, falls noch nicht in deinen CSS-Dateien */
-      .user-menu-container {
-        position: relative;
-        display: flex;
-        align-items: center;
-      }
 
-      .user-dropdown {
-        position: absolute;
-        top: 70px;
-        right: 0;
-        background-color: #2a3647;
-        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
-        border-radius: 20px 0 20px 20px;
-        padding: 10px 0;
-        display: none; /* Standardmäßig versteckt */
-        flex-direction: column;
-        z-index: 1000;
-        min-width: 130px;
-      }
-
-      .user-dropdown.active {
-        display: flex; /* Wird durch dein JS aktiviert */
-      }
-
-      .user-dropdown a {
-        color: white;
-        text-decoration: none;
-        padding: 8px 20px;
-        font-size: 16px;
-      }
-
-      .user-dropdown a:hover {
-        background-color: #455a73;
-      }
-    </style>
   </head>
   <body onload="initContacts()">
     <nav class="sidebar">
