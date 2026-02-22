@@ -109,7 +109,10 @@ function addSubtask() {
  */
 function showSubtaskIcons() {
   const activeIcons = document.getElementById("subtask-icons-active");
-  if (activeIcons) activeIcons.classList.remove("d-none");
+  if (activeIcons) {
+    activeIcons.classList.remove("v-hidden");
+    activeIcons.classList.remove("d-none"); // Also remove d-none if it was stuck
+  }
 }
 
 /**
@@ -117,7 +120,7 @@ function showSubtaskIcons() {
  */
 function hideSubtaskIcons() {
   const activeIcons = document.getElementById("subtask-icons-active");
-  if (activeIcons) activeIcons.classList.add("d-none");
+  if (activeIcons) activeIcons.classList.add("v-hidden");
 }
 
 /**

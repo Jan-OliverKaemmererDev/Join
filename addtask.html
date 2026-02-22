@@ -193,7 +193,11 @@
 
               <div class="form-group">
                 <label>Subtasks</label>
-                <div class="subtask-input-wrapper" id="subtask-wrapper">
+                <div
+                  class="subtask-input-wrapper"
+                  id="subtask-wrapper"
+                  onclick="document.getElementById('subtask-input').focus()"
+                >
                   <input
                     type="text"
                     id="subtask-input"
@@ -202,7 +206,7 @@
                     onkeydown="handleSubtaskKeydown(event)"
                   />
                   <div
-                    class="subtask-icons-active d-none"
+                    class="subtask-icons-active v-hidden"
                     id="subtask-icons-active"
                   >
                     <img

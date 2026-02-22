@@ -363,6 +363,10 @@ button:hover {
   display: none !important;
 }
 
+.v-hidden {
+  visibility: hidden !important;
+}
+
 .subtask-list {
   list-style: none;
   padding: 0;
