@@ -344,7 +344,7 @@ function setupFormForEdit(taskId) {
   const submitBtn = document.getElementById("create-task-btn");
   const title = document.querySelector(".add-task-title");
   title.textContent = "Edit Task";
-  submitBtn.textContent = "Save Changes";
+  submitBtn.innerHTML = `Save Changes <img src="./assets/icons/check-create-icon.svg" alt="Save Changes" />`;
   form.onsubmit = function (event) {
     event.preventDefault();
     updateTask(taskId);
@@ -382,7 +382,7 @@ function resetFormToAddMode() {
   const submitBtn = document.getElementById("create-task-btn");
   const title = document.querySelector(".add-task-title");
   title.textContent = "Add Task";
-  submitBtn.textContent = "Create Task";
+  submitBtn.innerHTML = `Create Task <img src="./assets/icons/check-create-icon.svg" alt="Create Task" />`;
   form.onsubmit = handleAddTask;
   clearForm();
   resetBoardDropdowns();
