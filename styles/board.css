@@ -1,15 +1,8 @@
 .board-container {
-  padding: 40px;
-  max-width: 1208px;
+  padding: 40px 80px;
+  max-width: 1440px;
+  margin: 0 auto;
   box-sizing: border-box;
-}
-
-.header-content {
-  max-width: 1208px;
-}
-
-.dashboard-header {
-  justify-content: flex-start;
 }
 
 .board-header {
