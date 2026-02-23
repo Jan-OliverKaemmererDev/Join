@@ -101,6 +101,7 @@
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 24px;
+    margin-top: 24px;
   }
 
   .board-header h1 {
@@ -120,12 +121,32 @@
     order: 3;
     width: 100%;
     min-width: 0;
-    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px;
+    padding: 8px 16px;
     box-sizing: border-box;
   }
 
   .search-bar input {
     font-size: 16px;
+    border: none;
+    padding: 0;
+    flex: 1;
+  }
+
+  .search-bar input:focus {
+    border: none;
+  }
+
+  .search-icon-container {
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+    border-left: 1px solid #d1d1d1;
+    cursor: pointer;
   }
 
   /* Add Task Button - erste Reihe rechts neben Board */
@@ -135,14 +156,20 @@
     height: 48px;
     padding: 0;
     border-radius: 10px;
-    font-size: 0;
     min-width: 48px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-add-task span {
+    display: none;
   }
 
   .btn-add-task img {
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
   }
 
   /* Board Columns - vertikal */
@@ -158,14 +185,45 @@
 
   /* Column Header */
   .column-header {
-    font-size: 16px;
+    font-size: 27px;
     margin-bottom: 16px;
+  }
+
+  .column-header-plus {
+    width: 32px;
+    height: 32px;
+  }
+
+  .column-header-plus img {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Task Lists - horizontales Scrollen */
+  .task-list {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    min-height: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .task-list::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 
   /* Task Cards */
   .task-card {
     padding: 16px;
     border-radius: 20px;
+    min-width: 260px;
+    max-width: 300px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
   }
 
   .task-card:hover {
@@ -462,11 +520,6 @@
 @media (min-width: 320px) and (max-width: 600px) {
   .board-header h1 {
     font-size: 36px;
-  }
-
-  .btn-add-task {
-    width: 48px;
-    height: 48px;
   }
 
   .column-header {
