@@ -89,8 +89,10 @@
 
   /* Board Header */
   .board-header {
-    flex-direction: column;
-    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
     gap: 16px;
     margin-bottom: 24px;
   }
@@ -98,28 +100,31 @@
   .board-header h1 {
     font-size: 47px;
     font-weight: 700;
+    order: 1;
+    margin: 0;
   }
 
-  /* Board Actions */
+  /* Board Actions - display: contents macht Kinder direkt zu Flex-Items von .board-header */
   .board-actions {
-    width: 100%;
-    flex-direction: row;
-    gap: 8px;
+    display: contents;
   }
 
-  /* Search Bar */
+  /* Search Bar - zweite Reihe, volle Breite */
   .search-bar {
-    flex: 1;
+    order: 3;
+    width: 100%;
     min-width: 0;
     padding: 8px 12px;
+    box-sizing: border-box;
   }
 
   .search-bar input {
     font-size: 16px;
   }
 
-  /* Add Task Button - jetzt Icon-only */
+  /* Add Task Button - erste Reihe rechts neben Board */
   .btn-add-task {
+    order: 2;
     width: 48px;
     height: 48px;
     padding: 0;
@@ -451,14 +456,6 @@
 @media (min-width: 320px) and (max-width: 600px) {
   .board-header h1 {
     font-size: 36px;
-  }
-
-  .board-actions {
-    flex-direction: row;
-  }
-
-  .search-bar {
-    flex: 1;
   }
 
   .btn-add-task {
