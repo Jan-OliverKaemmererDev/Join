@@ -1,5 +1,11 @@
 /* --- Grundlegendes Layout für Mobile (320px bis 780px) --- */
 @media (min-width: 320px) and (max-width: 780px) {
+  html,
+  body {
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+
   body {
     background-color: #f6f7f8;
     margin: 0;
@@ -134,7 +140,7 @@
     flex-shrink: 0;
   }
 
-  .btn-add-task svg {
+  .btn-add-task img {
     width: 24px;
     height: 24px;
   }
