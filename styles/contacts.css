@@ -17,6 +17,9 @@ body {
   flex: 1;
   overflow: hidden;
   position: relative;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 .contacts-list-container {
