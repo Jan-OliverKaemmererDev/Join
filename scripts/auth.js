@@ -80,6 +80,91 @@ const DEFAULT_CONTACTS = [
   },
 ];
 
+const DEFAULT_TASKS = [
+  {
+    id: 101,
+    title: "Setup Project Environment",
+    description: "Install dependencies, Setup Firebase, Configure Vite",
+    dueDate: new Date().toISOString().split("T")[0],
+    priority: "urgent",
+    assignedTo: ["1"],
+    category: "technical",
+    subtasks: [
+      { id: 1011, text: "Install dependencies", completed: true },
+      { id: 1012, text: "Setup Firebase", completed: true },
+      { id: 1013, text: "Configure Vite", completed: true },
+    ],
+    status: "done",
+    createdAt: new Date().toISOString(),
+    createdBy: "system",
+  },
+  {
+    id: 102,
+    title: "Implement User Authentication",
+    description: "Sign up page, Login page, Password reset",
+    dueDate: new Date(Date.now() + 86400000 * 2).toISOString().split("T")[0],
+    priority: "medium",
+    assignedTo: ["2", "3"],
+    category: "user-story",
+    subtasks: [
+      { id: 1021, text: "Sign up page", completed: false },
+      { id: 1022, text: "Login page", completed: false },
+      { id: 1023, text: "Password reset", completed: false },
+    ],
+    status: "todo",
+    createdAt: new Date().toISOString(),
+    createdBy: "system",
+  },
+  {
+    id: 103,
+    title: "Enhance Board Drag & Drop",
+    description: "Mobile touch support, Smooth animations",
+    dueDate: new Date(Date.now() + 86400000 * 1).toISOString().split("T")[0],
+    priority: "urgent",
+    assignedTo: ["4"],
+    category: "user-story",
+    subtasks: [
+      { id: 1031, text: "Mobile touch support", completed: true },
+      { id: 1032, text: "Smooth animations", completed: false },
+    ],
+    status: "inprogress",
+    createdAt: new Date().toISOString(),
+    createdBy: "system",
+  },
+  {
+    id: 104,
+    title: "Add Responsive Layouts",
+    description: "Tablet view, Smartphone portrait",
+    dueDate: new Date(Date.now() + 86400000 * 3).toISOString().split("T")[0],
+    priority: "low",
+    assignedTo: ["5"],
+    category: "user-story",
+    subtasks: [
+      { id: 1041, text: "Tablet view", completed: true },
+      { id: 1042, text: "Smartphone portrait", completed: true },
+    ],
+    status: "awaitfeedback",
+    createdAt: new Date().toISOString(),
+    createdBy: "system",
+  },
+  {
+    id: 105,
+    title: "Contact Management Refactoring",
+    description: "Optimize Firestore queries, Add search functionality",
+    dueDate: new Date(Date.now() + 86400000 * 5).toISOString().split("T")[0],
+    priority: "medium",
+    assignedTo: ["6", "7"],
+    category: "technical",
+    subtasks: [
+      { id: 1051, text: "Optimize Firestore queries", completed: false },
+      { id: 1052, text: "Add search functionality", completed: false },
+    ],
+    status: "todo",
+    createdAt: new Date().toISOString(),
+    createdBy: "system",
+  },
+];
+
 /**
  * Registriert einen neuen Benutzer über Firebase Authentication
  * @param {string} name - Der Name des Benutzers
@@ -143,6 +228,24 @@ async function initDefaultContacts(uid) {
       color: contact.color,
       initials: contact.initials,
     });
+  }
+}
+
+/**
+ * Schreibt die Standard-Tasks für einen neuen Benutzer (oder Gast) in Firestore
+ * @param {string} uid - Die Firebase User-ID
+ */
+async function initDefaultTasks(uid) {
+  for (let i = 0; i < DEFAULT_TASKS.length; i++) {
+    const task = DEFAULT_TASKS[i];
+    const taskRef = window.fbDoc(
+      window.firebaseDb,
+      "users",
+      uid,
+      "tasks",
+      String(task.id),
+    );
+    await window.fbSetDoc(taskRef, task);
   }
 }
 
@@ -238,6 +341,7 @@ async function ensureGuestProfile(uid) {
       createdAt: new Date().toISOString(),
     });
     await initDefaultContacts(uid);
+    await initDefaultTasks(uid);
   }
 }
 

@@ -330,7 +330,17 @@ function fillFormWithTaskData(task) {
  * @param {Object} task - Das Task-Objekt
  */
 function loadAssigneesForEdit(task) {
-  selectedContacts = Array.isArray(task.assignedTo) ? [...task.assignedTo] : [];
+  selectedContacts = [];
+  if (Array.isArray(task.assignedTo)) {
+    for (let i = 0; i < task.assignedTo.length; i++) {
+      const contact = allContacts.find(
+        (c) => String(c.id) === String(task.assignedTo[i]),
+      );
+      if (contact) {
+        selectedContacts.push(contact);
+      }
+    }
+  }
   renderAssignedToOptions();
   renderSelectedInitials();
 }
@@ -364,7 +374,7 @@ async function updateTask(taskId) {
     .value.trim();
   tasks[taskIndex].dueDate = document.getElementById("due-date").value;
   tasks[taskIndex].priority = selectedPriority;
-  tasks[taskIndex].assignedTo = [...selectedContacts];
+  tasks[taskIndex].assignedTo = selectedContacts.map((c) => c.id);
   tasks[taskIndex].category = document.getElementById("category").value;
   tasks[taskIndex].subtasks = JSON.parse(JSON.stringify(subtasks));
   await saveTasks();
