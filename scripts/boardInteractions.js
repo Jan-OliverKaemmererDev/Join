@@ -2,14 +2,14 @@
  * Öffnet das Add-Task-Overlay
  */
 function openAddTaskOverlay() {
-  document.getElementById("add-task-overlay").classList.add("active");
+  // Mobile: statt Overlay -> addtask.html
   if (window.innerWidth <= 780) {
-    const categoryEl = document.getElementById("category");
-    if (categoryEl && !categoryEl.value) {
-      categoryEl.value = "technical";
-    }
-    validateForm();
+    window.location.href = "addtask.html";
+    return;
   }
+
+  // Desktop: Overlay normal öffnen
+  document.getElementById("add-task-overlay").classList.add("active");
 }
 
 /**
