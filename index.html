@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" style="overflow:hidden;height:100%">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./styles/mobile/style-mobile.css" />
     <title>Join - Login</title>
   </head>
-  <body onload="initLogin()">
+  <body onload="initLogin()" style="overflow:hidden;height:100%;position:relative">
     <div id="animation-container" class="animation-container">
       <img
         id="flying-logo"
@@ -42,13 +42,29 @@
         <h1>Log in</h1>
         <div class="blue-underline"></div>
         <form onsubmit="handleLogin(event)">
-          <input type="email" id="email" placeholder="Email" required />
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            required
-          />
+          <div class="input-wrapper">
+            <input type="email" id="email" placeholder="Email" required />
+            <img
+              class="input-icon"
+              src="./assets/login-screen/mail.svg"
+              alt="Email Icon"
+            />
+          </div>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              required
+            />
+            <img
+              id="password-toggle"
+              class="input-icon password-icon"
+              src="./assets/login-screen/lock.svg"
+              alt="Toggle Password"
+              onclick="togglePasswordVisibility('password', this)"
+            />
+          </div>
           <div class="login-actions">
             <button type="submit" class="btn-dark">Log in</button>
             <button type="button" class="btn-light" onclick="guestLogin()">
@@ -75,7 +91,6 @@
 
     <script type="module" src="./scripts/firebase-init.js"></script>
     <script src="./scripts/auth.js"></script>
-
     <script src="./script.js"></script>
   </body>
 </html>

@@ -2,6 +2,7 @@
  * Initialisiert die Summary-Seite für angemeldete Benutzer
  */
 async function initSummaryUser() {
+  checkMobileGreeting(); // Sofort anzeigen, noch vor Firebase
   await waitForFirebase();
   const currentUser = getCurrentUser();
   if (!currentUser) {
@@ -12,7 +13,6 @@ async function initSummaryUser() {
   updateUserInitials(currentUser);
   updateGreeting();
   await updateTaskMetrics(currentUser);
-  checkMobileGreeting();
 }
 
 /**
@@ -224,6 +224,7 @@ function logoutFromSummary() {
   logoutUser();
   window.location.href = "index.html";
 }
+
 /**
  * Initialisiert die Summary-Seite (Legacy-Support)
  */
@@ -265,8 +266,6 @@ function checkMobileGreeting() {
     return;
   }
 
-  // Consume the login greeting flag on first page load after login.
-  // This prevents showing the welcome overlay again on reload.
   sessionStorage.removeItem("showJoinGreeting");
 
   if (isMobile) {

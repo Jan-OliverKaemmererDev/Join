@@ -25,18 +25,11 @@
   display: none;
 }
 
-/* Mobile Responsive Styles */
+/* Mobile Responsive Styles – NUR für Login-Seite */
 @media (min-width: 320px) and (max-width: 780px) {
-  html {
-    overflow: hidden;
-    height: 100%;
-  }
 
   body {
     background-color: var(--bg-color, #f0f2f5);
-    overflow: hidden;
-    height: 100%;
-    position: relative;
   }
 
   /* Animation Container */
@@ -228,6 +221,7 @@
     width: 100%;
   }
 
+  /* Mail-Icon: immer sichtbar, nicht klickbar */
   .input-wrapper .input-icon {
     position: absolute;
     right: 16px;
@@ -237,6 +231,13 @@
     height: 20px;
     pointer-events: none;
     opacity: 0.4;
+  }
+
+  /* Passwort-Auge: klickbar und volle Deckkraft */
+  .input-wrapper .password-icon {
+    pointer-events: all;
+    cursor: pointer;
+    opacity: 1;
   }
 
   /* Login Aktionen (Buttons) */

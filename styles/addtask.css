@@ -1,42 +1,64 @@
 .add-task-section {
-  padding: 40px 80px;
+  padding: 20px 60px;
   max-width: 1440px;
   margin: 0 auto;
+  height: calc(100vh - 80px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .add-task-section h1 {
-  font-size: 61px;
+  font-size: 48px;
   font-weight: 700;
-  margin-bottom: 40px;
+  margin: 0 0 20px 0;
   color: #000;
 }
 
 #add-task-form {
   align-items: flex-start;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-container {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 60px;
-  margin-bottom: 40px;
+  gap: 40px;
+  margin-bottom: 16px;
   max-width: 1000px;
+  flex: 1;
+  overflow: hidden;
 }
 
 .form-column {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 14px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Scrollbar dezent stylen */
+.form-column::-webkit-scrollbar {
+  width: 4px;
+}
+.form-column::-webkit-scrollbar-thumb {
+  background-color: #d1d1d1;
+  border-radius: 4px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .form-group label {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
   color: #2a3647;
 }
@@ -50,10 +72,10 @@
 .form-group input[type="date"],
 .form-group textarea,
 .form-group select {
-  padding: 12px 16px;
+  padding: 10px 14px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 18px;
   font-family: inherit;
   color: #000;
   background-color: #fff;
@@ -96,7 +118,7 @@
 
 .form-group textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 90px;
 }
 
 .form-group select {
@@ -117,13 +139,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding: 10px 14px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   background-color: #fff;
   cursor: pointer;
-  font-size: 20px;
-  height: 48px;
+  font-size: 18px;
+  height: 44px;
   box-sizing: border-box;
 }
 
@@ -149,7 +171,7 @@
   border: 1px solid #d1d1d1;
   border-top: none;
   border-radius: 0 0 10px 10px;
-  max-height: 250px;
+  max-height: 200px;
   overflow-y: auto;
   z-index: 100;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -158,7 +180,7 @@
 .contact-option {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: 10px 14px;
   cursor: pointer;
   transition: background-color 0.2s;
   gap: 12px;
@@ -185,25 +207,25 @@
 }
 
 .contact-avatar {
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   border: 2px solid #fff;
 }
 
 .contact-name {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .contact-checkbox {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border: 2px solid #2a3647;
   border-radius: 4px;
   display: flex;
@@ -223,32 +245,32 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .selected-avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
 }
 
 .priority-buttons {
   display: flex;
-  gap: 16px;
+  gap: 12px;
 }
 
 .priority-btn {
   flex: 1;
-  padding: 16px 12px;
+  padding: 12px 10px;
   border: none;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
   font-family: inherit;
   cursor: pointer;
@@ -287,11 +309,6 @@ button:hover {
   box-shadow: none;
 }
 
-.priority-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
 .priority-btn img {
   width: 16px;
   height: 16px;
@@ -321,10 +338,10 @@ button:hover {
 
 .subtask-input-wrapper input {
   flex: 1;
-  padding: 12px 16px;
+  padding: 10px 14px;
   border: none !important;
   border-radius: 10px 0 0 10px;
-  font-size: 20px;
+  font-size: 18px;
   font-family: inherit;
   outline: none;
 }
@@ -370,7 +387,7 @@ button:hover {
 .subtask-list {
   list-style: none;
   padding: 0;
-  margin: 8px 0 0 0;
+  margin: 6px 0 0 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -385,7 +402,7 @@ button:hover {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
-  height: 32px;
+  height: 30px;
 }
 
 .subtask-item:hover {
@@ -431,7 +448,7 @@ button:hover {
   background-color: #fff;
   border-bottom: 1px solid #29abe2;
   padding: 4px 12px;
-  height: 32px;
+  height: 30px;
 }
 
 .subtask-edit-input {
@@ -469,9 +486,10 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 20px;
+  padding-top: 14px;
   border-top: 1px solid #d1d1d1;
-  width: 750px;
+  width: 800px;
+  flex-shrink: 0;
 }
 
 .required-note {
@@ -487,9 +505,9 @@ button:hover {
 
 .btn-clear,
 .btn-create {
-  padding: 16px 24px;
+  padding: 12px 20px;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
@@ -540,6 +558,6 @@ button:hover {
 
 .btn-clear img,
 .btn-create img {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
 }

@@ -107,20 +107,31 @@
   margin: 15px 0 35px 0;
 }
 
-/* ---- Login-Seite: Spezifische Inputs ---- */
+/* ---- Login-Seite: Input Wrapper ---- */
 
-#email {
+.input-wrapper {
+  position: relative;
   width: 450px;
-  background-image: url("../assets/login-screen/mail.svg");
-  background-repeat: no-repeat;
-  background-position: right 21px center;
 }
 
-#password {
-  width: 450px;
-  background-image: url("../assets/login-screen/lock.svg");
-  background-repeat: no-repeat;
-  background-position: right 21px center;
+.input-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-wrapper .input-icon {
+  position: absolute;
+  right: 21px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.input-wrapper .password-icon {
+  cursor: pointer;
+  pointer-events: all;
 }
 
 /* ---- Login-Seite: Buttons ---- */
