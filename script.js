@@ -1,7 +1,22 @@
 /**
  * Initialisiert die Login-Seite
  */
-function initLogin() {}
+function initLogin() {
+  const passwordInput = document.getElementById("password");
+  const toggleIcon = document.getElementById("password-toggle");
+
+  passwordInput.addEventListener("input", function () {
+    const hasValue = this.value.length > 0;
+    // Schloss -> Auge tauschen sobald Text eingegeben wird
+    if (hasValue) {
+      toggleIcon.src = "./assets/login-screen/visibility_off.svg";
+    } else {
+      toggleIcon.src = "./assets/login-screen/lock.svg";
+      // Passwort wieder verstecken wenn Feld geleert wird
+      this.type = "password";
+    }
+  });
+}
 
 /**
  * Verarbeitet den Login-Vorgang
@@ -65,12 +80,15 @@ function showLoginError(message) {
  */
 function togglePasswordVisibility(inputId, iconElement) {
   const input = document.getElementById(inputId);
+  // Nur reagieren wenn Text vorhanden (sonst ist es das Schloss)
+  if (input.value.length === 0) return;
+
   if (input.type === "password") {
     input.type = "text";
-    iconElement.src = "./assets/login-screen/visibility.svg";
+    iconElement.src = "./assets/login-screen/visibility.svg"; // offenes Auge
   } else {
     input.type = "password";
-    iconElement.src = "./assets/login-screen/visibility_off.svg";
+    iconElement.src = "./assets/login-screen/visibility_off.svg"; // geschlossenes Auge
   }
 }
 
