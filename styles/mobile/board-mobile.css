@@ -100,13 +100,13 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 32px;
     margin-bottom: 24px;
     margin-top: 24px;
   }
 
   .board-header h1 {
-    font-size: 47px;
+    font-size: 42px;
     font-weight: 700;
     order: 1;
     margin: 0;
@@ -186,8 +186,9 @@
 
   /* Column Header */
   .column-header {
-    font-size: 27px;
+    font-size: 24px;
     margin-bottom: 16px;
+    color: #2A3647;
   }
 
   .column-header-plus {
@@ -224,7 +225,7 @@
   .task-card {
     padding: 16px;
     border-radius: 20px;
-    min-width: 260px;
+    min-width: 200px;
     max-width: 300px;
     flex-shrink: 0;
     scroll-snap-align: start;
@@ -330,14 +331,6 @@
 
 /* Für sehr kleine Bildschirme (Smartphones) - 320px bis 600px */
 @media (min-width: 320px) and (max-width: 600px) {
-  .board-header h1 {
-    font-size: 36px;
-  }
-
-  .column-header {
-    font-size: 14px;
-  }
-
   .task-title {
     font-size: 14px;
   }
