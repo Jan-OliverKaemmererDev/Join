@@ -263,7 +263,7 @@ function updateAutoScroll(y) {
  */
 function startAutoScroll() {
   if (autoScrollInterval) return;
-  autoScrollInterval = setInterval(() => {
+  autoScrollInterval = setInterval(function () {
     window.scrollBy(0, scrollDirection * 15);
   }, 20);
 }
@@ -380,9 +380,9 @@ function loadAssigneesForEdit(task) {
   selectedContacts = [];
   if (Array.isArray(task.assignedTo)) {
     for (let i = 0; i < task.assignedTo.length; i++) {
-      const contact = allContacts.find(
-        (c) => String(c.id) === String(task.assignedTo[i]),
-      );
+      const contact = allContacts.find(function (c) {
+        return String(c.id) === String(task.assignedTo[i]);
+      });
       if (contact) {
         selectedContacts.push(contact);
       }
@@ -421,7 +421,9 @@ async function updateTask(taskId) {
     .value.trim();
   tasks[taskIndex].dueDate = document.getElementById("due-date").value;
   tasks[taskIndex].priority = selectedPriority;
-  tasks[taskIndex].assignedTo = selectedContacts.map((c) => c.id);
+  tasks[taskIndex].assignedTo = selectedContacts.map(function (c) {
+    return c.id;
+  });
   tasks[taskIndex].category = document.getElementById("category").value;
   tasks[taskIndex].subtasks = JSON.parse(JSON.stringify(subtasks));
   await saveTasks();

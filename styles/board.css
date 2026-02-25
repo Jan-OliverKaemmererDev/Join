@@ -108,8 +108,12 @@
 }
 
 .column-header-plus:hover {
-  color: #29abe2;
   border-color: #29abe2;
+}
+
+.column-header-plus:hover img {
+  filter: invert(59%) sepia(85%) saturate(1458%) hue-rotate(167deg)
+    brightness(95%) contrast(95%);
 }
 
 .task-list {

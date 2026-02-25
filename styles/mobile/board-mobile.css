@@ -1,6 +1,5 @@
 /* --- Grundlegendes Layout für Mobile (320px bis 780px) --- */
 @media (min-width: 320px) and (max-width: 780px) {
-
   html,
   body {
     overflow-y: auto !important;
@@ -100,13 +99,13 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 32px;
     margin-bottom: 24px;
     margin-top: 24px;
   }
 
   .board-header h1 {
-    font-size: 47px;
+    font-size: 42px;
     font-weight: 700;
     order: 1;
     margin: 0;
@@ -153,15 +152,18 @@
   /* Add Task Button - erste Reihe rechts neben Board */
   .btn-add-task {
     order: 2;
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
     padding: 0;
     border-radius: 10px;
-    min-width: 48px;
+    min-width: 36px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #2a3647;
+    border: none;
+    cursor: pointer;
   }
 
   .btn-add-task span {
@@ -169,8 +171,9 @@
   }
 
   .btn-add-task img {
-    width: 30px;
-    height: 30px;
+    content: url("../../assets/icons/add-icon-white-mobile.svg");
+    width: 20px;
+    height: 20px;
   }
 
   /* Board Columns - vertikal */
@@ -187,17 +190,30 @@
   /* Column Header */
   .column-header {
     font-size: 27px;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+    color: #2a3647;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 !important;
   }
 
   .column-header-plus {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #2a3647;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
   }
 
   .column-header-plus img {
-    width: 14px;
-    height: 14px;
+    content: url("../../assets/icons/add-icon-blue-mobile.svg");
+    width: 16px;
+    height: 16px;
   }
 
   /* Task Lists - horizontales Scrollen */
@@ -224,7 +240,7 @@
   .task-card {
     padding: 16px;
     border-radius: 20px;
-    min-width: 260px;
+    min-width: 200px;
     max-width: 300px;
     flex-shrink: 0;
     scroll-snap-align: start;
@@ -281,7 +297,7 @@
     align-items: center;
   }
 
-  .sidebar>img,
+  .sidebar > img,
   .legal-links {
     display: none;
   }
@@ -325,25 +341,6 @@
 
   .nav-links a.active img {
     filter: brightness(0) invert(1) opacity(1);
-  }
-}
-
-/* Für sehr kleine Bildschirme (Smartphones) - 320px bis 600px */
-@media (min-width: 320px) and (max-width: 600px) {
-  .board-header h1 {
-    font-size: 36px;
-  }
-
-  .column-header {
-    font-size: 14px;
-  }
-
-  .task-title {
-    font-size: 14px;
-  }
-
-  .task-description {
-    font-size: 12px;
   }
 }
 
