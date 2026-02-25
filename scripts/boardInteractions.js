@@ -143,6 +143,9 @@ function filterCard(card, query) {
   }
 }
 
+let autoScrollInterval;
+let scrollDirection = 0; // 1 for down, -1 for up, 0 for none
+
 /**
  * Initialisiert Touch-Drag-and-Drop für mobile Geräte
  */
@@ -179,11 +182,12 @@ function handleTouchMove(ev) {
     createTouchDragClone(touch);
   }
   if (touchDragClone) {
-    ev.preventDefault();
+    if (ev.cancelable) ev.preventDefault();
     touchDragClone.style.left =
       touch.clientX - touchDragClone.offsetWidth / 2 + "px";
     touchDragClone.style.top = touch.clientY - 30 + "px";
     highlightColumnUnderTouch(touch.clientX, touch.clientY);
+    updateAutoScroll(touch.clientY);
   }
 }
 
@@ -200,6 +204,7 @@ function createTouchDragClone(touch) {
   touchDragClone.style.pointerEvents = "none";
   touchDragClone.style.transform = "rotate(3deg)";
   document.body.appendChild(touchDragClone);
+  document.body.style.overflow = "hidden";
   touchDragElement.style.opacity = "0.3";
   isDragging = true;
 }
@@ -209,6 +214,8 @@ function createTouchDragClone(touch) {
  * @param {TouchEvent} ev - Das Touch-Event
  */
 function handleTouchEnd(ev) {
+  stopAutoScroll();
+  document.body.style.overflow = "";
   if (!touchDragElement) return;
   if (touchDragClone) {
     const touch = ev.changedTouches[0];
@@ -230,6 +237,46 @@ function handleTouchEnd(ev) {
   setTimeout(function () {
     isDragging = false;
   }, 0);
+}
+
+/**
+ * Aktualisiert die Auto-Scroll-Richtung basierend auf der Touch-Position
+ * @param {number} y - Y-Koordinate des Touches
+ */
+function updateAutoScroll(y) {
+  const scrollThreshold = 100;
+  const windowHeight = window.innerHeight;
+
+  if (y < scrollThreshold) {
+    scrollDirection = -1;
+    startAutoScroll();
+  } else if (y > windowHeight - scrollThreshold) {
+    scrollDirection = 1;
+    startAutoScroll();
+  } else {
+    stopAutoScroll();
+  }
+}
+
+/**
+ * Startet den Auto-Scroll-Intervall
+ */
+function startAutoScroll() {
+  if (autoScrollInterval) return;
+  autoScrollInterval = setInterval(() => {
+    window.scrollBy(0, scrollDirection * 15);
+  }, 20);
+}
+
+/**
+ * Stoppt den Auto-Scroll-Intervall
+ */
+function stopAutoScroll() {
+  if (autoScrollInterval) {
+    clearInterval(autoScrollInterval);
+    autoScrollInterval = null;
+  }
+  scrollDirection = 0;
 }
 
 /**
