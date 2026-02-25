@@ -220,10 +220,11 @@
   .task-list {
     flex-direction: row;
     overflow-x: auto;
-    overflow-y: hidden;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 8px;
+    padding: 12px;
+    margin: -12px;
+    width: calc(100% + 24px);
     min-height: auto;
     scrollbar-width: none;
     /* Firefox */

@@ -340,11 +340,11 @@ function removeAllHighlights() {
   }
 }
 
-/**
- * Bearbeitet einen vorhandenen Task
- * @param {number} taskId - Die ID des zu bearbeitenden Tasks
- */
 function editTask(taskId) {
+  if (window.innerWidth <= 780) {
+    window.location.href = "addtask.html?edit=" + taskId;
+    return;
+  }
   const task = findTask(taskId);
   if (!task) return;
   closeTaskDetails();
