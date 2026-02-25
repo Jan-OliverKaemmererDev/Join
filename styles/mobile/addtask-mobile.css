@@ -8,17 +8,10 @@
     margin-left: 0 !important;
     width: 100% !important;
     padding-top: 72px;
-    padding-bottom: 166px;
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
+    padding-bottom: 180px;
+    height: 100vh !important;
+    overflow-y: auto !important;
     box-sizing: border-box;
-    display: block !important;
-  }
-
-  html, body {
-    height: auto !important;
-    overflow: auto !important;
   }
 
   .add-task-section {
@@ -118,7 +111,6 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    overflow: visible;
   }
 
   .form-group {
@@ -261,7 +253,7 @@
     padding: 10px 14px;
   }
 
-  /* ── Sticky footer mit Buttons ── */
+  /* ── Sticky footer ── */
   .form-footer {
     position: fixed;
     bottom: 72px;
@@ -272,13 +264,11 @@
     padding: 10px 16px;
     z-index: 900;
     display: flex !important;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 6px;
     box-sizing: border-box;
     width: 100%;
-    height: 74px;
   }
 
   .required-note {
@@ -292,6 +282,8 @@
     display: flex;
     gap: 12px;
     align-items: center;
+    width: 100%;
+    justify-content: flex-end;
   }
 
   .btn-clear,
@@ -316,11 +308,13 @@
     background-color: #fff;
     color: #2a3647;
     border: 1.5px solid #2a3647 !important;
+    min-width: 100px;
   }
 
   .btn-create {
     background-color: #2a3647;
     color: #fff;
+    min-width: 150px;
   }
 
   .btn-create:disabled {

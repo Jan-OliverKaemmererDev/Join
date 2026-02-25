@@ -293,6 +293,7 @@
 }
 
 .add-task-overlay-card {
+  width: 1116px;
   padding: 64px;
   border-radius: 30px;
   background: white;
