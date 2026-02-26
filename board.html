@@ -53,10 +53,18 @@
                 class="user-initials"
                 id="user-initials"
                 onclick="toggleUserMenu()"
+                role="button"
+                tabindex="0"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
                 G
               </div>
-              <div class="user-dropdown" id="user-dropdown">
+              <nav
+                class="user-dropdown"
+                id="user-dropdown"
+                aria-label="User menu"
+              >
                 <a href="legalnotice.html">Legal Notice</a>
                 <a href="privacypolicy.html">Privacy Policy</a>
                 <a
@@ -67,17 +75,17 @@
                   "
                   >Log out</a
                 >
-              </div>
+              </nav>
             </div>
           </div>
         </div>
       </header>
 
       <section class="board-container">
-        <div class="board-header">
+        <header class="board-header">
           <h1>Board</h1>
           <div class="board-actions">
-            <div class="search-bar">
+            <div class="search-bar" role="search">
               <input
                 type="text"
                 id="search-input"
@@ -93,7 +101,7 @@
               <img src="./assets/icons/add-icon-white.svg" alt="Add Task" />
             </button>
           </div>
-        </div>
+        </header>
 
         <div class="board-columns">
           <div
@@ -106,12 +114,12 @@
             "
             ondragleave="removeHighlight('todo-list')"
           >
-            <div class="column-header">
-              <span>To do</span>
+            <header class="column-header">
+              <span id="column-title-todo">To do</span>
               <div class="column-header-plus" onclick="openAddTaskOverlay()">
                 <img src="./assets/icons/add-icon-blue.svg" alt="Add" />
               </div>
-            </div>
+            </header>
             <div class="task-list" id="todo-list"></div>
           </div>
 
@@ -125,12 +133,12 @@
             "
             ondragleave="removeHighlight('inprogress-list')"
           >
-            <div class="column-header">
-              <span>In progress</span>
+            <header class="column-header">
+              <span id="column-title-inprogress">In progress</span>
               <div class="column-header-plus" onclick="openAddTaskOverlay()">
                 <img src="./assets/icons/add-icon-blue.svg" alt="Add" />
               </div>
-            </div>
+            </header>
             <div class="task-list" id="inprogress-list"></div>
           </div>
 
@@ -144,12 +152,12 @@
             "
             ondragleave="removeHighlight('awaitfeedback-list')"
           >
-            <div class="column-header">
-              <span>Await feedback</span>
+            <header class="column-header">
+              <span id="column-title-awaitfeedback">Await feedback</span>
               <div class="column-header-plus" onclick="openAddTaskOverlay()">
                 <img src="./assets/icons/add-icon-blue.svg" alt="Add" />
               </div>
-            </div>
+            </header>
             <div class="task-list" id="awaitfeedback-list"></div>
           </div>
 
@@ -163,9 +171,9 @@
             "
             ondragleave="removeHighlight('done-list')"
           >
-            <div class="column-header">
-              <span>Done</span>
-            </div>
+            <header class="column-header">
+              <span id="column-title-done">Done</span>
+            </header>
             <div class="task-list" id="done-list"></div>
           </div>
         </div>
@@ -176,6 +184,9 @@
       class="overlay-container"
       id="add-task-overlay"
       onclick="closeAddTaskOverlay()"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Add Task"
     >
       <div
         class="overlay-content add-task-overlay-card"
@@ -381,7 +392,7 @@
             </div>
           </div>
 
-          <div class="form-footer">
+          <footer class="form-footer">
             <p class="required-note">
               <span class="required">*</span>This field is required
             </p>
@@ -403,7 +414,7 @@
                 />
               </button>
             </div>
-          </div>
+          </footer>
         </form>
       </div>
     </div>
@@ -412,6 +423,9 @@
       class="overlay-container"
       id="task-details-overlay"
       onclick="closeTaskDetails()"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Task details"
     >
       <div
         class="overlay-content task-details-card"
@@ -421,7 +435,7 @@
     </div>
 
     <!-- Mobile Navigation -->
-    <div class="mobile-nav d-none-desktop">
+    <nav class="mobile-nav d-none-desktop" aria-label="Mobile navigation">
       <a href="summaryuser.html" class="nav-item">
         <img src="./assets/summary-page/summary-icon.svg" alt="" />
         <span>Summary</span>
@@ -438,10 +452,10 @@
         <img src="./assets/summary-page/contacts-icon.svg" alt="" />
         <span>Contacts</span>
       </a>
-    </div>
+    </nav>
 
     <!-- Landscape Warning -->
-    <div class="landscape-block">
+    <div class="landscape-block" role="alert">
       <p>Bitte drehe dein Gerät in den Hochformat-Modus</p>
     </div>
 

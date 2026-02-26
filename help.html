@@ -48,10 +48,18 @@
                 class="user-initials"
                 id="user-initials"
                 onclick="toggleUserMenu()"
+                role="button"
+                tabindex="0"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
                 SM
               </div>
-              <div class="user-dropdown" id="user-dropdown">
+              <nav
+                class="user-dropdown"
+                id="user-dropdown"
+                aria-label="User menu"
+              >
                 <a href="legalnotice.html">Legal Notice</a>
                 <a href="privacypolicy.html">Privacy Policy</a>
                 <a
@@ -62,21 +70,21 @@
                   "
                   >Log out</a
                 >
-              </div>
+              </nav>
             </div>
           </div>
         </div>
       </header>
 
       <section class="help-section">
-        <div class="help-header">
+        <header class="help-header">
           <h1>Help</h1>
           <a href="javascript:history.back()" class="back-link">
             <img src="./assets/login-screen/arrow-left.svg" alt="Back" />
           </a>
-        </div>
+        </header>
 
-        <div class="help-content">
+        <article class="help-content">
           <p>
             Welcome to the help page for <span class="blue-text">Join</span>,
             your guide to using our kanban project management tool. Here, we'll
@@ -114,7 +122,7 @@
 
           <ol class="help-steps">
             <li>
-              <div class="step-title">Exploring the Board</div>
+              <strong class="step-title">Exploring the Board</strong>
               <p>
                 When you log in to <span class="blue-text">Join</span>, you'll
                 find a default board. This board represents your project and
@@ -123,7 +131,7 @@
               </p>
             </li>
             <li>
-              <div class="step-title">Creating Contacts</div>
+              <strong class="step-title">Creating Contacts</strong>
               <p>
                 In <span class="blue-text">Join</span>, you can add contacts to
                 collaborate on your projects. Go to the "Contacts" section,
@@ -133,7 +141,7 @@
               </p>
             </li>
             <li>
-              <div class="step-title">Adding Cards</div>
+              <strong class="step-title">Adding Cards</strong>
               <p>
                 Now that you've added your contacts, you can start adding cards.
                 Cards represent individual tasks. Click the "+" button under the
@@ -143,7 +151,7 @@
               </p>
             </li>
             <li>
-              <div class="step-title">Moving Cards</div>
+              <strong class="step-title">Moving Cards</strong>
               <p>
                 As the task moves from one stage to another, you can reflect
                 that on the board by dragging and dropping the card from one
@@ -151,7 +159,7 @@
               </p>
             </li>
             <li>
-              <div class="step-title">Deleting Cards</div>
+              <strong class="step-title">Deleting Cards</strong>
               <p>
                 Once a task is completed, you can either move it to the "Done"
                 list or delete it. Deleting a card will permanently remove it
@@ -172,7 +180,7 @@
           </p>
 
           <h3>Enjoy using Join!</h3>
-        </div>
+        </article>
       </section>
     </main>
 

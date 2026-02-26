@@ -51,10 +51,18 @@
                 class="user-initials"
                 id="user-initials"
                 onclick="toggleUserMenu()"
+                role="button"
+                tabindex="0"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
                 G
               </div>
-              <div class="user-dropdown" id="user-dropdown">
+              <nav
+                class="user-dropdown"
+                id="user-dropdown"
+                aria-label="User menu"
+              >
                 <a href="legalnotice.html">Legal Notice</a>
                 <a href="privacypolicy.html">Privacy Policy</a>
                 <a
@@ -65,13 +73,13 @@
                   "
                   >Log out</a
                 >
-              </div>
+              </nav>
             </div>
           </div>
         </div>
       </header>
 
-      <section class="privacy-policy-container">
+      <article class="privacy-policy-container">
         <h1>Privacy Policy</h1>
 
         <p>
@@ -92,6 +100,7 @@
           <li>Email address</li>
           <li>Login credentials (encrypted)</li>
           <li>Profile information (e.g., initials)</li>
+          <li>Profile image (if uploaded)</li>
         </ul>
 
         <h2>2. Purpose of Data Processing</h2>
@@ -124,6 +133,7 @@
           <li>Request correction or completion of your data</li>
           <li>Request the deletion of your account and associated data</li>
           <li>Object to the processing of your data</li>
+          <li>Withdraw consent for data processing</li>
         </ul>
 
         <h2>5. Third-Party Services</h2>
@@ -143,7 +153,7 @@
         <p>
           <em>Last updated: July 26, 2023</em>
         </p>
-      </section>
+      </article>
     </main>
 
     <script type="module" src="./scripts/firebase-init.js"></script>

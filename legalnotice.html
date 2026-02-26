@@ -51,10 +51,18 @@
                 class="user-initials"
                 id="user-initials"
                 onclick="toggleUserMenu()"
+                role="button"
+                tabindex="0"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
                 G
               </div>
-              <div class="user-dropdown" id="user-dropdown">
+              <nav
+                class="user-dropdown"
+                id="user-dropdown"
+                aria-label="User menu"
+              >
                 <a href="legalnotice.html">Legal Notice</a>
                 <a href="privacypolicy.html">Privacy Policy</a>
                 <a
@@ -65,7 +73,7 @@
                   "
                   >Log out</a
                 >
-              </div>
+              </nav>
             </div>
           </div>
         </div>

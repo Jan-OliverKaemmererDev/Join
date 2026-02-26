@@ -67,65 +67,72 @@
                 class="user-initials"
                 id="user-initials"
                 onclick="toggleUserMenu()"
+                role="button"
+                tabindex="0"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
                 G
               </div>
-              <div id="user-dropdown" class="user-dropdown">
+              <nav id="user-dropdown" class="user-dropdown" aria-label="User menu">
                 <a href="legalnotice.html">Legal Notice</a>
                 <a href="privacypolicy.html">Privacy Policy</a>
                 <a href="#" onclick="handleLogout()">Log out</a>
-              </div>
+                </nav>
             </div>
           </div>
         </div>
       </header>
 
-      <div class="contacts-container">
-        <div class="contacts-list-container">
-          <div class="add-contact-btn-container">
-            <button class="btn-add-contact" onclick="openAddContactDialog()">
-              Add new contact
-              <img src="./assets/icons/person_add.svg" alt="Add Contact">
-                <path
-                  d="M16 8V24"
-                  stroke="white"
-                  stroke-width="4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M8 16H24"
-                  stroke="white"
-                  stroke-width="4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
-          <div id="contacts-list" class="contacts-list-scroll"></div>
-        </div>
+        <section class="contacts-container">
+          <aside class="contacts-list-container">
+            <div class="add-contact-btn-container">
+              <button class="btn-add-contact" onclick="openAddContactDialog()">
+                Add new contact
+                <img src="./assets/icons/person_add.svg" alt="Add Contact">
+                  <path
+                    d="M16 8V24"
+                    stroke="white"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M8 16H24"
+                    stroke="white"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div id="contacts-list" class="contacts-list-scroll" role="list"></div>
+          </aside>
 
-        <div class="contact-details-container">
-          <div class="details-header-static">
-            <h1>Contacts</h1>
-            <p>Better with a team</p>
-          </div>
+          <section class="contact-details-container">
+            <header class="details-header-static">
+              <h1>Contacts</h1>
+              <p>Better with a team</p>
+            </header>
 
           <div id="contact-details-view" class="contact-details-view">
             <div id="contact-details-content"></div>
           </div>
-        </div>
-      </div>
+          </section>
+        </section>
       <div
         class="mobile-add-btn d-none-desktop"
         onclick="openAddContactDialog()"
+        role="button"
+        tabindex="0"
+        aria-label="Add contact"
       >
         <img src="./assets/icons/person_add.svg" alt="Add Contact" />
       </div>
     </main>
 
-    <div id="add-contact-overlay" class="overlay-bg"></div>
+    <div id="add-contact-overlay" class="overlay-bg" role="dialog" aria-modal="true" aria-label="Add contact"></div>
 
     <script type="module" src="./scripts/firebase-init.js"></script>
     <script src="./scripts/auth.js"></script>
