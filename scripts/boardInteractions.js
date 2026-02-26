@@ -68,13 +68,49 @@ function closeTaskDetails() {
  */
 async function toggleSubtask(taskId, subtaskIndex) {
   const task = findTask(taskId);
-  if (task) {
-    task.subtasks[subtaskIndex].completed =
-      !task.subtasks[subtaskIndex].completed;
-    await saveTasks();
-    renderTasks();
-    openTaskDetails(taskId);
+  if (!task) return;
+
+  // 1. Optimistisches UI-Update: Detail-Checkbox sofort umschalten
+  const subtaskItems = document.querySelectorAll(".subtask-item-detail");
+  if (subtaskItems[subtaskIndex]) {
+    const checkbox =
+      subtaskItems[subtaskIndex].querySelector(".subtask-checkbox");
+    if (checkbox) {
+      checkbox.classList.toggle("checked");
+    }
   }
+
+  // 2. Datenmodell im Speicher aktualisieren
+  task.subtasks[subtaskIndex].completed =
+    !task.subtasks[subtaskIndex].completed;
+
+  // 3. Fortschrittsbalken auf der Board-Karte aktualisieren (ohne Full-Render)
+  updateTaskCardProgress(task);
+
+  // 4. Im Hintergrund speichern (nur diesen einen Task)
+  await saveSingleTask(task);
+}
+
+/**
+ * Aktualisiert den Fortschrittsbalken einer Task-Karte auf dem Board
+ * @param {Object} task - Das Task-Objekt
+ */
+function updateTaskCardProgress(task) {
+  const card = document.querySelector(`.task-card[data-task-id="${task.id}"]`);
+  if (!card) return;
+
+  const subtaskContainer = card.querySelector(".task-subtasks");
+  if (!subtaskContainer) return;
+
+  const completed = countCompletedSubtasks(task.subtasks);
+  const total = task.subtasks.length;
+  const percent = (completed / total) * 100;
+
+  const progressBar = subtaskContainer.querySelector(".progress-bar");
+  const progressText = subtaskContainer.querySelector("span");
+
+  if (progressBar) progressBar.style.width = `${percent}%`;
+  if (progressText) progressText.innerText = `${completed}/${total} Subtasks`;
 }
 
 /**
@@ -426,7 +462,7 @@ async function updateTask(taskId) {
   });
   tasks[taskIndex].category = document.getElementById("category").value;
   tasks[taskIndex].subtasks = JSON.parse(JSON.stringify(subtasks));
-  await saveTasks();
+  await saveSingleTask(tasks[taskIndex]);
   renderTasks();
   resetFormToAddMode();
   closeAddTaskOverlay();

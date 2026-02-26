@@ -358,7 +358,7 @@ async function moveTo(status) {
   const taskIndex = findTaskById(currentDraggedTaskId);
   if (taskIndex !== -1) {
     tasks[taskIndex].status = status;
-    await saveTasks();
+    await saveSingleTask(tasks[taskIndex]);
     renderTasks();
   }
   currentDraggedTaskId = null;
@@ -401,6 +401,27 @@ async function saveTasks() {
     }
   } catch (error) {
     console.error("Error saving tasks:", error);
+  }
+}
+
+/**
+ * Speichert einen einzelnen Task in Firestore
+ * @param {Object} task - Das zu speicherende Task-Objekt
+ */
+async function saveSingleTask(task) {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
+  try {
+    const taskRef = window.fbDoc(
+      window.firebaseDb,
+      "users",
+      currentUser.id,
+      "tasks",
+      String(task.id),
+    );
+    await window.fbSetDoc(taskRef, task);
+  } catch (error) {
+    console.error("Error saving single task:", error);
   }
 }
 
