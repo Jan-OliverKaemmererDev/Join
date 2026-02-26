@@ -191,6 +191,7 @@ async function signUpUser(name, email, password) {
   }
 }
 
+
 /**
  * Speichert das Benutzerprofil in Firestore
  * @param {string} uid - Die Firebase User-ID
@@ -206,6 +207,7 @@ async function saveUserProfile(uid, name, email) {
     createdAt: new Date().toISOString(),
   });
 }
+
 
 /**
  * Schreibt die Standard-Kontakte für einen neuen Benutzer in Firestore
@@ -231,6 +233,7 @@ async function initDefaultContacts(uid) {
   }
 }
 
+
 /**
  * Schreibt die Standard-Tasks für einen neuen Benutzer (oder Gast) in Firestore
  * @param {string} uid - Die Firebase User-ID
@@ -248,6 +251,7 @@ async function initDefaultTasks(uid) {
     await window.fbSetDoc(taskRef, task);
   }
 }
+
 
 /**
  * Meldet einen Benutzer über Firebase Authentication an
@@ -287,6 +291,7 @@ async function loginUser(email, password) {
   }
 }
 
+
 /**
  * Lädt das Benutzerprofil aus Firestore
  * @param {string} uid - Die Firebase User-ID
@@ -300,6 +305,7 @@ async function loadUserProfile(uid) {
   }
   return { name: "User", email: "" };
 }
+
 
 /**
  * Meldet einen Gast-Benutzer über Firebase Anonymous Auth an
@@ -326,6 +332,7 @@ async function guestLoginUser() {
   }
 }
 
+
 /**
  * Stellt sicher, dass ein Gast-Profil in Firestore existiert
  * @param {string} uid - Die Firebase User-ID des Gasts
@@ -345,6 +352,7 @@ async function ensureGuestProfile(uid) {
   }
 }
 
+
 /**
  * Ruft den aktuell angemeldeten Benutzer ab
  * @returns {Object|null} Der aktuelle Benutzer oder null
@@ -353,6 +361,7 @@ function getCurrentUser() {
   const userJson = sessionStorage.getItem("join_current_user");
   return userJson ? JSON.parse(userJson) : null;
 }
+
 
 /**
  * Meldet den aktuellen Benutzer ab
@@ -367,6 +376,7 @@ async function logoutUser() {
   console.log("User logged out");
 }
 
+
 /**
  * Prüft ob ein Benutzer angemeldet ist
  * @returns {boolean} True wenn ein Benutzer angemeldet ist
@@ -374,6 +384,7 @@ async function logoutUser() {
 function isLoggedIn() {
   return getCurrentUser() !== null;
 }
+
 
 /**
  * Erstellt ein Fehler-Ergebnis-Objekt aus einem Firebase-Fehler
@@ -413,6 +424,7 @@ function handleFirebaseError(error) {
   }
   return { success: false, error: errorCode, message: message };
 }
+
 
 /**
  * Erstellt ein Fehler-Ergebnis-Objekt

@@ -20,6 +20,7 @@ async function initAddTask() {
   checkForEditMode();
 }
 
+
 /**
  * Setzt das Mindestdatum für das Due-Date-Feld auf heute
  */
@@ -27,6 +28,7 @@ function setMinimumDate() {
   const today = new Date().toISOString().split("T")[0];
   document.getElementById("due-date").setAttribute("min", today);
 }
+
 
 /**
  * Aktualisiert die Benutzer-Initialen im Header
@@ -39,6 +41,7 @@ function updateHeaderInitials(user) {
     initialsElement.textContent = initials;
   }
 }
+
 
 /**
  * Generiert Initialen aus einem Namen
@@ -54,6 +57,7 @@ function getInitialsFromName(name) {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
+
 /**
  * Wählt eine Priorität aus und aktualisiert die UI
  * @param {string} priority - Die ausgewählte Priorität
@@ -64,6 +68,7 @@ function selectPriority(priority) {
   addActiveToSelected(priority);
 }
 
+
 /**
  * Entfernt die active-Klasse von allen Buttons
  * @param {NodeList} buttons - Die Liste der Priority-Buttons
@@ -73,6 +78,7 @@ function removeActiveFromAll(buttons) {
     buttons[i].classList.remove("active");
   }
 }
+
 
 /**
  * Fügt die active-Klasse zum ausgewählten Priority-Button hinzu
@@ -87,6 +93,7 @@ function addActiveToSelected(priority) {
     selectedPriority = priority;
   }
 }
+
 
 /**
  * Fügt einen neuen Subtask hinzu
@@ -105,6 +112,7 @@ function addSubtask() {
   hideSubtaskIcons();
 }
 
+
 /**
  * Zeigt die Subtask-Icons (Clear & Save) an
  */
@@ -116,6 +124,7 @@ function showSubtaskIcons() {
   }
 }
 
+
 /**
  * Blendet die Subtask-Icons (Clear & Save) aus
  */
@@ -123,6 +132,7 @@ function hideSubtaskIcons() {
   const activeIcons = document.getElementById("subtask-icons-active");
   if (activeIcons) activeIcons.classList.add("v-hidden");
 }
+
 
 /**
  * Leert das Subtask-Eingabefeld und blendet die Icons aus
@@ -155,6 +165,7 @@ function handleSubtaskKeydown(event) {
   }
 }
 
+
 /**
  * Erstellt ein Subtask-Objekt
  * @param {string} text - Der Subtask-Text
@@ -167,6 +178,7 @@ function createSubtask(text) {
     completed: false,
   };
 }
+
 
 /**
  * Rendert die Liste der Subtasks
@@ -181,6 +193,7 @@ function renderSubtasks() {
     list.appendChild(li);
   }
 }
+
 
 /**
  * Wechselt ein Subtask in den Bearbeitungsmodus
@@ -197,6 +210,7 @@ function editSubtask(id) {
     input.setSelectionRange(input.value.length, input.value.length);
   }
 }
+
 
 /**
  * Speichert die Bearbeitung eines Subtasks
@@ -217,6 +231,7 @@ function saveEditSubtask(id) {
   }
 }
 
+
 /**
  * Verarbeitet Tasteneingaben im Subtask-Edit-Feld
  * @param {number} id - Die ID des Subtasks
@@ -231,6 +246,7 @@ function handleSubtaskEditKeydown(id, event) {
   }
 }
 
+
 /**
  * Entfernt einen Subtask anhand der ID
  * @param {number} id - Die ID des zu entfernenden Subtasks
@@ -239,6 +255,7 @@ function removeSubtask(id) {
   subtasks = subtasks.filter((s) => s.id !== id);
   renderSubtasks();
 }
+
 
 /**
  * Validiert das Formular und aktiviert/deaktiviert den Submit-Button
@@ -254,6 +271,7 @@ function validateForm() {
     submitBtn.disabled = true;
   }
 }
+
 
 /**
  * Verarbeitet das Hinzufügen eines neuen Tasks
@@ -276,6 +294,7 @@ async function handleAddTask(event) {
   }, 1000);
 }
 
+
 /**
  * Erstellt ein Task-Objekt aus den Formulardaten
  * @param {Object} currentUser - Der aktuell angemeldete Benutzer
@@ -297,6 +316,7 @@ function buildTask(currentUser) {
   };
 }
 
+
 /**
  * Erstellt eine Kopie des Subtasks-Arrays
  * @returns {Array} Die Kopie des Subtasks-Arrays
@@ -309,6 +329,7 @@ function copySubtasks() {
   return copy;
 }
 
+
 /**
  * Löst ein taskAdded-Event aus
  * @param {Object} task - Das hinzugefügte Task-Objekt
@@ -318,6 +339,7 @@ function dispatchTaskAddedEvent(task) {
     new CustomEvent("taskAdded", { detail: { task: task } }),
   );
 }
+
 
 /**
  * Speichert einen Task in Firestore
@@ -339,6 +361,7 @@ async function saveTask(userId, task) {
   }
 }
 
+
 /**
  * Setzt das Formular zurück
  */
@@ -353,6 +376,7 @@ function clearForm() {
   renderSubtasks();
   validateForm();
 }
+
 
 /**
  * Zeigt eine Toast-Nachricht an
@@ -370,6 +394,7 @@ function showToast(message) {
   hideToastAfterDelay(toast);
 }
 
+
 /**
  * Erstellt ein Toast-Element
  * @returns {HTMLElement} Das erstellte Toast-Element
@@ -382,6 +407,7 @@ function createToastElement() {
   return toast;
 }
 
+
 /**
  * Versteckt die Toast-Nachricht nach einer Verzögerung
  * @param {HTMLElement} toast - Das Toast-Element
@@ -391,6 +417,7 @@ function hideToastAfterDelay(toast) {
     toast.classList.add("d-none");
   }, 3000);
 }
+
 
 /**
  * Lädt Kontakte aus Firestore
@@ -420,12 +447,14 @@ async function loadContacts() {
   }
 }
 
+
 /**
  * Sortiert Kontakte alphabetisch
  */
 function sortContactsByName() {
   allContacts.sort((a, b) => a.name.localeCompare(b.name));
 }
+
 
 /**
  * Rendert die Kontakt-Optionen im Dropdown
@@ -440,6 +469,7 @@ function renderAssignedToOptions() {
   });
 }
 
+
 /**
  * Schaltet das Dropdown-Menü um
  */
@@ -449,6 +479,7 @@ function toggleAssignedToDropdown() {
   wrapper.classList.toggle("open");
   options.classList.toggle("d-none");
 }
+
 
 /**
  * Schaltet die Auswahl eines Kontakts um
@@ -470,6 +501,7 @@ function toggleContactSelection(contactId, event) {
   renderAssignedToOptions();
   renderSelectedInitials();
 }
+
 
 /**
  * Rendert die Initialen der ausgewählten Kontakte
@@ -503,6 +535,7 @@ async function checkForEditMode() {
   }
 }
 
+
 /**
  * Lädt die Daten eines Tasks zur Bearbeitung
  * @param {string} taskId - Die ID des Tasks
@@ -528,6 +561,7 @@ async function loadTaskForEdit(taskId) {
     console.error("Error loading task for edit:", error);
   }
 }
+
 
 /**
  * Füllt das Formular mit Task-Daten
@@ -560,6 +594,7 @@ function fillFormWithTaskData(task) {
   validateForm();
 }
 
+
 /**
  * Lädt die zugewiesenen Kontakte in den Formularzustand
  * @param {Object} task - Das Task-Objekt
@@ -579,6 +614,7 @@ function loadAssigneesForEdit(task) {
   renderAssignedToOptions();
   renderSelectedInitials();
 }
+
 
 /**
  * Konfiguriert das Formular für die Bearbeitung
@@ -607,6 +643,7 @@ function setupFormForEdit(taskId) {
     clearBtn.style.display = "none";
   }
 }
+
 
 /**
  * Verarbeitet die Aktualisierung eines Tasks

@@ -12,6 +12,7 @@ function openAddTaskOverlay() {
   document.getElementById("add-task-overlay").classList.add("active");
 }
 
+
 /**
  * Schließt das Add-Task-Overlay
  */
@@ -19,6 +20,7 @@ function closeAddTaskOverlay() {
   document.getElementById("add-task-overlay").classList.remove("active");
   resetFormToAddMode();
 }
+
 
 /**
  * Öffnet die Task-Detailansicht
@@ -32,6 +34,7 @@ function openTaskDetails(taskId) {
     buildTaskDetailsHtml(task);
   document.getElementById("task-details-overlay").classList.add("active");
 }
+
 
 /**
  * Baut das vollständige HTML für die Task-Detailansicht
@@ -54,12 +57,14 @@ function buildTaskDetailsHtml(task) {
   );
 }
 
+
 /**
  * Schließt die Task-Detailansicht
  */
 function closeTaskDetails() {
   document.getElementById("task-details-overlay").classList.remove("active");
 }
+
 
 /**
  * Schaltet den Status eines Subtasks um
@@ -91,6 +96,7 @@ async function toggleSubtask(taskId, subtaskIndex) {
   await saveSingleTask(task);
 }
 
+
 /**
  * Aktualisiert den Fortschrittsbalken einer Task-Karte auf dem Board
  * @param {Object} task - Das Task-Objekt
@@ -112,6 +118,7 @@ function updateTaskCardProgress(task) {
   if (progressBar) progressBar.style.width = `${percent}%`;
   if (progressText) progressText.innerText = `${completed}/${total} Subtasks`;
 }
+
 
 /**
  * Löscht einen Task
@@ -137,6 +144,7 @@ async function deleteTask(taskId) {
   closeTaskDetails();
 }
 
+
 /**
  * Filtert einen Task aus dem Tasks-Array
  * @param {number} taskId - Die ID des zu entfernenden Tasks
@@ -152,6 +160,7 @@ function filterOutTask(taskId) {
   return filtered;
 }
 
+
 /**
  * Durchsucht Tasks anhand einer Suchanfrage
  */
@@ -163,6 +172,7 @@ function searchTasks() {
     filterCard(card, query);
   }
 }
+
 
 /**
  * Filtert eine Task-Karte basierend auf der Suchanfrage
@@ -191,6 +201,7 @@ function initTouchDragDrop() {
   document.addEventListener("touchend", handleTouchEnd);
 }
 
+
 /**
  * Behandelt den Touchstart auf einer Task-Karte
  * @param {TouchEvent} ev - Das Touch-Event
@@ -204,6 +215,7 @@ function handleTouchStart(ev) {
   touchDragTaskId = getTaskIdFromCard(card);
   touchDragElement = card;
 }
+
 
 /**
  * Behandelt die Touchmove-Events während des Drags
@@ -227,6 +239,7 @@ function handleTouchMove(ev) {
   }
 }
 
+
 /**
  * Erstellt einen visuellen Klon der Karte für den Touch-Drag
  * @param {Touch} touch - Das Touch-Objekt
@@ -244,6 +257,7 @@ function createTouchDragClone(touch) {
   touchDragElement.style.opacity = "0.3";
   isDragging = true;
 }
+
 
 /**
  * Behandelt das Touchend-Event und führt den Drop aus
@@ -275,6 +289,7 @@ function handleTouchEnd(ev) {
   }, 0);
 }
 
+
 /**
  * Aktualisiert die Auto-Scroll-Richtung basierend auf der Touch-Position
  * @param {number} y - Y-Koordinate des Touches
@@ -294,6 +309,7 @@ function updateAutoScroll(y) {
   }
 }
 
+
 /**
  * Startet den Auto-Scroll-Intervall
  */
@@ -303,6 +319,7 @@ function startAutoScroll() {
     window.scrollBy(0, scrollDirection * 15);
   }, 20);
 }
+
 
 /**
  * Stoppt den Auto-Scroll-Intervall
@@ -314,6 +331,7 @@ function stopAutoScroll() {
   }
   scrollDirection = 0;
 }
+
 
 /**
  * Findet die Board-Spalte unter einem bestimmten Punkt
@@ -337,6 +355,7 @@ function getColumnUnderPoint(x, y) {
   return null;
 }
 
+
 /**
  * Gibt den Status-String für eine Spalten-ID zurück
  * @param {string} columnId - Die HTML-ID der Spalte
@@ -349,6 +368,7 @@ function getStatusFromColumnId(columnId) {
   if (columnId === "column-done") return "done";
   return null;
 }
+
 
 /**
  * Hebt die Spalte unter dem Touch-Punkt hervor
@@ -366,6 +386,7 @@ function highlightColumnUnderTouch(x, y) {
   }
 }
 
+
 /**
  * Entfernt alle Drag-Hervorhebungen
  */
@@ -375,6 +396,7 @@ function removeAllHighlights() {
     lists[i].classList.remove("drag-over");
   }
 }
+
 
 function editTask(taskId) {
   if (window.innerWidth <= 780) {
@@ -388,6 +410,7 @@ function editTask(taskId) {
   openAddTaskOverlay();
   setupFormForEdit(taskId);
 }
+
 
 /**
  * Füllt das Formular mit den Daten eines Tasks
@@ -407,6 +430,7 @@ function fillFormWithTaskData(task) {
   renderSubtasks();
   validateForm();
 }
+
 
 /**
  * Lädt die zugewiesenen Kontakte in den Formularzustand
@@ -428,6 +452,7 @@ function loadAssigneesForEdit(task) {
   renderSelectedInitials();
 }
 
+
 /**
  * Konfiguriert das Formular für die Bearbeitung
  * @param {number} taskId - Die ID des zu bearbeitenden Tasks
@@ -443,6 +468,7 @@ function setupFormForEdit(taskId) {
     updateTask(taskId);
   };
 }
+
 
 /**
  * Aktualisiert einen vorhandenen Task
@@ -468,6 +494,7 @@ async function updateTask(taskId) {
   closeAddTaskOverlay();
   showToast("Task updated successfully");
 }
+
 
 /**
  * Setzt das Formular zurück in den Add-Modus

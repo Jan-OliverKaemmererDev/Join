@@ -10,6 +10,7 @@ function initContacts() {
   })();
 }
 
+
 function loadContactsFromFirestore() {
   return (async function () {
     const currentUser = getCurrentUser();
@@ -17,6 +18,7 @@ function loadContactsFromFirestore() {
     await loadContactsFromFirestoreAsync(currentUser);
   })();
 }
+
 
 function loadContactsFromFirestoreAsync(currentUser) {
   return (async function () {
@@ -31,6 +33,7 @@ function loadContactsFromFirestoreAsync(currentUser) {
   })();
 }
 
+
 function getContactsReference(currentUser) {
   return window.fbCollection(
     window.firebaseDb,
@@ -39,6 +42,7 @@ function getContactsReference(currentUser) {
     "contacts",
   );
 }
+
 
 function populateContactsFromSnapshot(snapshot) {
   contacts = [];
@@ -49,11 +53,13 @@ function populateContactsFromSnapshot(snapshot) {
   });
 }
 
+
 function sortContacts() {
   contacts.sort(function (a, b) {
     return a.name.localeCompare(b.name);
   });
 }
+
 
 function getInitials(name) {
   const parts = name.split(" ");
@@ -65,6 +71,7 @@ function getInitials(name) {
   return initials.toUpperCase();
 }
 
+
 function renderContactList() {
   const list = document.getElementById("contacts-list");
   if (!list) return;
@@ -74,6 +81,7 @@ function renderContactList() {
     appendContactItemToList(list, contact);
   });
 }
+
 
 function appendContactItemToList(list, contact) {
   const first = contact.name[0].toUpperCase();
@@ -91,14 +99,17 @@ function getLastRenderedLetter() {
   return lastRenderedLetter;
 }
 
+
 function updateLastRenderedLetter(letter) {
   lastRenderedLetter = letter;
 }
+
 
 function addLetterGroupToList(list, letter) {
   list.innerHTML +=
     getContactGroupLetterTemplate(letter) + getSeparatorLineTemplate();
 }
+
 
 function findContactById(id) {
   const found = contacts.find(function (c) {
@@ -107,6 +118,7 @@ function findContactById(id) {
   return found || null;
 }
 
+
 function showContactDetails(id) {
   const contact = findContactById(id);
   if (!contact) return;
@@ -114,6 +126,7 @@ function showContactDetails(id) {
   markActiveContact(id);
   applyContactDetailsVisibility(id);
 }
+
 
 function renderContactDetailsView(contact, id) {
   const content = document.getElementById("contact-details-content");
@@ -124,6 +137,7 @@ function renderContactDetailsView(contact, id) {
   }
 }
 
+
 function markActiveContact(id) {
   const items = document.querySelectorAll(".contact-item");
   items.forEach(function (item) {
@@ -131,6 +145,7 @@ function markActiveContact(id) {
     item.classList.toggle("active", isActive);
   });
 }
+
 
 function applyContactDetailsVisibility(id) {
   if (window.innerWidth <= 780) {
@@ -140,15 +155,18 @@ function applyContactDetailsVisibility(id) {
   }
 }
 
+
 function applyMobileContactDetailsVisibility() {
   const container = document.querySelector(".contact-details-container");
   container.classList.add("show-mobile");
 }
 
+
 function applyDesktopContactDetailsVisibility() {
   const container = document.getElementById("contact-details-view");
   container.classList.add("visible");
 }
+
 
 function closeContactDetails() {
   const container = document.querySelector(".contact-details-container");
@@ -158,6 +176,7 @@ function closeContactDetails() {
     item.classList.remove("active");
   });
 }
+
 
 function checkUser() {
   if (typeof getCurrentUser === "function") {
@@ -170,6 +189,7 @@ function checkUser() {
   }
 }
 
+
 function openAddContactDialog() {
   const overlay = document.getElementById("add-contact-overlay");
   overlay.innerHTML = getAddContactDialogTemplate();
@@ -177,12 +197,14 @@ function openAddContactDialog() {
   document.body.style.overflow = "hidden";
 }
 
+
 function openEditContactDialog(id) {
   const overlay = document.getElementById("add-contact-overlay");
   overlay.innerHTML = getEditContactDialogTemplate(findContactById(id));
   overlay.classList.add("active");
   document.body.style.overflow = "hidden";
 }
+
 
 function closeAddContactDialog() {
   const overlay = document.getElementById("add-contact-overlay");
@@ -193,6 +215,7 @@ function closeAddContactDialog() {
   }, 300);
 }
 
+
 function createContact(e) {
   e.preventDefault();
   const currentUser = getCurrentUser();
@@ -201,6 +224,7 @@ function createContact(e) {
   const newContact = buildNewContactObject(name);
   saveNewContactToFirestore(currentUser, newContact);
 }
+
 
 function buildNewContactObject(name) {
   const colors = ["#AB47BC", "#FF9800", "#5C6BC0", "#26A69A"];
@@ -215,6 +239,7 @@ function buildNewContactObject(name) {
   };
 }
 
+
 function saveNewContactToFirestore(currentUser, newContact) {
   return (async function () {
     try {
@@ -225,6 +250,7 @@ function saveNewContactToFirestore(currentUser, newContact) {
     }
   })();
 }
+
 
 function saveContactToFirestoreDb(currentUser, newContact) {
   return (async function () {
@@ -239,12 +265,14 @@ function saveContactToFirestoreDb(currentUser, newContact) {
   })();
 }
 
+
 function finalizeContactCreation(newContact) {
   contacts.push(newContact);
   renderContactList();
   closeAddContactDialog();
   showSuccessAlert();
 }
+
 
 function saveContact(e, id) {
   e.preventDefault();
@@ -256,12 +284,14 @@ function saveContact(e, id) {
   persistContactToFirestore(currentUser, contact, id);
 }
 
+
 function updateContactFromForm(contact) {
   contact.name = document.getElementById("edit-contact-name").value;
   contact.email = document.getElementById("edit-contact-email").value;
   contact.phone = document.getElementById("edit-contact-phone").value;
   contact.initials = getInitials(contact.name);
 }
+
 
 function persistContactToFirestore(currentUser, contact, id) {
   return (async function () {
@@ -273,6 +303,7 @@ function persistContactToFirestore(currentUser, contact, id) {
     }
   })();
 }
+
 
 function updateContactInFirestoreDb(currentUser, contact, id) {
   return (async function () {
@@ -287,6 +318,7 @@ function updateContactInFirestoreDb(currentUser, contact, id) {
   })();
 }
 
+
 function finalizeContactUpdate(contact) {
   renderContactList();
   const content = document.getElementById("contact-details-content");
@@ -294,11 +326,13 @@ function finalizeContactUpdate(contact) {
   closeAddContactDialog();
 }
 
+
 function deleteContact(id) {
   const currentUser = getCurrentUser();
   if (!currentUser) return;
   removeContactFromFirestore(currentUser, id);
 }
+
 
 function removeContactFromFirestore(currentUser, id) {
   return (async function () {
@@ -310,6 +344,7 @@ function removeContactFromFirestore(currentUser, id) {
     }
   })();
 }
+
 
 function deleteContactFromFirestoreDb(currentUser, id) {
   return (async function () {
@@ -324,17 +359,20 @@ function deleteContactFromFirestoreDb(currentUser, id) {
   })();
 }
 
+
 function finalizeContactDeletion(id) {
   removeContactFromLocal(id);
   renderContactList();
   closeContactDetails();
 }
 
+
 function removeContactFromLocal(id) {
   contacts = contacts.filter(function (c) {
     return String(c.id) !== String(id);
   });
 }
+
 
 function showSuccessAlert() {
   const alert = document.createElement("div");
@@ -343,6 +381,7 @@ function showSuccessAlert() {
   document.body.appendChild(alert);
   showAlertWithDelay(alert);
 }
+
 
 function showAlertWithDelay(alert) {
   setTimeout(function () {
@@ -353,12 +392,14 @@ function showAlertWithDelay(alert) {
   }, 2000);
 }
 
+
 function hideAndRemoveAlert(alert) {
   alert.classList.remove("show");
   setTimeout(function () {
     alert.remove();
   }, 500);
 }
+
 
 function toggleContactMenu(e) {
   e.stopPropagation();

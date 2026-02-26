@@ -34,6 +34,7 @@ function getTaskCardTemplate(
   `;
 }
 
+
 /**
  * Generiert das HTML-Template für einen Fortschrittsbalken
  * @param {number} completed - Anzahl der abgeschlossenen Subtasks
@@ -52,6 +53,7 @@ function getProgressBarTemplate(completed, total) {
   `;
 }
 
+
 /**
  * Generiert das HTML-Template für ein Assignee-Badge
  * @param {string} initials - Die Initialen des Assignees
@@ -62,6 +64,7 @@ function getAssigneeBadgeTemplate(initials, color) {
   return `<div class="assignee-badge" style="background-color: ${backgroundColor};">${initials}</div>`;
 }
 
+
 /**
  * Generiert das HTML-Template für fehlende Tasks
  * @param {string} message - Die anzuzeigende Nachricht
@@ -70,6 +73,7 @@ function getAssigneeBadgeTemplate(initials, color) {
 function getNoTasksTemplate(message) {
   return `<div class="no-tasks">${message}</div>`;
 }
+
 
 /**
  * Generiert das HTML-Template für ein Subtask-Element in der Detailansicht
@@ -87,6 +91,7 @@ function getSubtaskItemDetailTemplate(taskId, index, st) {
     </div>
   `;
 }
+
 
 /**
  * Generiert das HTML-Template für die Task-Detailansicht
@@ -150,6 +155,7 @@ function getTaskDetailsTemplate(
   `;
 }
 
+
 /**
  * Generiert ein HTML-Template für einen zugewiesenen Kontakt in der Detailansicht
  * @param {string} initials - Initialen des Kontakts
@@ -166,6 +172,7 @@ function getAssignedToDetailItemTemplate(initials, color, name) {
   `;
 }
 
+
 /**
  * Generiert das HTML-Icon für hohe Priorität
  * @returns {string} Das HTML für das Urgent-Icon
@@ -174,6 +181,7 @@ function getUrgentPriorityIcon() {
   return `<svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 0L0.5 12H16.5L8.5 0Z" fill="#FF3D00"/></svg>`;
 }
 
+
 /**
  * Generiert das HTML-Icon für mittlere Priorität
  * @returns {string} Das HTML für das Medium-Icon
@@ -181,6 +189,7 @@ function getUrgentPriorityIcon() {
 function getMediumPriorityIcon() {
   return `<svg width="17" height="8" viewBox="0 0 17 8" fill="none"><rect width="17" height="3" rx="1" fill="#FFA800"/><rect y="5" width="17" height="3" rx="1" fill="#FFA800"/></svg>`;
 }
+
 
 /**
  * Generiert das HTML-Icon für niedrige Priorität

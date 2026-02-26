@@ -18,6 +18,7 @@ function getSubtaskItemTemplate(subtask) {
   `;
 }
 
+
 /**
  * Generiert das HTML-Template für ein Subtask-Element (Bearbeitungsmodus)
  * @param {Object} subtask - Das Subtask-Objekt
@@ -35,6 +36,7 @@ function getSubtaskEditTemplate(subtask) {
     </div>
   `;
 }
+
 
 /**
  * Generiert das HTML-Template für eine Kontakt-Option im Dropdown
@@ -59,6 +61,7 @@ function getContactOptionTemplate(contact, isSelected) {
   `;
 }
 
+
 /**
  * Generiert das HTML-Template für die Initialen einer ausgewählten Person
  * @param {Object} contact - Das Kontakt-Objekt
@@ -71,6 +74,7 @@ function getSelectedContactInitialsTemplate(contact) {
     </div>
   `;
 }
+
 
 /**
  * Generiert das HTML-Template für eine Toast-Nachricht

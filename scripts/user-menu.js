@@ -20,6 +20,7 @@ function toggleUserMenu() {
   dropdown.classList.toggle("active");
 }
 
+
 /**
  * Schließt das Dropdown-Menü bei Klick außerhalb
  * @param {Event} event - Das Click-Event
@@ -37,6 +38,7 @@ function handleClickOutside(event) {
   }
 }
 
+
 /**
  * Meldet den Benutzer ab und leitet zur Login-Seite weiter
  */
@@ -45,6 +47,7 @@ async function handleLogout() {
   await logoutUser();
   window.location.href = "index.html";
 }
+
 
 /**
  * Richtet den Event-Listener für Klicks außerhalb des Menüs ein

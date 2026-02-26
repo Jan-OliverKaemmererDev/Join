@@ -15,6 +15,7 @@ async function initSummaryUser() {
   checkMobileGreeting();
 }
 
+
 /**
  * Aktualisiert den Benutzernamen auf der Seite
  * @param {Object} user - Das Benutzer-Objekt
@@ -25,6 +26,7 @@ function updateUserName(user) {
     userNameElement.textContent = user.name;
   }
 }
+
 
 /**
  * Aktualisiert die Benutzer-Initialen im Header
@@ -37,6 +39,7 @@ function updateUserInitials(user) {
     initialsElement.textContent = initials;
   }
 }
+
 
 /**
  * Generiert Initialen aus einem Namen
@@ -53,6 +56,7 @@ function getInitials(name) {
     return (firstInitial + lastInitial).toUpperCase();
   }
 }
+
 
 /**
  * Aktualisiert die Begrüßungsnachricht basierend auf der Tageszeit
@@ -77,6 +81,7 @@ function updateGreeting() {
   }
 }
 
+
 /**
  * Aktualisiert die Task-Metriken auf der Summary-Seite
  * @param {Object} user - Das Benutzer-Objekt
@@ -97,6 +102,7 @@ async function updateTaskMetrics(user) {
     deadlineElement.textContent = "No upcoming deadline";
   }
 }
+
 
 /**
  * Ruft die Tasks eines Benutzers aus Firestore ab
@@ -122,6 +128,7 @@ async function getUserTasks(userId) {
     return [];
   }
 }
+
 
 /**
  * Berechnet die Task-Metriken aus einem Task-Array
@@ -157,6 +164,7 @@ function calculateTaskMetrics(tasks) {
   return metrics;
 }
 
+
 /**
  * Verarbeitet den Status eines Tasks und aktualisiert die Metriken
  * @param {Object} task - Das Task-Objekt
@@ -179,6 +187,7 @@ function processTaskStatus(task, metrics) {
   }
 }
 
+
 /**
  * Zählt dringende Tasks in den Metriken
  * @param {Object} task - Das Task-Objekt
@@ -189,6 +198,7 @@ function countUrgentTasks(task, metrics) {
     metrics.urgent++;
   }
 }
+
 
 /**
  * Verfolgt die nächste Deadline
@@ -206,6 +216,7 @@ function trackNearestDeadline(task, nearestDeadline) {
   return nearestDeadline;
 }
 
+
 /**
  * Formatiert eine Deadline für die Anzeige
  * @param {string} deadline - Die Deadline als String
@@ -216,6 +227,7 @@ function formatDeadline(deadline) {
   const options = { year: "numeric", month: "long", day: "numeric" };
   return date.toLocaleDateString("en-US", options);
 }
+
 
 /**
  * Meldet den Benutzer ab und leitet zur Login-Seite
@@ -231,6 +243,7 @@ function initSummary() {
   updateGreeting();
   renderTaskMetrics();
 }
+
 
 /**
  * Rendert die Task-Metriken auf der Seite (Fallback oder Gast-View)
@@ -253,6 +266,7 @@ function renderTaskMetrics() {
     }
   }
 }
+
 
 /**
  * Überprüft, ob die mobile Begrüßungs-Animation angezeigt werden soll
@@ -284,6 +298,7 @@ function checkMobileGreeting() {
     }
   }
 }
+
 
 /**
  * Leitet den Benutzer zur Board-Seite weiter mit einer kurzen Animation

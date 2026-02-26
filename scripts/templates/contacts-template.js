@@ -15,6 +15,7 @@ function getContactItemTemplate(contact) {
   `;
 }
 
+
 /**
  * --- DETAIL ANSICHT LOGIK ---
  */
@@ -25,6 +26,7 @@ function getContactDetailsTemplate(contact) {
     return getDesktopContactDetailsTemplate(contact);
   }
 }
+
 
 function getDesktopContactDetailsTemplate(contact) {
   return `
@@ -59,6 +61,7 @@ function getDesktopContactDetailsTemplate(contact) {
     </div>
   `;
 }
+
 
 function getMobileContactDetailsTemplate(contact) {
   return `
@@ -102,6 +105,7 @@ function getMobileContactDetailsTemplate(contact) {
   `;
 }
 
+
 /**
  * --- EDIT DIALOG LOGIK (Screenshot Design) ---
  */
@@ -112,6 +116,7 @@ function getEditContactDialogTemplate(contact) {
     return getDesktopEditContactTemplate(contact);
   }
 }
+
 
 function getDesktopEditContactTemplate(contact) {
   return `
@@ -163,6 +168,7 @@ function getDesktopEditContactTemplate(contact) {
   `;
 }
 
+
 function getMobileEditContactTemplate(contact) {
   return `
     <div class="edit-contact-mobile-overlay" onclick="event.stopPropagation()">
@@ -203,6 +209,7 @@ function getMobileEditContactTemplate(contact) {
   `;
 }
 
+
 /**
  * --- ADD CONTACT DIALOG LOGIK ---
  */
@@ -213,6 +220,7 @@ function getAddContactDialogTemplate() {
     return getDesktopAddContactTemplate();
   }
 }
+
 
 function getDesktopAddContactTemplate() {
   return `
@@ -267,6 +275,7 @@ function getDesktopAddContactTemplate() {
   `;
 }
 
+
 function getMobileAddContactTemplate() {
   return `
     <div class="edit-contact-mobile-overlay" onclick="event.stopPropagation()">
@@ -307,12 +316,14 @@ function getMobileAddContactTemplate() {
   `;
 }
 
+
 /**
  * --- HELPER TEMPLATES ---
  */
 function getContactGroupLetterTemplate(letter) {
   return `<div class="contact-group-letter">${letter}</div>`;
 }
+
 
 function getSeparatorLineTemplate() {
   return `<div class="separator-line" style="border-bottom: 1px solid #D1D1D1; margin: 0 24px 10px 24px;"></div>`;
