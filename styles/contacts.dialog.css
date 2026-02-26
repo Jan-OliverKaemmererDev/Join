@@ -40,17 +40,7 @@
     transform: translateX(0);
 }
 
-.dialog-left {
-    width: 467px;
-    background-color: #2a3647;
-    padding: 66px 48px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
-}
+
 
 .dialog-right {
     padding: 66px 48px;
