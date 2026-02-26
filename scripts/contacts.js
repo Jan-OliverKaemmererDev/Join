@@ -148,10 +148,6 @@ function applyMobileContactDetailsVisibility() {
 function applyDesktopContactDetailsVisibility() {
   const container = document.getElementById("contact-details-view");
   container.classList.add("visible");
-  const header = document.querySelector(".details-header-static");
-  if (header) {
-    header.classList.add("slide-up");
-  }
 }
 
 function closeContactDetails() {

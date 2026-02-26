@@ -169,11 +169,6 @@ body {
   display: flex;
   align-items: center;
   gap: 30px;
-  transition: padding-top 0.2s ease-in-out;
-}
-
-.details-header-static.slide-up {
-  padding-top: 0;
 }
 
 .details-header-static h1 {
@@ -192,10 +187,10 @@ body {
 
 .contact-details-view {
   position: absolute;
-  top: 110px; /* Gleiche Höhe wie der statische Header (Details-header-static) */
+  top: 205px; /* Positioned below the static header (110px padding + header height) */
   left: 0;
   width: 100%;
-  height: calc(100% - 110px);
+  height: calc(100% - 205px);
   /* background-color: #f6f7f8; */
   transition: transform 0.2s ease-in-out; /* Schnellere Animation für Desktop */
   padding: 0 55px;
