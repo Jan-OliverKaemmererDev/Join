@@ -14,157 +14,6 @@ function waitForFirebase() {
   });
 }
 
-const GUEST_USER = {
-  id: "guest",
-  name: "Gast",
-  email: "guest@join.com",
-  isGuest: true,
-};
-
-const DEFAULT_CONTACTS = [
-  {
-    id: 1,
-    name: "Anja Schulz",
-    email: "schulz@hotmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#AB47BC",
-    initials: "AS",
-  },
-  {
-    id: 2,
-    name: "Anton Mayer",
-    email: "antonm@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#FF9800",
-    initials: "AM",
-  },
-  {
-    id: 3,
-    name: "Benedikt Ziegler",
-    email: "benedikt@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#5C6BC0",
-    initials: "BZ",
-  },
-  {
-    id: 4,
-    name: "David Eisenberg",
-    email: "davidberg@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#F06292",
-    initials: "DE",
-  },
-  {
-    id: 5,
-    name: "Eva Fischer",
-    email: "eva@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#FFCA28",
-    initials: "EF",
-  },
-  {
-    id: 6,
-    name: "Emmanuel Mauer",
-    email: "emmanuelma@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#26A69A",
-    initials: "EM",
-  },
-  {
-    id: 7,
-    name: "Marcel Bauer",
-    email: "bauer@gmail.com",
-    phone: "+49 1111 11 111 1",
-    color: "#6A1B9A",
-    initials: "MB",
-  },
-];
-
-const DEFAULT_TASKS = [
-  {
-    id: 101,
-    title: "Setup Project Environment",
-    description: "Install dependencies, Setup Firebase, Configure Vite",
-    dueDate: new Date().toISOString().split("T")[0],
-    priority: "urgent",
-    assignedTo: ["1"],
-    category: "technical",
-    subtasks: [
-      { id: 1011, text: "Install dependencies", completed: true },
-      { id: 1012, text: "Setup Firebase", completed: true },
-      { id: 1013, text: "Configure Vite", completed: true },
-    ],
-    status: "done",
-    createdAt: new Date().toISOString(),
-    createdBy: "system",
-  },
-  {
-    id: 102,
-    title: "Implement User Authentication",
-    description: "Sign up page, Login page, Password reset",
-    dueDate: new Date(Date.now() + 86400000 * 2).toISOString().split("T")[0],
-    priority: "medium",
-    assignedTo: ["2", "3"],
-    category: "user-story",
-    subtasks: [
-      { id: 1021, text: "Sign up page", completed: false },
-      { id: 1022, text: "Login page", completed: false },
-      { id: 1023, text: "Password reset", completed: false },
-    ],
-    status: "todo",
-    createdAt: new Date().toISOString(),
-    createdBy: "system",
-  },
-  {
-    id: 103,
-    title: "Enhance Board Drag & Drop",
-    description: "Mobile touch support, Smooth animations",
-    dueDate: new Date(Date.now() + 86400000 * 1).toISOString().split("T")[0],
-    priority: "urgent",
-    assignedTo: ["4"],
-    category: "user-story",
-    subtasks: [
-      { id: 1031, text: "Mobile touch support", completed: true },
-      { id: 1032, text: "Smooth animations", completed: false },
-    ],
-    status: "inprogress",
-    createdAt: new Date().toISOString(),
-    createdBy: "system",
-  },
-  {
-    id: 104,
-    title: "Add Responsive Layouts",
-    description: "Tablet view, Smartphone portrait",
-    dueDate: new Date(Date.now() + 86400000 * 3).toISOString().split("T")[0],
-    priority: "low",
-    assignedTo: ["5"],
-    category: "user-story",
-    subtasks: [
-      { id: 1041, text: "Tablet view", completed: true },
-      { id: 1042, text: "Smartphone portrait", completed: true },
-    ],
-    status: "awaitfeedback",
-    createdAt: new Date().toISOString(),
-    createdBy: "system",
-  },
-  {
-    id: 105,
-    title: "Contact Management Refactoring",
-    description: "Optimize Firestore queries, Add search functionality",
-    dueDate: new Date(Date.now() + 86400000 * 5).toISOString().split("T")[0],
-    priority: "medium",
-    assignedTo: ["6", "7"],
-    category: "technical",
-    subtasks: [
-      { id: 1051, text: "Optimize Firestore queries", completed: false },
-      { id: 1052, text: "Add search functionality", completed: false },
-    ],
-    status: "todo",
-    createdAt: new Date().toISOString(),
-    createdBy: "system",
-  },
-];
-
 /**
  * Registriert einen neuen Benutzer über Firebase Authentication
  * @param {string} name - Der Name des Benutzers
@@ -191,7 +40,6 @@ async function signUpUser(name, email, password) {
   }
 }
 
-
 /**
  * Speichert das Benutzerprofil in Firestore
  * @param {string} uid - Die Firebase User-ID
@@ -207,7 +55,6 @@ async function saveUserProfile(uid, name, email) {
     createdAt: new Date().toISOString(),
   });
 }
-
 
 /**
  * Schreibt die Standard-Kontakte für einen neuen Benutzer in Firestore
@@ -233,7 +80,6 @@ async function initDefaultContacts(uid) {
   }
 }
 
-
 /**
  * Schreibt die Standard-Tasks für einen neuen Benutzer (oder Gast) in Firestore
  * @param {string} uid - Die Firebase User-ID
@@ -251,7 +97,6 @@ async function initDefaultTasks(uid) {
     await window.fbSetDoc(taskRef, task);
   }
 }
-
 
 /**
  * Meldet einen Benutzer über Firebase Authentication an
@@ -291,7 +136,6 @@ async function loginUser(email, password) {
   }
 }
 
-
 /**
  * Lädt das Benutzerprofil aus Firestore
  * @param {string} uid - Die Firebase User-ID
@@ -305,7 +149,6 @@ async function loadUserProfile(uid) {
   }
   return { name: "User", email: "" };
 }
-
 
 /**
  * Meldet einen Gast-Benutzer über Firebase Anonymous Auth an
@@ -332,7 +175,6 @@ async function guestLoginUser() {
   }
 }
 
-
 /**
  * Stellt sicher, dass ein Gast-Profil in Firestore existiert
  * @param {string} uid - Die Firebase User-ID des Gasts
@@ -352,7 +194,6 @@ async function ensureGuestProfile(uid) {
   }
 }
 
-
 /**
  * Ruft den aktuell angemeldeten Benutzer ab
  * @returns {Object|null} Der aktuelle Benutzer oder null
@@ -361,7 +202,6 @@ function getCurrentUser() {
   const userJson = sessionStorage.getItem("join_current_user");
   return userJson ? JSON.parse(userJson) : null;
 }
-
 
 /**
  * Meldet den aktuellen Benutzer ab
@@ -376,7 +216,6 @@ async function logoutUser() {
   console.log("User logged out");
 }
 
-
 /**
  * Prüft ob ein Benutzer angemeldet ist
  * @returns {boolean} True wenn ein Benutzer angemeldet ist
@@ -384,7 +223,6 @@ async function logoutUser() {
 function isLoggedIn() {
   return getCurrentUser() !== null;
 }
-
 
 /**
  * Erstellt ein Fehler-Ergebnis-Objekt aus einem Firebase-Fehler
@@ -424,7 +262,6 @@ function handleFirebaseError(error) {
   }
   return { success: false, error: errorCode, message: message };
 }
-
 
 /**
  * Erstellt ein Fehler-Ergebnis-Objekt

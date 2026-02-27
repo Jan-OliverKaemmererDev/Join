@@ -20,7 +20,6 @@ async function initBoard() {
   initTouchDragDrop();
 }
 
-
 /**
  * Richtet den Event-Listener für hinzugefügte Tasks ein
  */
@@ -32,7 +31,6 @@ function setupTaskAddedListener() {
     });
   });
 }
-
 
 /**
  * Überprüft ob ein Benutzer angemeldet ist
@@ -47,7 +45,6 @@ function checkUser() {
     updateHeaderInitials(currentUser);
   }
 }
-
 
 /**
  * Lädt die Tasks des aktuellen Benutzers aus Firestore
@@ -73,7 +70,6 @@ async function loadTasks() {
   }
 }
 
-
 /**
  * Leert alle Board-Spalten
  */
@@ -83,7 +79,6 @@ function clearAllColumns() {
   document.getElementById("awaitfeedback-list").innerHTML = "";
   document.getElementById("done-list").innerHTML = "";
 }
-
 
 /**
  * Rendert alle Tasks auf dem Board
@@ -97,7 +92,6 @@ function renderTasks() {
   }
   renderAllEmptyStates(counts);
 }
-
 
 /**
  * Rendert eine einzelne Task-Karte
@@ -114,7 +108,6 @@ function renderTaskCard(task, counts) {
   }
 }
 
-
 /**
  * Rendert Empty-States für alle leeren Spalten
  * @param {Object} counts - Die Zähl-Objekt mit Task-Anzahlen pro Status
@@ -130,7 +123,6 @@ function renderAllEmptyStates(counts) {
   renderEmptyState("done", counts.done, "No tasks Done");
 }
 
-
 /**
  * Rendert einen Empty-State für eine Spalte
  * @param {string} status - Der Status der Spalte
@@ -143,169 +135,6 @@ function renderEmptyState(status, count, message) {
     list.innerHTML = getNoTasksTemplate(message);
   }
 }
-
-
-/**
- * Generiert das HTML für eine Task-Karte
- * @param {Object} task - Das Task-Objekt
- * @returns {string} Das generierte HTML
- */
-function generateTaskCardHtml(task) {
-  const categoryClass = getCategoryClass(task.category);
-  const categoryLabel = getCategoryLabel(task.category);
-  const progressHtml = generateProgressHtml(task);
-  const priorityIcon = getPriorityIcon(task.priority);
-  const assigneesHtml = generateAssigneesHtml(task);
-  return getTaskCardTemplate(
-    task,
-    categoryClass,
-    categoryLabel,
-    progressHtml,
-    assigneesHtml,
-    priorityIcon,
-  );
-}
-
-
-/**
- * Gibt die CSS-Klasse für eine Kategorie zurück
- * @param {string} category - Die Kategorie
- * @returns {string} Die CSS-Klasse
- */
-function getCategoryClass(category) {
-  return category === "user-story"
-    ? "category-user-story"
-    : "category-technical";
-}
-
-
-/**
- * Gibt das Label für eine Kategorie zurück
- * @param {string} category - Die Kategorie
- * @returns {string} Das Kategorie-Label
- */
-function getCategoryLabel(category) {
-  return category === "user-story" ? "User Story" : "Technical Task";
-}
-
-
-/**
- * Generiert das HTML für den Fortschrittsbalken
- * @param {Object} task - Das Task-Objekt
- * @returns {string} Das HTML für den Fortschrittsbalken
- */
-function generateProgressHtml(task) {
-  if (task.subtasks && task.subtasks.length > 0) {
-    const completed = countCompletedSubtasks(task.subtasks);
-    const total = task.subtasks.length;
-    return getProgressBarTemplate(completed, total);
-  }
-  return "";
-}
-
-
-/**
- * Zählt die abgeschlossenen Subtasks
- * @param {Array} subtasks - Array mit Subtasks
- * @returns {number} Anzahl der abgeschlossenen Subtasks
- */
-function countCompletedSubtasks(subtasks) {
-  let count = 0;
-  for (let i = 0; i < subtasks.length; i++) {
-    if (subtasks[i].completed) {
-      count++;
-    }
-  }
-  return count;
-}
-
-
-/**
- * Generiert das HTML für zugewiesene Benutzer
- * @param {Object} task - Das Task-Objekt
- * @returns {string} Das HTML für die Assignees
- */
-function generateAssigneesHtml(task) {
-  if (!task.assignedTo || !Array.isArray(task.assignedTo)) return "";
-  let html = "";
-  const displayCount = Math.min(task.assignedTo.length, 3);
-
-  for (let i = 0; i < displayCount; i++) {
-    const contactId = task.assignedTo[i];
-    const contact = allContacts.find((c) => String(c.id) === String(contactId));
-    if (contact) {
-      const initials = getInitialsFromName(contact.name);
-      html += getAssigneeBadgeTemplate(initials, contact.color);
-    }
-  }
-
-  if (task.assignedTo.length > 3) {
-    html += getAssigneeBadgeTemplate(
-      `+${task.assignedTo.length - 3}`,
-      "#2A3647",
-    );
-  }
-
-  return html;
-}
-
-
-/**
- * Generiert das HTML für zugewiesene Kontakte in der Detailansicht
- * @param {Object} task - Das Task-Objekt
- * @returns {string} Das HTML mit Kontakt-Badges und Namen
- */
-function buildAssignedToDetailsHtml(task) {
-  if (
-    !task.assignedTo ||
-    !Array.isArray(task.assignedTo) ||
-    task.assignedTo.length === 0
-  ) {
-    return "<span>No one</span>";
-  }
-  return buildAssigneeDetailItems(task.assignedTo);
-}
-
-
-/**
- * Baut die HTML-Einträge für alle zugewiesenen Kontakte
- * @param {Array} assignedIds - Array von Kontakt-IDs
- * @returns {string} Das HTML für alle Kontakt-Einträge
- */
-function buildAssigneeDetailItems(assignedIds) {
-  let html = "";
-  for (let i = 0; i < assignedIds.length; i++) {
-    const contact = allContacts.find(
-      (c) => String(c.id) === String(assignedIds[i]),
-    );
-    if (contact) {
-      const initials = getInitialsFromName(contact.name);
-      html += getAssignedToDetailItemTemplate(
-        initials,
-        contact.color,
-        contact.name,
-      );
-    }
-  }
-  return html || "<span>No one</span>";
-}
-
-
-/**
- * Gibt das Icon für eine Priorität zurück
- * @param {string} priority - Die Priorität
- * @returns {string} Das HTML für das Prioritäts-Icon
- */
-function getPriorityIcon(priority) {
-  if (priority === "urgent") {
-    return getUrgentPriorityIcon();
-  } else if (priority === "medium") {
-    return getMediumPriorityIcon();
-  } else {
-    return getLowPriorityIcon();
-  }
-}
-
 
 /**
  * Startet das Drag-and-Drop für einen Task
@@ -321,7 +150,6 @@ function startDragging(id, ev) {
   }
 }
 
-
 /**
  * Beendet das Drag-and-Drop
  */
@@ -331,7 +159,6 @@ function endDragging() {
   }, 0);
 }
 
-
 /**
  * Erlaubt das Ablegen eines Tasks
  * @param {Event} ev - Das Drag-Event
@@ -339,7 +166,6 @@ function endDragging() {
 function allowDrop(ev) {
   ev.preventDefault();
 }
-
 
 /**
  * Hebt eine Drop-Zone hervor
@@ -349,7 +175,6 @@ function highlight(id) {
   document.getElementById(id).classList.add("drag-over");
 }
 
-
 /**
  * Entfernt die Hervorhebung einer Drop-Zone
  * @param {string} id - Die ID der Drop-Zone
@@ -357,7 +182,6 @@ function highlight(id) {
 function removeHighlight(id) {
   document.getElementById(id).classList.remove("drag-over");
 }
-
 
 /**
  * Findet den Index eines Tasks anhand der ID
@@ -373,7 +197,6 @@ function findTaskById(taskId) {
   return -1;
 }
 
-
 /**
  * Verschiebt einen Task zu einem neuen Status
  * @param {string} status - Der neue Status
@@ -387,7 +210,6 @@ async function moveTo(status) {
   }
   currentDraggedTaskId = null;
 }
-
 
 /**
  * Behandelt das Drop-Event für einen Task
@@ -405,7 +227,6 @@ function drop(ev, status) {
   }
   moveTo(status);
 }
-
 
 /**
  * Speichert alle Tasks in Firestore
@@ -430,7 +251,6 @@ async function saveTasks() {
   }
 }
 
-
 /**
  * Speichert einen einzelnen Task in Firestore
  * @param {Object} task - Das zu speicherende Task-Objekt
@@ -452,7 +272,6 @@ async function saveSingleTask(task) {
   }
 }
 
-
 /**
  * Findet einen Task anhand der ID
  * @param {number} taskId - Die ID des Tasks
@@ -466,22 +285,6 @@ function findTask(taskId) {
   }
   return null;
 }
-
-
-/**
- * Generiert das HTML für die Subtasks-Liste
- * @param {Object} task - Das Task-Objekt
- * @returns {string} Das HTML für die Subtasks
- */
-function buildSubtasksHtml(task) {
-  let subtasksHtml = "";
-  for (let i = 0; i < task.subtasks.length; i++) {
-    const st = task.subtasks[i];
-    subtasksHtml += getSubtaskItemDetailTemplate(task.id, i, st);
-  }
-  return subtasksHtml;
-}
-
 
 /**
  * Liest die Task-ID aus dem data-Attribut einer Karte

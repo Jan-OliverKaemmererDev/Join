@@ -12,7 +12,6 @@ function openAddTaskOverlay() {
   document.getElementById("add-task-overlay").classList.add("active");
 }
 
-
 /**
  * Schließt das Add-Task-Overlay
  */
@@ -20,7 +19,6 @@ function closeAddTaskOverlay() {
   document.getElementById("add-task-overlay").classList.remove("active");
   resetFormToAddMode();
 }
-
 
 /**
  * Öffnet die Task-Detailansicht
@@ -34,7 +32,6 @@ function openTaskDetails(taskId) {
     buildTaskDetailsHtml(task);
   document.getElementById("task-details-overlay").classList.add("active");
 }
-
 
 /**
  * Baut das vollständige HTML für die Task-Detailansicht
@@ -57,14 +54,12 @@ function buildTaskDetailsHtml(task) {
   );
 }
 
-
 /**
  * Schließt die Task-Detailansicht
  */
 function closeTaskDetails() {
   document.getElementById("task-details-overlay").classList.remove("active");
 }
-
 
 /**
  * Schaltet den Status eines Subtasks um
@@ -96,7 +91,6 @@ async function toggleSubtask(taskId, subtaskIndex) {
   await saveSingleTask(task);
 }
 
-
 /**
  * Aktualisiert den Fortschrittsbalken einer Task-Karte auf dem Board
  * @param {Object} task - Das Task-Objekt
@@ -118,7 +112,6 @@ function updateTaskCardProgress(task) {
   if (progressBar) progressBar.style.width = `${percent}%`;
   if (progressText) progressText.innerText = `${completed}/${total} Subtasks`;
 }
-
 
 /**
  * Löscht einen Task
@@ -144,7 +137,6 @@ async function deleteTask(taskId) {
   closeTaskDetails();
 }
 
-
 /**
  * Filtert einen Task aus dem Tasks-Array
  * @param {number} taskId - Die ID des zu entfernenden Tasks
@@ -160,7 +152,6 @@ function filterOutTask(taskId) {
   return filtered;
 }
 
-
 /**
  * Durchsucht Tasks anhand einer Suchanfrage
  */
@@ -172,7 +163,6 @@ function searchTasks() {
     filterCard(card, query);
   }
 }
-
 
 /**
  * Filtert eine Task-Karte basierend auf der Suchanfrage
@@ -189,215 +179,6 @@ function filterCard(card, query) {
   }
 }
 
-let autoScrollInterval;
-let scrollDirection = 0; // 1 for down, -1 for up, 0 for none
-
-/**
- * Initialisiert Touch-Drag-and-Drop für mobile Geräte
- */
-function initTouchDragDrop() {
-  document.addEventListener("touchstart", handleTouchStart, { passive: true });
-  document.addEventListener("touchmove", handleTouchMove, { passive: false });
-  document.addEventListener("touchend", handleTouchEnd);
-}
-
-
-/**
- * Behandelt den Touchstart auf einer Task-Karte
- * @param {TouchEvent} ev - Das Touch-Event
- */
-function handleTouchStart(ev) {
-  const card = ev.target.closest(".task-card");
-  if (!card) return;
-  const touch = ev.touches[0];
-  touchStartX = touch.clientX;
-  touchStartY = touch.clientY;
-  touchDragTaskId = getTaskIdFromCard(card);
-  touchDragElement = card;
-}
-
-
-/**
- * Behandelt die Touchmove-Events während des Drags
- * @param {TouchEvent} ev - Das Touch-Event
- */
-function handleTouchMove(ev) {
-  if (!touchDragElement) return;
-  const touch = ev.touches[0];
-  const deltaX = Math.abs(touch.clientX - touchStartX);
-  const deltaY = Math.abs(touch.clientY - touchStartY);
-  if (!touchDragClone && (deltaX > 10 || deltaY > 10)) {
-    createTouchDragClone(touch);
-  }
-  if (touchDragClone) {
-    if (ev.cancelable) ev.preventDefault();
-    touchDragClone.style.left =
-      touch.clientX - touchDragClone.offsetWidth / 2 + "px";
-    touchDragClone.style.top = touch.clientY - 30 + "px";
-    highlightColumnUnderTouch(touch.clientX, touch.clientY);
-    updateAutoScroll(touch.clientY);
-  }
-}
-
-
-/**
- * Erstellt einen visuellen Klon der Karte für den Touch-Drag
- * @param {Touch} touch - Das Touch-Objekt
- */
-function createTouchDragClone(touch) {
-  touchDragClone = touchDragElement.cloneNode(true);
-  touchDragClone.style.position = "fixed";
-  touchDragClone.style.zIndex = "10000";
-  touchDragClone.style.width = touchDragElement.offsetWidth + "px";
-  touchDragClone.style.opacity = "0.8";
-  touchDragClone.style.pointerEvents = "none";
-  touchDragClone.style.transform = "rotate(3deg)";
-  document.body.appendChild(touchDragClone);
-  document.body.style.overflow = "hidden";
-  touchDragElement.style.opacity = "0.3";
-  isDragging = true;
-}
-
-
-/**
- * Behandelt das Touchend-Event und führt den Drop aus
- * @param {TouchEvent} ev - Das Touch-Event
- */
-function handleTouchEnd(ev) {
-  stopAutoScroll();
-  document.body.style.overflow = "";
-  if (!touchDragElement) return;
-  if (touchDragClone) {
-    const touch = ev.changedTouches[0];
-    const column = getColumnUnderPoint(touch.clientX, touch.clientY);
-    if (column && touchDragTaskId !== null) {
-      currentDraggedTaskId = touchDragTaskId;
-      const status = getStatusFromColumnId(column.id);
-      if (status) {
-        moveTo(status);
-      }
-    }
-    touchDragClone.remove();
-    touchDragClone = null;
-    touchDragElement.style.opacity = "";
-    removeAllHighlights();
-  }
-  touchDragElement = null;
-  touchDragTaskId = null;
-  setTimeout(function () {
-    isDragging = false;
-  }, 0);
-}
-
-
-/**
- * Aktualisiert die Auto-Scroll-Richtung basierend auf der Touch-Position
- * @param {number} y - Y-Koordinate des Touches
- */
-function updateAutoScroll(y) {
-  const scrollThreshold = 100;
-  const windowHeight = window.innerHeight;
-
-  if (y < scrollThreshold) {
-    scrollDirection = -1;
-    startAutoScroll();
-  } else if (y > windowHeight - scrollThreshold) {
-    scrollDirection = 1;
-    startAutoScroll();
-  } else {
-    stopAutoScroll();
-  }
-}
-
-
-/**
- * Startet den Auto-Scroll-Intervall
- */
-function startAutoScroll() {
-  if (autoScrollInterval) return;
-  autoScrollInterval = setInterval(function () {
-    window.scrollBy(0, scrollDirection * 15);
-  }, 20);
-}
-
-
-/**
- * Stoppt den Auto-Scroll-Intervall
- */
-function stopAutoScroll() {
-  if (autoScrollInterval) {
-    clearInterval(autoScrollInterval);
-    autoScrollInterval = null;
-  }
-  scrollDirection = 0;
-}
-
-
-/**
- * Findet die Board-Spalte unter einem bestimmten Punkt
- * @param {number} x - X-Koordinate
- * @param {number} y - Y-Koordinate
- * @returns {HTMLElement|null} Das Spalten-Element oder null
- */
-function getColumnUnderPoint(x, y) {
-  const columns = document.querySelectorAll(".board-column");
-  for (let i = 0; i < columns.length; i++) {
-    const rect = columns[i].getBoundingClientRect();
-    if (
-      x >= rect.left &&
-      x <= rect.right &&
-      y >= rect.top &&
-      y <= rect.bottom
-    ) {
-      return columns[i];
-    }
-  }
-  return null;
-}
-
-
-/**
- * Gibt den Status-String für eine Spalten-ID zurück
- * @param {string} columnId - Die HTML-ID der Spalte
- * @returns {string|null} Der Status-String oder null
- */
-function getStatusFromColumnId(columnId) {
-  if (columnId === "column-todo") return "todo";
-  if (columnId === "column-inprogress") return "inprogress";
-  if (columnId === "column-awaitfeedback") return "awaitfeedback";
-  if (columnId === "column-done") return "done";
-  return null;
-}
-
-
-/**
- * Hebt die Spalte unter dem Touch-Punkt hervor
- * @param {number} x - X-Koordinate
- * @param {number} y - Y-Koordinate
- */
-function highlightColumnUnderTouch(x, y) {
-  removeAllHighlights();
-  const column = getColumnUnderPoint(x, y);
-  if (column) {
-    const list = column.querySelector(".task-list");
-    if (list) {
-      list.classList.add("drag-over");
-    }
-  }
-}
-
-
-/**
- * Entfernt alle Drag-Hervorhebungen
- */
-function removeAllHighlights() {
-  const lists = document.querySelectorAll(".task-list");
-  for (let i = 0; i < lists.length; i++) {
-    lists[i].classList.remove("drag-over");
-  }
-}
-
-
 function editTask(taskId) {
   if (window.innerWidth <= 780) {
     window.location.href = "addtask.html?edit=" + taskId;
@@ -410,7 +191,6 @@ function editTask(taskId) {
   openAddTaskOverlay();
   setupFormForEdit(taskId);
 }
-
 
 /**
  * Füllt das Formular mit den Daten eines Tasks
@@ -430,7 +210,6 @@ function fillFormWithTaskData(task) {
   renderSubtasks();
   validateForm();
 }
-
 
 /**
  * Lädt die zugewiesenen Kontakte in den Formularzustand
@@ -452,7 +231,6 @@ function loadAssigneesForEdit(task) {
   renderSelectedInitials();
 }
 
-
 /**
  * Konfiguriert das Formular für die Bearbeitung
  * @param {number} taskId - Die ID des zu bearbeitenden Tasks
@@ -468,7 +246,6 @@ function setupFormForEdit(taskId) {
     updateTask(taskId);
   };
 }
-
 
 /**
  * Aktualisiert einen vorhandenen Task
@@ -494,7 +271,6 @@ async function updateTask(taskId) {
   closeAddTaskOverlay();
   showToast("Task updated successfully");
 }
-
 
 /**
  * Setzt das Formular zurück in den Add-Modus

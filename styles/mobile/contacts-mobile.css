@@ -181,7 +181,7 @@
     position: relative;
     flex: 1;
     overflow: hidden;
-    display: flex;
+    display: flex !important;
     flex-direction: column;
   }
 

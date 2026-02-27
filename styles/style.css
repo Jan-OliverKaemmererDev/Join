@@ -1,107 +1,4 @@
-
-/* ---- Login-Seite: Animation ---- */
-
-.animation-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: var(--bg-color);
-  z-index: 999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: fadeOutBackground 0.4s ease-in-out 1.3s forwards;
-}
-
-#flying-logo {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 274px;
-  z-index: 1000;
-  animation: moveLogoDiagonal 0.8s ease-in-out 0.5s forwards;
-}
-
-@keyframes moveLogoDiagonal {
-  from {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 274px;
-  }
-
-  to {
-    top: 37px;
-    left: max(37px, calc(50% - 683px));
-    transform: translate(0, 0);
-    width: 100px;
-  }
-}
-
-@keyframes fadeOutBackground {
-  to {
-    background-color: transparent;
-    pointer-events: none;
-  }
-}
-
-.login-header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 37px 40px;
-  height: 100px;
-  max-width: 1440px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 35px;
-}
-
-.login-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - 200px);
-  max-width: 1440px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 0 40px;
-  box-sizing: border-box;
-}
-
-.login-card {
-  background-color: var(--white);
-  padding: 48px 56px;
-  border-radius: 30px;
-  box-shadow: 0 0 14px 3px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 652px;
-}
-
-.login-card h1 {
-  font-size: 61px;
-  margin: 0;
-  font-weight: 700;
-}
-
-.blue-underline {
-  width: 150px;
-  height: 3px;
-  background-color: var(--light-blue);
-  margin: 15px 0 35px 0;
-}
+/* ---- Login-Seite: Spezifische Inputs ---- */
 
 #email {
   width: 450px;
@@ -116,6 +13,8 @@
   background-repeat: no-repeat;
   background-position: right 21px center;
 }
+
+/* ---- Login-Seite: Buttons ---- */
 
 .btn-signup {
   background-color: var(--dark-blue);
@@ -172,6 +71,8 @@
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
+/* ---- Login-Seite: Footer & Signup ---- */
+
 .mobile-signup {
   display: none;
 }
@@ -199,6 +100,8 @@
   text-shadow: 0 0 0.5px var(--light-blue);
 }
 
+/* ---- Sidebar Navigation ---- */
+
 .sidebar {
   height: 100vh;
   width: 232px;
@@ -214,7 +117,7 @@
   box-sizing: border-box;
 }
 
-.sidebar>img {
+.sidebar > img {
   width: 100px;
   margin-left: 40px;
   margin-bottom: 100px;
@@ -270,6 +173,8 @@
   font-weight: 700;
 }
 
+/* ---- Dashboard Layout ---- */
+
 .main-content {
   margin-left: 232px;
   width: calc(100% - 232px);
@@ -277,6 +182,8 @@
   height: 100vh;
   overflow-y: auto;
 }
+
+/* ---- Dashboard Header ---- */
 
 .dashboard-header {
   height: 80px;
@@ -302,7 +209,7 @@
   box-sizing: border-box;
 }
 
-.dashboard-header>span {
+.dashboard-header > span {
   font-size: 20px;
   color: var(--dark-blue);
 }
@@ -395,6 +302,8 @@
   width: 100%;
   height: 100%;
 }
+
+/* ---- Mobile Navigation (standardmäßig ausgeblendet) ---- */
 
 .mobile-nav {
   display: none;
