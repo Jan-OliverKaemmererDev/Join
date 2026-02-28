@@ -39,7 +39,7 @@ async function signUpUser(name, email, password) {
     ]);
     await batch.commit();
 
-    return { success: true, message: "Registration successful" };
+    return { success: true, message: "Registrierung erfolgreich" };
   } catch (error) {
     console.error("Signup error:", error);
     return handleFirebaseError(error);
@@ -189,7 +189,7 @@ async function guestLoginUser() {
     const user = userCredential.user;
     const guestSession = {
       id: user.uid,
-      name: "Guest",
+      name: "Gast",
       email: "guest@join.com",
       isGuest: true,
     };
@@ -213,7 +213,7 @@ async function ensureGuestProfile(uid) {
   if (!docSnap.exists()) {
     const batch = window.fbWriteBatch(window.firebaseDb);
     batch.set(userRef, {
-      name: "Guest",
+      name: "Gast",
       email: "guest@join.com",
       isGuest: true,
       createdAt: new Date().toISOString(),

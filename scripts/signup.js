@@ -35,10 +35,10 @@ async function handleRegistration(event) {
   }
   const result = await signUpUser(name, email, pass);
   if (result.success) {
-    console.log("User successfully registered:", email);
+    console.log("Benutzer erfolgreich registriert:", email);
     showSuccessMessageAndRedirect();
   } else {
-    console.error("Registration error:", result.error, result.message);
+    console.error("Registrierungsfehler:", result.error, result.message);
     handleRegistrationError(result);
   }
 }
