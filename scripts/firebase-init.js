@@ -14,6 +14,7 @@ import {
   getDocs,
   deleteDoc,
   updateDoc,
+  writeBatch,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 window.firebaseAuth = auth;
@@ -32,6 +33,7 @@ window.fbGetDoc = getDoc;
 window.fbGetDocs = getDocs;
 window.fbDeleteDoc = deleteDoc;
 window.fbUpdateDoc = updateDoc;
+window.fbWriteBatch = writeBatch;
 
 window.firebaseReady = true;
 window.dispatchEvent(new Event("firebaseReady"));

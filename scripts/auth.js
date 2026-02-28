@@ -30,8 +30,14 @@ async function signUpUser(name, email, password) {
     );
     const user = userCredential.user;
     await window.fbUpdateProfile(user, { displayName: name });
-    await saveUserProfile(user.uid, name, email);
-    await initDefaultContacts(user.uid);
+
+    const batch = window.fbWriteBatch(window.firebaseDb);
+    await Promise.all([
+      saveUserProfile(user.uid, name, email, batch),
+      initDefaultContacts(user.uid, batch),
+    ]);
+    await batch.commit();
+
     console.log("User registered successfully:", email);
     return { success: true, message: "Registrierung erfolgreich" };
   } catch (error) {
@@ -46,23 +52,28 @@ async function signUpUser(name, email, password) {
  * @param {string} name - Der Name des Benutzers
  * @param {string} email - Die E-Mail-Adresse
  */
-async function saveUserProfile(uid, name, email) {
+async function saveUserProfile(uid, name, email, batch) {
   const userRef = window.fbDoc(window.firebaseDb, "users", uid);
-  await window.fbSetDoc(userRef, {
+  const data = {
     name: name,
     email: email,
     isGuest: false,
     createdAt: new Date().toISOString(),
-  });
+  };
+  if (batch) {
+    batch.set(userRef, data);
+  } else {
+    await window.fbSetDoc(userRef, data);
+  }
 }
 
 /**
  * Schreibt die Standard-Kontakte für einen neuen Benutzer in Firestore
- * Alle Writes laufen parallel für bessere Performance
  * @param {string} uid - Die Firebase User-ID
  */
-async function initDefaultContacts(uid) {
-  const writes = DEFAULT_CONTACTS.map(function (contact) {
+async function initDefaultContacts(uid, batch) {
+  for (let i = 0; i < DEFAULT_CONTACTS.length; i++) {
+    const contact = DEFAULT_CONTACTS[i];
     const contactRef = window.fbDoc(
       window.firebaseDb,
       "users",
@@ -70,24 +81,33 @@ async function initDefaultContacts(uid) {
       "contacts",
       String(contact.id),
     );
-    return window.fbSetDoc(contactRef, {
-      name: contact.name,
-      email: contact.email,
-      phone: contact.phone,
-      color: contact.color,
-      initials: contact.initials,
-    });
-  });
-  await Promise.all(writes);
+    if (batch) {
+      batch.set(contactRef, {
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+        color: contact.color,
+        initials: contact.initials,
+      });
+    } else {
+      await window.fbSetDoc(contactRef, {
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone,
+        color: contact.color,
+        initials: contact.initials,
+      });
+    }
+  }
 }
 
 /**
  * Schreibt die Standard-Tasks für einen neuen Benutzer (oder Gast) in Firestore
- * Alle Writes laufen parallel für bessere Performance
  * @param {string} uid - Die Firebase User-ID
  */
-async function initDefaultTasks(uid) {
-  const writes = DEFAULT_TASKS.map(function (task) {
+async function initDefaultTasks(uid, batch) {
+  for (let i = 0; i < DEFAULT_TASKS.length; i++) {
+    const task = DEFAULT_TASKS[i];
     const taskRef = window.fbDoc(
       window.firebaseDb,
       "users",
@@ -95,9 +115,12 @@ async function initDefaultTasks(uid) {
       "tasks",
       String(task.id),
     );
-    return window.fbSetDoc(taskRef, task);
-  });
-  await Promise.all(writes);
+    if (batch) {
+      batch.set(taskRef, task);
+    } else {
+      await window.fbSetDoc(taskRef, task);
+    }
+  }
 }
 
 /**
@@ -119,8 +142,12 @@ async function loginUser(email, password) {
       profile.name !== "User" ? profile.name : user.displayName || profile.name;
     const userEmail = profile.email || user.email;
     if (profile.name === "User" || !profile.email) {
-      await saveUserProfile(user.uid, userName, userEmail);
-      await initDefaultContacts(user.uid);
+      const batch = window.fbWriteBatch(window.firebaseDb);
+      await Promise.all([
+        saveUserProfile(user.uid, userName, userEmail, batch),
+        initDefaultContacts(user.uid, batch),
+      ]);
+      await batch.commit();
     }
     const sessionUser = {
       id: user.uid,
@@ -153,17 +180,11 @@ async function loadUserProfile(uid) {
 }
 
 /**
- * Meldet einen Gast-Benutzer über Firebase Anonymous Auth an.
- * Beim ersten Login wird das Profil im Hintergrund angelegt.
- * Beim zweiten Login (Cache vorhanden) wird Firebase komplett übersprungen –
- * das passiert in script.js (guestLogin), diese Funktion wird dann nicht mehr aufgerufen.
+ * Meldet einen Gast-Benutzer über Firebase Anonymous Auth an
  * @returns {Object} Ergebnis-Objekt mit success und user
  */
 async function guestLoginUser() {
   try {
-    const cachedUid = localStorage.getItem("join_guest_uid");
-    const profileReady = localStorage.getItem("join_guest_profile_ready");
-
     const userCredential = await window.fbSignInAnon(window.firebaseAuth);
     const user = userCredential.user;
     const guestSession = {
@@ -172,18 +193,9 @@ async function guestLoginUser() {
       email: "guest@join.com",
       isGuest: true,
     };
-
-    // Session sofort setzen – nicht auf Firestore-Writes warten
+    await ensureGuestProfile(user.uid);
     sessionStorage.setItem("join_current_user", JSON.stringify(guestSession));
     sessionStorage.setItem("showJoinGreeting", "true");
-
-    // Profil nur initialisieren wenn noch nie gemacht (anhand gecachter UID)
-    if (!profileReady || cachedUid !== user.uid) {
-      ensureGuestProfile(user.uid).catch(function (err) {
-        console.warn("Background guest profile init failed:", err);
-      });
-    }
-
     console.log("Guest logged in with uid:", user.uid);
     return { success: true, user: guestSession };
   } catch (error) {
@@ -193,26 +205,26 @@ async function guestLoginUser() {
 }
 
 /**
- * Stellt sicher, dass ein Gast-Profil in Firestore existiert.
- * Speichert die UID im localStorage damit der nächste Login sofort passiert.
+ * Stellt sicher, dass ein Gast-Profil in Firestore existiert
  * @param {string} uid - Die Firebase User-ID des Gasts
  */
 async function ensureGuestProfile(uid) {
   const userRef = window.fbDoc(window.firebaseDb, "users", uid);
   const docSnap = await window.fbGetDoc(userRef);
   if (!docSnap.exists()) {
-    await window.fbSetDoc(userRef, {
+    const batch = window.fbWriteBatch(window.firebaseDb);
+    batch.set(userRef, {
       name: "Gast",
       email: "guest@join.com",
       isGuest: true,
       createdAt: new Date().toISOString(),
     });
-    // Contacts und Tasks parallel schreiben
-    await Promise.all([initDefaultContacts(uid), initDefaultTasks(uid)]);
+    await Promise.all([
+      initDefaultContacts(uid, batch),
+      initDefaultTasks(uid, batch),
+    ]);
+    await batch.commit();
   }
-  // UID und Status cachen – beim nächsten Login kein Firebase-Call mehr nötig
-  localStorage.setItem("join_guest_uid", uid);
-  localStorage.setItem("join_guest_profile_ready", "true");
 }
 
 /**

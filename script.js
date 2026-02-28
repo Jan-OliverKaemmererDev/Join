@@ -22,29 +22,9 @@ async function handleLogin(event) {
 }
 
 /**
- * Führt einen Gast-Login durch.
- * Beim zweiten Aufruf (localStorage-Cache vorhanden) wird kein
- * Firebase-Request mehr gemacht – sofortige Weiterleitung.
+ * Führt einen Gast-Login durch
  */
 async function guestLogin() {
-  const cachedUid = localStorage.getItem("join_guest_uid");
-  const profileReady = localStorage.getItem("join_guest_profile_ready");
-
-  if (cachedUid && profileReady) {
-    // Kein Firebase-Call nötig – sofort weiterleiten
-    const guestSession = {
-      id: cachedUid,
-      name: "Gast",
-      email: "guest@join.com",
-      isGuest: true,
-    };
-    sessionStorage.setItem("join_current_user", JSON.stringify(guestSession));
-    sessionStorage.setItem("showJoinGreeting", "true");
-    window.location.href = "summaryguest.html";
-    return;
-  }
-
-  // Erster Login: Firebase Anonymous Auth durchführen
   await waitForFirebase();
   const result = await guestLoginUser();
   if (result.success) {
