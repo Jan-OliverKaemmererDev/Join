@@ -366,3 +366,10 @@
     text-decoration: underline;
   }
 }
+
+@media (max-width: 380px) {
+
+.mobile-signup {
+  margin-top: 16px !important;
+}
+}
