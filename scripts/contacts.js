@@ -129,8 +129,19 @@ function applyDesktopContactDetailsVisibility() {
 }
 
 function closeContactDetails() {
-  const container = document.querySelector(".contact-details-container");
-  container.classList.remove("show-mobile");
+  const containerMobile = document.querySelector(".contact-details-container");
+  const containerDesktop = document.getElementById("contact-details-view");
+  const content = document.getElementById("contact-details-content");
+
+  if (containerMobile) containerMobile.classList.remove("show-mobile");
+  if (containerDesktop) containerDesktop.classList.remove("visible");
+
+  if (content) {
+    setTimeout(function () {
+      content.innerHTML = "";
+    }, 200); // Wait for transition
+  }
+
   const items = document.querySelectorAll(".contact-item");
   items.forEach(function (item) {
     item.classList.remove("active");
