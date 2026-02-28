@@ -95,6 +95,11 @@ async function initSummaryGuest() {
   initSideMenu("summary");
   displayGuestInitials();
   updateGreeting();
-  await updateTaskMetrics(GUEST_USER);
+
+  const currentUser = getCurrentUser();
+  if (currentUser) {
+    await updateTaskMetrics(currentUser);
+  }
+
   checkMobileGreeting();
 }
