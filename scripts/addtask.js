@@ -51,9 +51,12 @@ async function handleAddTask(event) {
   showToast("Task added to board");
   dispatchTaskAddedEvent(task);
   clearForm();
-  setTimeout(() => {
-    window.location.href = "board.html";
-  }, 300);
+
+  if (!window.location.pathname.includes("board.html")) {
+    setTimeout(() => {
+      window.location.href = "board.html";
+    }, 300);
+  }
 }
 
 /**
@@ -249,9 +252,11 @@ async function handleEditTask(event, taskId) {
     await window.fbSetDoc(taskRef, task);
     showToast("Task updated successfully");
 
-    setTimeout(function () {
-      window.location.href = "board.html";
-    }, 300);
+    if (!window.location.pathname.includes("board.html")) {
+      setTimeout(function () {
+        window.location.href = "board.html";
+      }, 300);
+    }
   } catch (error) {
     console.error("Error updating task:", error);
   }
