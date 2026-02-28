@@ -15,7 +15,6 @@ function getContactItemTemplate(contact) {
   `;
 }
 
-
 /**
  * --- DETAIL ANSICHT LOGIK ---
  */
@@ -26,7 +25,6 @@ function getContactDetailsTemplate(contact) {
     return getDesktopContactDetailsTemplate(contact);
   }
 }
-
 
 function getDesktopContactDetailsTemplate(contact) {
   return `
@@ -61,7 +59,6 @@ function getDesktopContactDetailsTemplate(contact) {
     </div>
   `;
 }
-
 
 function getMobileContactDetailsTemplate(contact) {
   return `
@@ -105,7 +102,6 @@ function getMobileContactDetailsTemplate(contact) {
   `;
 }
 
-
 /**
  * --- EDIT DIALOG LOGIK (Screenshot Design) ---
  */
@@ -116,7 +112,6 @@ function getEditContactDialogTemplate(contact) {
     return getDesktopEditContactTemplate(contact);
   }
 }
-
 
 function getDesktopEditContactTemplate(contact) {
   return `
@@ -151,7 +146,7 @@ function getDesktopEditContactTemplate(contact) {
               <img src="./assets/login-screen/mail.svg" class="input-icon">
             </div>
             <div class="input-group">
-              <input type="tel" value="${contact.phone}" required id="edit-contact-phone" placeholder="Phone">
+              <input type="tel" value="${contact.phone}" required id="edit-contact-phone" placeholder="Phone" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]+" title="Please enter only numbers">
               <img src="./assets/icons/phone.svg" class="input-icon">
             </div>
             
@@ -167,7 +162,6 @@ function getDesktopEditContactTemplate(contact) {
     </div>
   `;
 }
-
 
 function getMobileEditContactTemplate(contact) {
   return `
@@ -195,7 +189,7 @@ function getMobileEditContactTemplate(contact) {
             <img src="./assets/login-screen/mail.svg" class="input-icon">
           </div>
           <div class="input-group">
-            <input type="tel" value="${contact.phone}" required id="edit-contact-phone" placeholder="Phone">
+            <input type="tel" value="${contact.phone}" required id="edit-contact-phone" placeholder="Phone" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]+" title="Please enter only numbers">
             <img src="./assets/icons/phone.svg" class="input-icon">
           </div>
           
@@ -209,7 +203,6 @@ function getMobileEditContactTemplate(contact) {
   `;
 }
 
-
 /**
  * --- ADD CONTACT DIALOG LOGIK ---
  */
@@ -220,7 +213,6 @@ function getAddContactDialogTemplate() {
     return getDesktopAddContactTemplate();
   }
 }
-
 
 function getDesktopAddContactTemplate() {
   return `
@@ -256,7 +248,7 @@ function getDesktopAddContactTemplate() {
               <img src="./assets/login-screen/mail.svg" class="input-icon">
             </div>
             <div class="input-group">
-              <input type="tel" placeholder="Phone" required id="new-contact-phone">
+              <input type="tel" placeholder="Phone" required id="new-contact-phone" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]+" title="Please enter only numbers">
               <img src="./assets/icons/phone.svg" class="input-icon">
             </div>
             
@@ -274,7 +266,6 @@ function getDesktopAddContactTemplate() {
     </div>
   `;
 }
-
 
 function getMobileAddContactTemplate() {
   return `
@@ -303,7 +294,7 @@ function getMobileAddContactTemplate() {
             <img src="./assets/login-screen/mail.svg" class="input-icon">
           </div>
           <div class="input-group">
-            <input type="tel" placeholder="Phone" required id="new-contact-phone">
+            <input type="tel" placeholder="Phone" required id="new-contact-phone" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]+" title="Please enter only numbers">
             <img src="./assets/icons/phone.svg" class="input-icon">
           </div>
           
@@ -316,14 +307,12 @@ function getMobileAddContactTemplate() {
   `;
 }
 
-
 /**
  * --- HELPER TEMPLATES ---
  */
 function getContactGroupLetterTemplate(letter) {
   return `<div class="contact-group-letter">${letter}</div>`;
 }
-
 
 function getSeparatorLineTemplate() {
   return `<div class="separator-line" style="border-bottom: 1px solid #D1D1D1; margin: 0 24px 10px 24px;"></div>`;
