@@ -58,11 +58,11 @@ async function saveUserProfile(uid, name, email) {
 
 /**
  * Schreibt die Standard-Kontakte für einen neuen Benutzer in Firestore
+ * Alle Writes laufen parallel für bessere Performance
  * @param {string} uid - Die Firebase User-ID
  */
 async function initDefaultContacts(uid) {
-  for (let i = 0; i < DEFAULT_CONTACTS.length; i++) {
-    const contact = DEFAULT_CONTACTS[i];
+  const writes = DEFAULT_CONTACTS.map(function (contact) {
     const contactRef = window.fbDoc(
       window.firebaseDb,
       "users",
@@ -70,23 +70,24 @@ async function initDefaultContacts(uid) {
       "contacts",
       String(contact.id),
     );
-    await window.fbSetDoc(contactRef, {
+    return window.fbSetDoc(contactRef, {
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
       color: contact.color,
       initials: contact.initials,
     });
-  }
+  });
+  await Promise.all(writes);
 }
 
 /**
  * Schreibt die Standard-Tasks für einen neuen Benutzer (oder Gast) in Firestore
+ * Alle Writes laufen parallel für bessere Performance
  * @param {string} uid - Die Firebase User-ID
  */
 async function initDefaultTasks(uid) {
-  for (let i = 0; i < DEFAULT_TASKS.length; i++) {
-    const task = DEFAULT_TASKS[i];
+  const writes = DEFAULT_TASKS.map(function (task) {
     const taskRef = window.fbDoc(
       window.firebaseDb,
       "users",
@@ -94,8 +95,9 @@ async function initDefaultTasks(uid) {
       "tasks",
       String(task.id),
     );
-    await window.fbSetDoc(taskRef, task);
-  }
+    return window.fbSetDoc(taskRef, task);
+  });
+  await Promise.all(writes);
 }
 
 /**
@@ -151,11 +153,17 @@ async function loadUserProfile(uid) {
 }
 
 /**
- * Meldet einen Gast-Benutzer über Firebase Anonymous Auth an
+ * Meldet einen Gast-Benutzer über Firebase Anonymous Auth an.
+ * Beim ersten Login wird das Profil im Hintergrund angelegt.
+ * Beim zweiten Login (Cache vorhanden) wird Firebase komplett übersprungen –
+ * das passiert in script.js (guestLogin), diese Funktion wird dann nicht mehr aufgerufen.
  * @returns {Object} Ergebnis-Objekt mit success und user
  */
 async function guestLoginUser() {
   try {
+    const cachedUid = localStorage.getItem("join_guest_uid");
+    const profileReady = localStorage.getItem("join_guest_profile_ready");
+
     const userCredential = await window.fbSignInAnon(window.firebaseAuth);
     const user = userCredential.user;
     const guestSession = {
@@ -164,9 +172,18 @@ async function guestLoginUser() {
       email: "guest@join.com",
       isGuest: true,
     };
-    await ensureGuestProfile(user.uid);
+
+    // Session sofort setzen – nicht auf Firestore-Writes warten
     sessionStorage.setItem("join_current_user", JSON.stringify(guestSession));
     sessionStorage.setItem("showJoinGreeting", "true");
+
+    // Profil nur initialisieren wenn noch nie gemacht (anhand gecachter UID)
+    if (!profileReady || cachedUid !== user.uid) {
+      ensureGuestProfile(user.uid).catch(function (err) {
+        console.warn("Background guest profile init failed:", err);
+      });
+    }
+
     console.log("Guest logged in with uid:", user.uid);
     return { success: true, user: guestSession };
   } catch (error) {
@@ -176,7 +193,8 @@ async function guestLoginUser() {
 }
 
 /**
- * Stellt sicher, dass ein Gast-Profil in Firestore existiert
+ * Stellt sicher, dass ein Gast-Profil in Firestore existiert.
+ * Speichert die UID im localStorage damit der nächste Login sofort passiert.
  * @param {string} uid - Die Firebase User-ID des Gasts
  */
 async function ensureGuestProfile(uid) {
@@ -189,9 +207,12 @@ async function ensureGuestProfile(uid) {
       isGuest: true,
       createdAt: new Date().toISOString(),
     });
-    await initDefaultContacts(uid);
-    await initDefaultTasks(uid);
+    // Contacts und Tasks parallel schreiben
+    await Promise.all([initDefaultContacts(uid), initDefaultTasks(uid)]);
   }
+  // UID und Status cachen – beim nächsten Login kein Firebase-Call mehr nötig
+  localStorage.setItem("join_guest_uid", uid);
+  localStorage.setItem("join_guest_profile_ready", "true");
 }
 
 /**
