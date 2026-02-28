@@ -39,7 +39,6 @@ async function signUpUser(name, email, password) {
     ]);
     await batch.commit();
 
-    console.log("User registered successfully:", email);
     return { success: true, message: "Registrierung erfolgreich" };
   } catch (error) {
     console.error("Signup error:", error);
@@ -159,7 +158,6 @@ async function loginUser(email, password) {
     };
     sessionStorage.setItem("join_current_user", JSON.stringify(sessionUser));
     sessionStorage.setItem("showJoinGreeting", "true");
-    console.log("User logged in:", email);
     return { success: true, user: sessionUser };
   } catch (error) {
     console.error("Login error:", error);
@@ -198,7 +196,6 @@ async function guestLoginUser() {
     await ensureGuestProfile(user.uid);
     sessionStorage.setItem("join_current_user", JSON.stringify(guestSession));
     sessionStorage.setItem("showJoinGreeting", "true");
-    console.log("Guest logged in with uid:", user.uid);
     return { success: true, user: guestSession };
   } catch (error) {
     console.error("Guest login error:", error);
@@ -248,7 +245,6 @@ async function logoutUser() {
     console.error("Logout error:", error);
   }
   sessionStorage.removeItem("join_current_user");
-  console.log("User logged out");
 }
 
 /**

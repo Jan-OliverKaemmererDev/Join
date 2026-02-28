@@ -14,7 +14,6 @@ async function handleLogin(event) {
   const password = document.getElementById("password").value;
   const result = await loginUser(email, password);
   if (result.success) {
-    console.log("Login erfolgreich:", result.user.name);
     window.location.href = "summaryuser.html";
   } else {
     showLoginError(result.message);
@@ -28,7 +27,6 @@ async function guestLogin() {
   await waitForFirebase();
   const result = await guestLoginUser();
   if (result.success) {
-    console.log("Gast-Login erfolgreich");
     window.location.href = "summaryguest.html";
   } else {
     showLoginError(result.message);
