@@ -53,7 +53,7 @@ async function handleAddTask(event) {
   clearForm();
   setTimeout(() => {
     window.location.href = "board.html";
-  }, 1000);
+  }, 300);
 }
 
 /**
@@ -251,7 +251,7 @@ async function handleEditTask(event, taskId) {
 
     setTimeout(function () {
       window.location.href = "board.html";
-    }, 1000);
+    }, 300);
   } catch (error) {
     console.error("Error updating task:", error);
   }

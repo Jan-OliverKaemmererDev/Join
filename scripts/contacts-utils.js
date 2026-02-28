@@ -103,10 +103,10 @@ function showSuccessAlert() {
 function showAlertWithDelay(alert) {
   setTimeout(function () {
     alert.classList.add("show");
-  }, 100);
+  }, 50);
   setTimeout(function () {
     hideAndRemoveAlert(alert);
-  }, 2000);
+  }, 800);
 }
 
 function hideAndRemoveAlert(alert) {

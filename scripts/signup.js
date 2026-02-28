@@ -81,5 +81,5 @@ function showSuccessMessageAndRedirect() {
   msg.classList.remove("d-none");
   setTimeout(function () {
     window.location.href = "index.html";
-  }, 1500);
+  }, 800);
 }
