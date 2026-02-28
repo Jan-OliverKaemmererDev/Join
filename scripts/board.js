@@ -205,8 +205,10 @@ async function moveTo(status) {
   const taskIndex = findTaskById(currentDraggedTaskId);
   if (taskIndex !== -1) {
     tasks[taskIndex].status = status;
-    await saveSingleTask(tasks[taskIndex]);
+    // UI sofort aktualisieren (Optimistisches Update)
     renderTasks();
+    // Im Hintergrund speichern
+    await saveSingleTask(tasks[taskIndex]);
   }
   currentDraggedTaskId = null;
 }
