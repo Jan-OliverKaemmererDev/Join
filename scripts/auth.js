@@ -39,7 +39,7 @@ async function signUpUser(name, email, password) {
     ]);
     await batch.commit();
 
-    return { success: true, message: "Registrierung erfolgreich" };
+    return { success: true, message: "Registration successful" };
   } catch (error) {
     console.error("Signup error:", error);
     return handleFirebaseError(error);
@@ -189,7 +189,7 @@ async function guestLoginUser() {
     const user = userCredential.user;
     const guestSession = {
       id: user.uid,
-      name: "Gast",
+      name: "Guest",
       email: "guest@join.com",
       isGuest: true,
     };
@@ -213,7 +213,7 @@ async function ensureGuestProfile(uid) {
   if (!docSnap.exists()) {
     const batch = window.fbWriteBatch(window.firebaseDb);
     batch.set(userRef, {
-      name: "Gast",
+      name: "Guest",
       email: "guest@join.com",
       isGuest: true,
       createdAt: new Date().toISOString(),
@@ -261,35 +261,35 @@ function isLoggedIn() {
  * @returns {Object} Das Fehler-Objekt
  */
 function handleFirebaseError(error) {
-  let message = "Ein Fehler ist aufgetreten";
+  let message = "An error occurred";
   let errorCode = error.code || "unknown";
   switch (error.code) {
     case "auth/email-already-in-use":
-      message = "Diese E-Mail-Adresse ist bereits registriert";
+      message = "This email address is already registered";
       errorCode = "duplicate-email";
       break;
     case "auth/invalid-email":
-      message = "Ungültige E-Mail-Adresse";
+      message = "Invalid email address";
       errorCode = "invalid-email";
       break;
     case "auth/weak-password":
-      message = "Das Passwort ist zu schwach (mindestens 6 Zeichen)";
+      message = "The password is too weak (at least 6 characters)";
       errorCode = "weak-password";
       break;
     case "auth/user-not-found":
-      message = "Benutzer nicht gefunden";
+      message = "User not found";
       errorCode = "user-not-found";
       break;
     case "auth/wrong-password":
-      message = "Falsches Passwort";
+      message = "Wrong password";
       errorCode = "wrong-password";
       break;
     case "auth/invalid-credential":
-      message = "E-Mail oder Passwort ist falsch";
+      message = "Email or password is incorrect";
       errorCode = "invalid-credential";
       break;
     default:
-      message = "Ein Fehler ist aufgetreten: " + error.message;
+      message = "An error occurred: " + error.message;
   }
   return { success: false, error: errorCode, message: message };
 }

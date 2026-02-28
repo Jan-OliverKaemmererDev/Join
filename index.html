@@ -42,7 +42,7 @@
       <section class="login-card" aria-labelledby="login-heading">
         <h1 id="login-heading">Log in</h1>
         <div class="blue-underline"></div>
-        <form onsubmit="handleLogin(event)">
+        <form onsubmit="handleLogin(event)" novalidate>
           <input type="email" id="email" placeholder="Email" required />
           <input
             type="password"
@@ -50,6 +50,9 @@
             placeholder="Password"
             required
           />
+          <div id="login-error" class="error-message d-none">
+            Check your email and password. Please try again.
+          </div>
           <div class="login-actions">
             <button type="submit" class="btn-dark">Log in</button>
             <button type="button" class="btn-light" onclick="guestLogin()">

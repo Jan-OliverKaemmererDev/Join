@@ -87,6 +87,19 @@ button:hover {
   display: none;
 }
 
+.input-error {
+  border: 1px solid #ff8190 !important;
+}
+
+.error-message {
+  color: #ff8190;
+  font-size: 14px;
+  margin-top: -15px;
+  margin-bottom: 5px;
+  width: 100%;
+  text-align: center;
+}
+
 /* ---- Toast Nachricht ---- */
 
 .toast-message {

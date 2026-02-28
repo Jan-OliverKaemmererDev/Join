@@ -35,10 +35,10 @@ async function handleRegistration(event) {
   }
   const result = await signUpUser(name, email, pass);
   if (result.success) {
-    console.log("Benutzer erfolgreich registriert:", email);
+    console.log("User successfully registered:", email);
     showSuccessMessageAndRedirect();
   } else {
-    console.error("Registrierungsfehler:", result.error, result.message);
+    console.error("Registration error:", result.error, result.message);
     handleRegistrationError(result);
   }
 }
@@ -48,7 +48,19 @@ async function handleRegistration(event) {
  */
 function showPasswordError() {
   const errorMsg = document.getElementById("error-message");
-  errorMsg.classList.remove("d-none");
+  const confirmPassInput = document.getElementById("confirm-password");
+
+  if (errorMsg) {
+    errorMsg.classList.remove("d-none");
+  }
+  confirmPassInput.classList.add("input-error");
+
+  const resetError = () => {
+    if (errorMsg) errorMsg.classList.add("d-none");
+    confirmPassInput.classList.remove("input-error");
+    confirmPassInput.removeEventListener("input", resetError);
+  };
+  confirmPassInput.addEventListener("input", resetError);
 }
 
 /**
@@ -57,20 +69,23 @@ function showPasswordError() {
  */
 function handleRegistrationError(result) {
   const errorMsg = document.getElementById("error-message");
-  switch (result.error) {
-    case "duplicate-email":
-      errorMsg.textContent = result.message;
-      break;
-    case "weak-password":
-      errorMsg.textContent = result.message;
-      break;
-    case "invalid-email":
-      errorMsg.textContent = result.message;
-      break;
-    default:
-      errorMsg.textContent = "Fehler bei der Registrierung: " + result.message;
+  const emailInput = document.getElementById("email");
+
+  if (errorMsg) {
+    errorMsg.textContent = result.message;
+    errorMsg.classList.remove("d-none");
   }
-  errorMsg.classList.remove("d-none");
+
+  if (result.error === "duplicate-email" || result.error === "invalid-email") {
+    emailInput.classList.add("input-error");
+  }
+
+  const resetError = () => {
+    if (errorMsg) errorMsg.classList.add("d-none");
+    emailInput.classList.remove("input-error");
+    emailInput.removeEventListener("input", resetError);
+  };
+  emailInput.addEventListener("input", resetError);
 }
 
 /**

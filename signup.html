@@ -34,7 +34,7 @@
 
         <div class="blue-underline"></div>
 
-        <form id="signup-form" onsubmit="handleRegistration(event)">
+        <form id="signup-form" onsubmit="handleRegistration(event)" novalidate>
           <input
             type="text"
             id="name"
@@ -95,8 +95,8 @@
             >
           </div>
 
-          <div id="error-message" class="error-text d-none">
-            Passwords do not match
+          <div id="error-message" class="error-message d-none">
+            Your passwords don't match. Please try again.
           </div>
 
           <div class="login-actions center-button">

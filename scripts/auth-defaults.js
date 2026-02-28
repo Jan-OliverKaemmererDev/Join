@@ -1,6 +1,6 @@
 const GUEST_USER = {
   id: "guest",
-  name: "Gast",
+  name: "Guest",
   email: "guest@join.com",
   isGuest: true,
 };

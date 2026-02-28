@@ -10,13 +10,13 @@ function initLogin() {}
 async function handleLogin(event) {
   event.preventDefault();
   await waitForFirebase();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const result = await loginUser(email, password);
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const result = await loginUser(emailInput.value, passwordInput.value);
   if (result.success) {
     window.location.href = "summaryuser.html";
   } else {
-    showLoginError(result.message);
+    showLoginError();
   }
 }
 
@@ -37,23 +37,28 @@ async function guestLogin() {
  * Zeigt eine Login-Fehlermeldung an
  * @param {string} message - Die anzuzeigende Fehlermeldung
  */
-function showLoginError(message) {
-  let errorMsg = document.getElementById("login-error");
-  if (!errorMsg) {
-    errorMsg = document.createElement("div");
-    errorMsg.id = "login-error";
-    errorMsg.className = "error-message";
-    errorMsg.style.color = "red";
-    errorMsg.style.marginTop = "10px";
-    errorMsg.style.textAlign = "center";
-    const form = document.querySelector("form");
-    form.appendChild(errorMsg);
+function showLoginError() {
+  const errorMsg = document.getElementById("login-error");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+
+  if (errorMsg) {
+    errorMsg.classList.remove("d-none");
   }
-  errorMsg.textContent = message;
-  errorMsg.style.display = "block";
-  setTimeout(function () {
-    errorMsg.style.display = "none";
-  }, 5000);
+
+  emailInput.classList.add("input-error");
+  passwordInput.classList.add("input-error");
+
+  const resetError = () => {
+    if (errorMsg) errorMsg.classList.add("d-none");
+    emailInput.classList.remove("input-error");
+    passwordInput.classList.remove("input-error");
+    emailInput.removeEventListener("input", resetError);
+    passwordInput.removeEventListener("input", resetError);
+  };
+
+  emailInput.addEventListener("input", resetError);
+  passwordInput.addEventListener("input", resetError);
 }
 
 /**
