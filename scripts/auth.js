@@ -35,6 +35,7 @@ async function signUpUser(name, email, password) {
     await Promise.all([
       saveUserProfile(user.uid, name, email, batch),
       initDefaultContacts(user.uid, batch),
+      initDefaultTasks(user.uid, batch),
     ]);
     await batch.commit();
 
@@ -146,6 +147,7 @@ async function loginUser(email, password) {
       await Promise.all([
         saveUserProfile(user.uid, userName, userEmail, batch),
         initDefaultContacts(user.uid, batch),
+        initDefaultTasks(user.uid, batch),
       ]);
       await batch.commit();
     }

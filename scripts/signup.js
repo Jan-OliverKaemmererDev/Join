@@ -5,7 +5,6 @@ function initSignup() {
   checkFormValidity();
 }
 
-
 /**
  * Überprüft die Gültigkeit des Registrierungs-Formulars
  */
@@ -18,7 +17,6 @@ function checkFormValidity() {
   const btn = document.getElementById("signup-btn");
   btn.disabled = !(name && email && pass && confirm && privacy);
 }
-
 
 /**
  * Verarbeitet die Benutzerregistrierung
@@ -45,7 +43,6 @@ async function handleRegistration(event) {
   }
 }
 
-
 /**
  * Zeigt eine Passwort-Fehlermeldung an
  */
@@ -53,7 +50,6 @@ function showPasswordError() {
   const errorMsg = document.getElementById("error-message");
   errorMsg.classList.remove("d-none");
 }
-
 
 /**
  * Verarbeitet Registrierungsfehler und zeigt entsprechende Meldungen
@@ -77,7 +73,6 @@ function handleRegistrationError(result) {
   errorMsg.classList.remove("d-none");
 }
 
-
 /**
  * Zeigt eine Erfolgsmeldung an und leitet zur Login-Seite weiter
  */
@@ -86,5 +81,5 @@ function showSuccessMessageAndRedirect() {
   msg.classList.remove("d-none");
   setTimeout(function () {
     window.location.href = "index.html";
-  }, 3000);
+  }, 1500);
 }
