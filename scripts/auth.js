@@ -236,15 +236,67 @@ function getCurrentUser() {
 }
 
 /**
- * Meldet den aktuellen Benutzer ab
+ * Meldet den aktuellen Benutzer ab und löscht Gast-Daten falls zutreffend
  */
 async function logoutUser() {
+  const currentUser = getCurrentUser();
+  const firebaseUser = window.firebaseAuth.currentUser;
+
+  if (
+    currentUser &&
+    currentUser.isGuest &&
+    firebaseUser &&
+    firebaseUser.isAnonymous
+  ) {
+    await deleteUserData(currentUser.id);
+    try {
+      await firebaseUser.delete();
+    } catch (e) {
+      console.warn("Could not delete anonymous auth user:", e);
+    }
+  }
+
   try {
     await window.fbSignOut(window.firebaseAuth);
   } catch (error) {
     console.error("Logout error:", error);
   }
   sessionStorage.removeItem("join_current_user");
+}
+
+/**
+ * Löscht alle Daten eines Benutzers aus Firestore
+ * @param {string} uid - Die Firebase User-ID
+ */
+async function deleteUserData(uid) {
+  try {
+    const batch = window.fbWriteBatch(window.firebaseDb);
+
+    const tasksRef = window.fbCollection(
+      window.firebaseDb,
+      "users",
+      uid,
+      "tasks",
+    );
+    const tasksSnap = await window.fbGetDocs(tasksRef);
+    tasksSnap.forEach((doc) => batch.delete(doc.ref));
+
+    const contactsRef = window.fbCollection(
+      window.firebaseDb,
+      "users",
+      uid,
+      "contacts",
+    );
+    const contactsSnap = await window.fbGetDocs(contactsRef);
+    contactsSnap.forEach((doc) => batch.delete(doc.ref));
+
+    const userRef = window.fbDoc(window.firebaseDb, "users", uid);
+    batch.delete(userRef);
+
+    await batch.commit();
+  } catch (error) {
+    console.error("Error deleting guest data:", error);
+  }
 }
 
 /**
