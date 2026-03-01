@@ -279,8 +279,8 @@ function checkMobileGreeting() {
         setTimeout(() => {
           greetingContainer.classList.remove("mobile-greeting-overlay");
           greetingContainer.classList.remove("fade-out");
-        }, 300);
-      }, 300);
+        }, 500); // Wait for transition to finish
+      }, 1500); // Display for 1.5 seconds
     }
   }
 }

@@ -367,9 +367,8 @@
   }
 }
 
-@media (max-width: 380px) {
-
-.mobile-signup {
-  margin-top: 16px !important;
-}
+@media (max-width: 400px) {
+  .mobile-signup {
+    margin-top: 16px !important;
+  }
 }

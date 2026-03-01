@@ -368,7 +368,10 @@
   .greeting-container.fade-out {
     display: flex !important;
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background-color: #f6f7f8;
     flex-direction: column;
     align-items: center;
