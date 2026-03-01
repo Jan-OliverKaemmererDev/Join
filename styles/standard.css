@@ -87,6 +87,11 @@ button:hover {
   display: none;
 }
 
+.v-none {
+  visibility: hidden;
+  opacity: 0;
+}
+
 .input-error {
   border: 1px solid #ff8190 !important;
 }
@@ -98,6 +103,7 @@ button:hover {
   margin-bottom: 5px;
   width: 100%;
   text-align: center;
+  transition: opacity 200ms ease-in-out;
 }
 
 /* ---- Toast Nachricht ---- */

@@ -43,14 +43,14 @@ function showLoginError() {
   const passwordInput = document.getElementById("password");
 
   if (errorMsg) {
-    errorMsg.classList.remove("d-none");
+    errorMsg.classList.remove("v-none");
   }
 
   emailInput.classList.add("input-error");
   passwordInput.classList.add("input-error");
 
   const resetError = () => {
-    if (errorMsg) errorMsg.classList.add("d-none");
+    if (errorMsg) errorMsg.classList.add("v-none");
     emailInput.classList.remove("input-error");
     passwordInput.classList.remove("input-error");
     emailInput.removeEventListener("input", resetError);

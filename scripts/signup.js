@@ -51,12 +51,12 @@ function showPasswordError() {
   const confirmPassInput = document.getElementById("confirm-password");
 
   if (errorMsg) {
-    errorMsg.classList.remove("d-none");
+    errorMsg.classList.remove("v-none");
   }
   confirmPassInput.classList.add("input-error");
 
   const resetError = () => {
-    if (errorMsg) errorMsg.classList.add("d-none");
+    if (errorMsg) errorMsg.classList.add("v-none");
     confirmPassInput.classList.remove("input-error");
     confirmPassInput.removeEventListener("input", resetError);
   };
@@ -73,7 +73,7 @@ function handleRegistrationError(result) {
 
   if (errorMsg) {
     errorMsg.textContent = result.message;
-    errorMsg.classList.remove("d-none");
+    errorMsg.classList.remove("v-none");
   }
 
   if (result.error === "duplicate-email" || result.error === "invalid-email") {
@@ -81,7 +81,7 @@ function handleRegistrationError(result) {
   }
 
   const resetError = () => {
-    if (errorMsg) errorMsg.classList.add("d-none");
+    if (errorMsg) errorMsg.classList.add("v-none");
     emailInput.classList.remove("input-error");
     emailInput.removeEventListener("input", resetError);
   };
