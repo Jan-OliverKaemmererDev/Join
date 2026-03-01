@@ -27,15 +27,18 @@ function selectCategory(category, event) {
 
 
 // Schließt das Kategorie-Dropdown bei Klick außerhalb
-document.addEventListener("click", function (event) {
-  const wrapper = document.getElementById("category-wrapper");
-  if (wrapper && !wrapper.contains(event.target)) {
-    wrapper.classList.remove("open");
-    const options = document.getElementById("category-options");
-    if (options) options.classList.add("d-none");
-  }
-});
-
+document.addEventListener(
+  "click",
+  function (event) {
+    const wrapper = document.getElementById("category-wrapper");
+    if (wrapper && !wrapper.contains(event.target)) {
+      wrapper.classList.remove("open");
+      const options = document.getElementById("category-options");
+      if (options) options.classList.add("d-none");
+    }
+  },
+  true,
+);
 
 /**
  * Setzt die Board-Dropdowns nach dem Schließen des Overlays zurück

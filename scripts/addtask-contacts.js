@@ -90,14 +90,18 @@ function renderSelectedInitials() {
 }
 
 // Schließt das Dropdown bei Klick außerhalb
-document.addEventListener("click", function (event) {
-  const wrapper = document.getElementById("assigned-to-wrapper");
-  if (wrapper && !wrapper.contains(event.target)) {
-    wrapper.classList.remove("open");
-    const options = document.getElementById("assigned-to-options");
-    if (options) options.classList.add("d-none");
-  }
-});
+document.addEventListener(
+  "click",
+  function (event) {
+    const wrapper = document.getElementById("assigned-to-wrapper");
+    if (wrapper && !wrapper.contains(event.target)) {
+      wrapper.classList.remove("open");
+      const options = document.getElementById("assigned-to-options");
+      if (options) options.classList.add("d-none");
+    }
+  },
+  true,
+);
 
 /**
  * Lädt die zugewiesenen Kontakte in den Formularzustand

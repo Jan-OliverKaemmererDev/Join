@@ -53,7 +53,7 @@ async function handleLogout() {
  * Richtet den Event-Listener für Klicks außerhalb des Menüs ein
  */
 function setupClickOutsideListener() {
-  document.addEventListener("click", handleClickOutside);
+  document.addEventListener("click", handleClickOutside, true);
 }
 
 document.addEventListener("DOMContentLoaded", setupClickOutsideListener);
