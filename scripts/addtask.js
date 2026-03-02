@@ -55,7 +55,7 @@ async function handleAddTask(event) {
   if (!window.location.pathname.includes("board.html")) {
     setTimeout(() => {
       window.location.href = "board.html";
-    }, 300);
+    }, 1000);
   }
 }
 
@@ -255,7 +255,7 @@ async function handleEditTask(event, taskId) {
     if (!window.location.pathname.includes("board.html")) {
       setTimeout(function () {
         window.location.href = "board.html";
-      }, 300);
+      }, 1000);
     }
   } catch (error) {
     console.error("Error updating task:", error);
