@@ -12,6 +12,7 @@ let touchDragTaskId = null;
  */
 async function initBoard() {
   await waitForFirebase();
+  initSideMenu("board");
   await loadTasks();
   await loadContacts(); // Shared from addtask.js
   renderTasks();
