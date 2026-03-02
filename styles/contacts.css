@@ -610,3 +610,23 @@ body {
 .info-label {
   font-weight: bold;
 }
+
+/* ===== Validation Styles ===== */
+.input-error {
+  border: 1px solid #ff3d00 !important;
+  outline: none;
+}
+
+.field-error-msg {
+  display: block;
+  color: #ff3d00;
+  font-size: 12px;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+
+.input-group {
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+}

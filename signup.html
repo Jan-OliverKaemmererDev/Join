@@ -35,52 +35,64 @@
         <div class="blue-underline"></div>
 
         <form id="signup-form" onsubmit="handleRegistration(event)" novalidate>
-          <input
-            type="text"
-            id="name"
-            placeholder="Name"
-            oninput="checkFormValidity()"
-            required
-          />
-
-          <input
-            type="email"
-            id="email"
-            placeholder="Email"
-            oninput="checkFormValidity()"
-            required
-          />
-
-          <div class="input-wrapper">
+          <div class="signup-input-wrap">
             <input
-              type="password"
-              id="password"
-              placeholder="Password"
+              type="text"
+              id="name"
+              placeholder="Name"
               oninput="checkFormValidity()"
               required
             />
-            <img
-              src="./assets/login-screen/visibility_off.svg"
-              onclick="togglePasswordVisibility('password', this)"
-              class="input-icon"
-              alt="Toggle Password"
-            />
+            <span id="hint-name" class="signup-hint"></span>
           </div>
 
-          <div class="input-wrapper">
+          <div class="signup-input-wrap">
             <input
-              type="password"
-              id="confirm-password"
-              placeholder="Confirm Password"
+              type="email"
+              id="email"
+              placeholder="Email"
               oninput="checkFormValidity()"
               required
             />
-            <img
-              src="./assets/login-screen/visibility_off.svg"
-              onclick="togglePasswordVisibility('confirm-password', this)"
-              class="input-icon"
-              alt="Toggle Password"
-            />
+            <span id="hint-email" class="signup-hint"></span>
+          </div>
+
+          <div class="signup-input-wrap">
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                oninput="checkFormValidity()"
+                required
+              />
+              <img
+                src="./assets/login-screen/visibility_off.svg"
+                onclick="togglePasswordVisibility('password', this)"
+                class="input-icon"
+                alt="Toggle Password"
+              />
+            </div>
+            <span id="hint-password" class="signup-hint"></span>
+          </div>
+
+          <div class="signup-input-wrap">
+            <div class="input-wrapper">
+              <input
+                type="password"
+                id="confirm-password"
+                placeholder="Confirm Password"
+                oninput="checkFormValidity()"
+                required
+              />
+              <img
+                src="./assets/login-screen/visibility_off.svg"
+                onclick="togglePasswordVisibility('confirm-password', this)"
+                class="input-icon"
+                alt="Toggle Password"
+              />
+            </div>
+            <span id="hint-confirm-password" class="signup-hint"></span>
           </div>
 
           <div class="privacy-policy-check">

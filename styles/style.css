@@ -308,3 +308,39 @@
 .mobile-nav {
   display: none;
 }
+
+/* ===== Disabled Button State ===== */
+.btn-dark:disabled,
+.btn-dark.btn-disabled {
+  background-color: #d1d1d1;
+  color: #a8a8a8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-dark:disabled:hover,
+.btn-dark.btn-disabled:hover {
+  background-color: #d1d1d1;
+  box-shadow: none;
+}
+
+/* ===== Inline Field Hints ===== */
+.signup-hint {
+  display: none;
+  color: #ff3d00;
+  font-size: 12px;
+  margin-top: 4px;
+  padding-left: 4px;
+}
+
+.signup-input-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+}
+
+.login-input-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 450px;
+}

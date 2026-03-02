@@ -182,11 +182,78 @@ function closeAddContactDialog() {
   }, 300);
 }
 
+function validateContactForm(nameId, emailId, phoneId) {
+  const name = document.getElementById(nameId).value.trim();
+  const email = document.getElementById(emailId).value.trim();
+  const phone = document.getElementById(phoneId).value.trim();
+  let valid = true;
+
+  // Name: mindestens 3 Buchstaben
+  const nameInput = document.getElementById(nameId);
+  const nameLetters = name.replace(/[^a-zA-ZäöüÄÖÜß]/g, "");
+  if (nameLetters.length < 3) {
+    showFieldError(nameId, "Der Name muss mindestens 3 Buchstaben enthalten.");
+    valid = false;
+  } else {
+    clearFieldError(nameId);
+  }
+
+  // Email: valides Format
+  const emailInput = document.getElementById(emailId);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    showFieldError(emailId, "Bitte eine gültige E-Mail-Adresse eingeben.");
+    valid = false;
+  } else {
+    clearFieldError(emailId);
+  }
+
+  // Telefon: mindestens 6 Ziffern
+  if (phone.length < 6) {
+    showFieldError(
+      phoneId,
+      "Bitte eine gültige Telefonnummer eingeben (mind. 6 Ziffern).",
+    );
+    valid = false;
+  } else {
+    clearFieldError(phoneId);
+  }
+
+  return valid;
+}
+
+function showFieldError(inputId, message) {
+  const input = document.getElementById(inputId);
+  input.classList.add("input-error");
+  let errorEl = input.parentElement.querySelector(".field-error-msg");
+  if (!errorEl) {
+    errorEl = document.createElement("span");
+    errorEl.className = "field-error-msg";
+    input.parentElement.appendChild(errorEl);
+  }
+  errorEl.textContent = message;
+}
+
+function clearFieldError(inputId) {
+  const input = document.getElementById(inputId);
+  input.classList.remove("input-error");
+  const errorEl = input.parentElement.querySelector(".field-error-msg");
+  if (errorEl) errorEl.remove();
+}
+
 function createContact(e) {
   e.preventDefault();
   const currentUser = getCurrentUser();
   if (!currentUser) return;
-  const name = document.getElementById("new-contact-name").value;
+  if (
+    !validateContactForm(
+      "new-contact-name",
+      "new-contact-email",
+      "new-contact-phone",
+    )
+  )
+    return;
+  const name = document.getElementById("new-contact-name").value.trim();
   const newContact = buildNewContactObject(name);
   saveNewContactToFirestore(currentUser, newContact);
 }
@@ -215,6 +282,14 @@ function saveContact(e, id) {
   e.preventDefault();
   const currentUser = getCurrentUser();
   if (!currentUser) return;
+  if (
+    !validateContactForm(
+      "edit-contact-name",
+      "edit-contact-email",
+      "edit-contact-phone",
+    )
+  )
+    return;
   const contact = findContactById(id);
   if (!contact) return;
   updateContactFromForm(contact);

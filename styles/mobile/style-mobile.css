@@ -218,6 +218,11 @@
     box-sizing: border-box;
   }
 
+  .login-input-wrap {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
   /* Input Wrapper (für Icons) */
   .input-wrapper {
     position: relative;

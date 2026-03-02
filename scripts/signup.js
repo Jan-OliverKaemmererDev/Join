@@ -6,16 +6,85 @@ function initSignup() {
 }
 
 /**
- * Überprüft die Gültigkeit des Registrierungs-Formulars
+ * Zeigt oder versteckt einen Hinweis unter einem Input-Feld.
+ * @param {string} inputId - ID des Input-Elements
+ * @param {string|null} message - Nachricht oder null zum Ausblenden
+ */
+function setFieldHint(inputId, message) {
+  const input = document.getElementById(inputId);
+  const hint = document.getElementById("hint-" + inputId);
+  if (!input || !hint) return;
+
+  if (message) {
+    input.classList.add("input-error");
+    hint.textContent = message;
+    hint.style.display = "block";
+  } else {
+    input.classList.remove("input-error");
+    hint.textContent = "";
+    hint.style.display = "none";
+  }
+}
+
+/**
+ * Überprüft die Gültigkeit des Registrierungs-Formulars und zeigt Hinweise
  */
 function checkFormValidity() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
   const pass = document.getElementById("password").value;
   const confirm = document.getElementById("confirm-password").value;
   const privacy = document.getElementById("privacy-check").checked;
   const btn = document.getElementById("signup-btn");
-  btn.disabled = !(name && email && pass && confirm && privacy);
+
+  const nameLetters = name.replace(/[^a-zA-ZäöüÄÖÜß]/g, "");
+  const nameValid = nameLetters.length >= 3;
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  const passValid = pass.length >= 6;
+  const confirmValid = confirm === "" ? true : pass === confirm;
+  const confirmComplete = confirm.length >= 1 && pass === confirm;
+
+  // Hinweise nur zeigen, wenn Felder bereits berührt wurden
+  if (name.length > 0) {
+    setFieldHint(
+      "name",
+      nameValid ? null : "Der Name muss mindestens 3 Buchstaben enthalten.",
+    );
+  } else {
+    setFieldHint("name", null);
+  }
+
+  if (email.length > 0) {
+    setFieldHint(
+      "email",
+      emailValid ? null : "Bitte eine gültige E-Mail-Adresse eingeben.",
+    );
+  } else {
+    setFieldHint("email", null);
+  }
+
+  if (pass.length > 0) {
+    setFieldHint(
+      "password",
+      passValid ? null : "Das Passwort muss mindestens 6 Zeichen lang sein.",
+    );
+  } else {
+    setFieldHint("password", null);
+  }
+
+  if (confirm.length > 0) {
+    setFieldHint(
+      "confirm-password",
+      pass === confirm ? null : "Die Passwörter stimmen nicht überein.",
+    );
+  } else {
+    setFieldHint("confirm-password", null);
+  }
+
+  const allValid =
+    nameValid && emailValid && passValid && confirmComplete && privacy;
+  btn.disabled = !allValid;
+  btn.classList.toggle("btn-disabled", !allValid);
 }
 
 /**
