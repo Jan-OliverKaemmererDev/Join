@@ -28,6 +28,7 @@ body {
   flex-direction: column;
   z-index: 2;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .add-contact-btn-container {
@@ -86,12 +87,13 @@ body {
 .contact-item {
   display: flex;
   align-items: center;
-  gap: 35px;
+  gap: 16px;
   padding: 15px 24px;
   border-radius: 10px;
   cursor: pointer;
   margin-bottom: 8px;
   transition: background-color 0.1s;
+  min-width: 0;
 }
 
 .contact-item:hover {
@@ -137,40 +139,56 @@ body {
   color: white;
   font-size: 12px;
   font-weight: 400;
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
+  box-sizing: content-box;
 }
 
 .contact-info-list {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .contact-name-list {
   font-size: 20px;
   font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .contact-email-list {
   text-decoration: none;
   font-size: 16px;
   color: #007cee;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .contact-details-container {
   flex: 1;
   background-color: #f6f7f8;
-  position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  min-width: 280px;
 }
 
 .details-header-static {
-  padding-top: 110px;
+  padding: 40px 24px 20px
+    max(55px, calc((100vw - 232px - 1440px) / 2 + 80px - 456px));
   display: flex;
   align-items: center;
-  gap: 30px;
+  flex-wrap: wrap;
+  gap: 12px 30px;
   width: 100%;
-  padding-left: max(55px, calc((100vw - 232px - 1440px) / 2 + 80px - 456px));
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .details-header-static h1 {
@@ -185,37 +203,38 @@ body {
   color: #2a3647;
   border-left: 3px solid #29abe2;
   padding-left: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .contact-details-view {
-  position: absolute;
-  top: 205px; /* Positioned below the static header  */
-  left: 0;
-  width: 100%;
-  height: calc(100% - 205px);
-  transition: transform 0.2s ease-in-out;
-  z-index: 10;
-  transform: translateX(100%);
+  flex: 1;
+  position: relative;
   overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.2s ease-in-out;
 }
 
 #contact-details-content {
   width: 100%;
-  padding-left: max(55px, calc((100vw - 232px - 1440px) / 2 + 80px - 456px));
   padding-right: 55px;
   box-sizing: border-box;
 }
 
 .contact-details-view.visible {
-  transform: translateX(0); /* Kommt reingefahren */
+  transform: translateX(0);
 }
 
 .contact-header-details {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 54px;
+  gap: 32px;
   margin-bottom: 21px;
   padding-top: 25px;
+  min-width: 0;
 }
 
 .contact-avatar-large {
@@ -232,7 +251,7 @@ body {
   color: white;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
-  box-sizing: content-box;
+  box-sizing: border-box;
   aspect-ratio: 1 / 1;
 }
 
@@ -240,6 +259,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
+  flex: 1;
 }
 
 .contact-name-details {
@@ -247,6 +268,9 @@ body {
   font-weight: 700;
   margin: 0;
   line-height: 1.2;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .contact-actions {
@@ -655,9 +679,8 @@ body {
 @media (min-width: 781px) and (max-width: 1100px) {
   .details-header-static {
     padding-left: 24px;
-    padding-top: 80px;
-    gap: 16px;
-    flex-wrap: wrap;
+    padding-top: 32px;
+    gap: 12px;
   }
 
   .details-header-static h1 {
@@ -665,33 +688,21 @@ body {
   }
 
   .details-header-static p {
-    font-size: 20px;
+    font-size: 18px;
     padding-left: 16px;
-  }
-
-  .contact-avatar-large {
-    width: 80px;
-    height: 80px;
-    font-size: 32px;
-    flex-shrink: 0;
   }
 
   #contact-details-content {
     padding-left: 24px;
     padding-right: 24px;
   }
-
-  .contact-details-view {
-    top: 160px;
-    height: calc(100% - 160px);
-  }
 }
 
-/* ---- Intermediate breakpoint: Liste schmaler damit Detail-Bereich sichtbar bleibt ---- */
-@media (min-width: 781px) and (max-width: 1000px) {
+/* ---- 900px–1100px: Liste schmäler ---- */
+@media (min-width: 901px) and (max-width: 1100px) {
   .contacts-list-container {
-    width: 280px;
-    min-width: 280px;
+    width: 320px;
+    min-width: 320px;
   }
 
   .btn-add-contact {
@@ -700,34 +711,50 @@ body {
     gap: 10px;
   }
 
+  .contact-avatar-large {
+    width: 90px;
+    height: 90px;
+    font-size: 36px;
+  }
+}
+
+/* ---- 781px–900px: Sehr schmale Desktop-Ansicht ---- */
+@media (min-width: 781px) and (max-width: 900px) {
+  .contacts-list-container {
+    width: 240px;
+    min-width: 240px;
+  }
+
+  .btn-add-contact {
+    max-width: 100%;
+    font-size: 14px;
+    gap: 8px;
+    padding: 10px 0;
+  }
+
   .details-header-static {
-    padding-left: 20px;
-    padding-top: 60px;
-    gap: 12px;
+    padding-left: 16px;
+    padding-top: 24px;
+    gap: 8px;
   }
 
   .details-header-static h1 {
-    font-size: 36px;
+    font-size: 32px;
   }
 
   .details-header-static p {
-    font-size: 16px;
+    font-size: 15px;
     padding-left: 12px;
   }
 
-  .contact-details-view {
-    top: 140px;
-    height: calc(100% - 140px);
-  }
-
   #contact-details-content {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .contact-avatar-large {
-    width: 80px;
-    height: 80px;
-    font-size: 30px;
+    width: 72px;
+    height: 72px;
+    font-size: 28px;
   }
 }

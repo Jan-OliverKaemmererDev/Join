@@ -402,3 +402,37 @@
     pointer-events: none;
   }
 }
+
+@media (max-width: 780px) {
+  .contact-header-details {
+    gap: 16px;
+    padding-top: 16px;
+  }
+
+  .contact-avatar-large {
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
+    min-height: 72px;
+    font-size: 28px;
+    box-sizing: border-box;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+  }
+
+  .contact-name-section {
+    min-width: 0;
+    flex: 1;
+  }
+
+  /* 
+   * Available width at 320px: 320px - 32px padding - 72px avatar - 16px gap = 200px
+   * "Anja Schulz" at 24px ≈ 11 chars * 14px = 154px → fits on one line
+   */
+  .contact-name-details {
+    font-size: clamp(18px, 6vw, 32px);
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
