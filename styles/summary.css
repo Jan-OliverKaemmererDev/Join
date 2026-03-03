@@ -39,7 +39,8 @@
 .metrics-grid {
   display: flex;
   flex-wrap: wrap;
-  width: 550px;
+  width: 100%;
+  max-width: 550px;
   gap: 20px;
 }
 

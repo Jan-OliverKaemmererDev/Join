@@ -186,6 +186,7 @@
 
   .priority-btn {
     flex: 1;
+    min-width: 0;
     padding: 12px 4px;
     font-size: 15px;
     font-weight: 400;
@@ -201,6 +202,19 @@
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.12);
     font-family: inherit;
     white-space: nowrap;
+    overflow: hidden;
+  }
+
+  @media (max-width: 380px) {
+    .priority-btn {
+      font-size: 12px;
+      gap: 3px;
+      padding: 10px 2px;
+    }
+    .priority-btn img {
+      width: 12px !important;
+      height: 12px !important;
+    }
   }
 
   .priority-btn img {
@@ -245,6 +259,11 @@
 
   .contact-name {
     font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
   }
 
   /* ── Subtasks ── */
@@ -392,5 +411,13 @@
 
   .nav-links a.active img {
     filter: brightness(0) invert(1);
+  }
+}
+
+@media (min-width: 320px) and (max-width: 780px) {
+  .form-footer {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
   }
 }

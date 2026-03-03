@@ -371,3 +371,31 @@
     min-width: 45%;
   }
 }
+
+/* ---- Intermediate breakpoint: Sidebar vorhanden, aber Screen noch schmal ---- */
+@media (min-width: 781px) and (max-width: 1050px) {
+  .board-header {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .board-header h1 {
+    font-size: 42px;
+  }
+
+  .board-actions {
+    gap: 16px;
+  }
+
+  .search-bar {
+    width: 200px;
+    min-width: 0;
+  }
+
+  .btn-add-task {
+    font-size: 16px;
+    padding: 8px 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}

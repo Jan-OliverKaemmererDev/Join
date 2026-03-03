@@ -34,11 +34,16 @@
   --font-main: "Inter", sans-serif;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   padding: 0;
   font-family: var(--font-main);
   background-color: var(--bg-color);
+  overflow-x: hidden;
 }
 
 /* ---- Formular-Elemente ---- */
@@ -104,6 +109,9 @@ button:hover {
   width: 100%;
   text-align: center;
   transition: opacity 200ms ease-in-out;
+  white-space: normal;
+  word-break: break-word;
+  box-sizing: border-box;
 }
 
 /* ---- Toast Nachricht ---- */

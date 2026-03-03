@@ -21,11 +21,13 @@ body {
 
 .contacts-list-container {
   width: 456px;
+  max-width: 100%;
   background-color: white;
   box-shadow: 4px 0px 6px 0px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 .add-contact-btn-container {
@@ -47,7 +49,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 18px;
-  width: 352px;
+  width: 100%;
+  max-width: 352px;
   height: 56px;
 }
 
@@ -228,6 +231,9 @@ body {
   font-weight: 500;
   color: white;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+  box-sizing: content-box;
+  aspect-ratio: 1 / 1;
 }
 
 .contact-name-section {
@@ -640,6 +646,88 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 422px; /* Fixed width to prevent expansion */
+  width: 100%;
+  max-width: 422px; /* Prevent expansion on desktop */
   min-height: 80px; /* Reserved space for error message */
+}
+
+/* ---- Intermediate breakpoint: verhindern dass h1/"Better with a team" rausfliegen ---- */
+@media (min-width: 781px) and (max-width: 1100px) {
+  .details-header-static {
+    padding-left: 24px;
+    padding-top: 80px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .details-header-static h1 {
+    font-size: 42px;
+  }
+
+  .details-header-static p {
+    font-size: 20px;
+    padding-left: 16px;
+  }
+
+  .contact-avatar-large {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+
+  #contact-details-content {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .contact-details-view {
+    top: 160px;
+    height: calc(100% - 160px);
+  }
+}
+
+/* ---- Intermediate breakpoint: Liste schmaler damit Detail-Bereich sichtbar bleibt ---- */
+@media (min-width: 781px) and (max-width: 1000px) {
+  .contacts-list-container {
+    width: 280px;
+    min-width: 280px;
+  }
+
+  .btn-add-contact {
+    max-width: 100%;
+    font-size: 16px;
+    gap: 10px;
+  }
+
+  .details-header-static {
+    padding-left: 20px;
+    padding-top: 60px;
+    gap: 12px;
+  }
+
+  .details-header-static h1 {
+    font-size: 36px;
+  }
+
+  .details-header-static p {
+    font-size: 16px;
+    padding-left: 12px;
+  }
+
+  .contact-details-view {
+    top: 140px;
+    height: calc(100% - 140px);
+  }
+
+  #contact-details-content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .contact-avatar-large {
+    width: 80px;
+    height: 80px;
+    font-size: 30px;
+  }
 }

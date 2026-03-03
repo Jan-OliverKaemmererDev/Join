@@ -1,14 +1,16 @@
 /* ---- Login-Seite: Spezifische Inputs ---- */
 
 #email {
-  width: 450px;
+  width: 100%;
+  max-width: 450px;
   background-image: url("../assets/login-screen/mail.svg");
   background-repeat: no-repeat;
   background-position: right 21px center;
 }
 
 #password {
-  width: 450px;
+  width: 100%;
+  max-width: 450px;
   background-image: url("../assets/login-screen/lock.svg");
   background-repeat: no-repeat;
   background-position: right 21px center;
@@ -181,6 +183,7 @@
   max-width: none;
   height: 100vh;
   overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 /* ---- Dashboard Header ---- */
@@ -334,20 +337,31 @@
   white-space: nowrap;
 }
 
+@media (max-width: 400px) {
+  .signup-hint {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
 .signup-input-wrap {
   display: flex;
   flex-direction: column;
-  width: 450px;
+  width: 100%;
+  max-width: 450px;
   min-height: 72px;
   justify-content: flex-start;
+  box-sizing: border-box;
 }
 
 .login-input-wrap {
   display: flex;
   flex-direction: column;
-  width: 450px;
+  width: 100%;
+  max-width: 450px;
   min-height: 72px;
   justify-content: flex-start;
+  box-sizing: border-box;
 }
 
 .login-main form {

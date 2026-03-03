@@ -277,7 +277,9 @@
   justify-content: space-between;
   padding-top: 20px;
   border-top: 1px solid #d1d1d1;
-  width: 750px;
+  width: 100%;
+  max-width: 750px;
+  box-sizing: border-box;
 }
 
 .required-note {
@@ -348,4 +350,26 @@
 .btn-create img {
   width: 24px;
   height: 24px;
+}
+
+/* ---- Intermediate breakpoint: Sidebar vorhanden, aber Screen noch schmal ---- */
+@media (min-width: 781px) and (max-width: 1100px) {
+  .add-task-section {
+    padding: 24px 32px;
+  }
+
+  .add-task-section h1 {
+    font-size: 42px;
+    margin-bottom: 24px;
+  }
+
+  .form-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 100%;
+  }
+
+  .form-footer {
+    max-width: 100%;
+  }
 }

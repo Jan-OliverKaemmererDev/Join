@@ -72,6 +72,8 @@
   align-items: center;
   gap: 12px;
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .contact-avatar {
@@ -89,6 +91,11 @@
 
 .contact-name {
   font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
 }
 
 .contact-checkbox {
