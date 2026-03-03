@@ -169,10 +169,6 @@ button:disabled {
     margin: 8px 0 15px 0;
   }
 
-  form {
-    gap: 12px;
-  }
-
   input {
     font-size: 16px;
     padding: 10px 15px;

@@ -331,16 +331,31 @@
   font-size: 12px;
   margin-top: 4px;
   padding-left: 4px;
+  white-space: nowrap;
 }
 
 .signup-input-wrap {
   display: flex;
   flex-direction: column;
   width: 450px;
+  min-height: 72px;
+  justify-content: flex-start;
 }
 
 .login-input-wrap {
   display: flex;
   flex-direction: column;
   width: 450px;
+  min-height: 72px;
+  justify-content: flex-start;
+}
+
+.login-main form {
+  gap: 8px; /* Reduced gap because input-wraps now have internal spacing */
+}
+
+@media (max-width: 480px) {
+  .login-main form {
+    gap: 0; /* Min-height is enough on mobile */
+  }
 }
