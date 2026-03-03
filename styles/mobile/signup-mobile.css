@@ -10,8 +10,9 @@
 
   /* Überschreibt style-mobile.css (padding: 225px 16px 0) */
   .login-main {
-    padding: 120px 16px 0;
+    padding: 120px 16px 70px;
     justify-content: flex-start;
+    min-height: 100vh;
   }
 
   /* Karte */
