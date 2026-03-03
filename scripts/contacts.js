@@ -164,6 +164,12 @@ function openAddContactDialog() {
   overlay.innerHTML = getAddContactDialogTemplate();
   overlay.classList.add("active");
   document.body.style.overflow = "hidden";
+  checkContactFormValidity(
+    "new-contact-name",
+    "new-contact-email",
+    "new-contact-phone",
+    "add-contact-submit",
+  );
 }
 
 function openEditContactDialog(id) {
@@ -171,6 +177,12 @@ function openEditContactDialog(id) {
   overlay.innerHTML = getEditContactDialogTemplate(findContactById(id));
   overlay.classList.add("active");
   document.body.style.overflow = "hidden";
+  checkContactFormValidity(
+    "edit-contact-name",
+    "edit-contact-email",
+    "edit-contact-phone",
+    "edit-contact-submit",
+  );
 }
 
 function closeAddContactDialog() {
@@ -224,21 +236,72 @@ function validateContactForm(nameId, emailId, phoneId) {
 
 function showFieldError(inputId, message) {
   const input = document.getElementById(inputId);
+  const group = input.closest(".input-group");
   input.classList.add("input-error");
-  let errorEl = input.parentElement.querySelector(".field-error-msg");
+  let errorEl = group.querySelector(".field-error-msg");
   if (!errorEl) {
     errorEl = document.createElement("span");
     errorEl.className = "field-error-msg";
-    input.parentElement.appendChild(errorEl);
+    group.appendChild(errorEl);
   }
   errorEl.textContent = message;
 }
 
 function clearFieldError(inputId) {
   const input = document.getElementById(inputId);
+  const group = input.closest(".input-group");
   input.classList.remove("input-error");
-  const errorEl = input.parentElement.querySelector(".field-error-msg");
-  if (errorEl) errorEl.remove();
+  if (group) {
+    const errorEl = group.querySelector(".field-error-msg");
+    if (errorEl) errorEl.remove();
+  }
+}
+
+function checkContactFormValidity(nameId, emailId, phoneId, buttonId) {
+  const name = document.getElementById(nameId).value.trim();
+  const email = document.getElementById(emailId).value.trim();
+  const phone = document.getElementById(phoneId).value.trim();
+  const btn = document.getElementById(buttonId);
+
+  const nameLetters = name.replace(/[^a-zA-ZäöüÄÖÜß]/g, "");
+  const nameValid = nameLetters.length >= 3;
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  const phoneValid = phone.length >= 11;
+
+  updateContactFieldFeedback(
+    nameId,
+    name,
+    nameValid,
+    "Der Name muss mindestens 3 Buchstaben enthalten.",
+  );
+  updateContactFieldFeedback(
+    emailId,
+    email,
+    emailValid,
+    "Bitte eine gültige E-Mail-Adresse eingeben.",
+  );
+  updateContactFieldFeedback(
+    phoneId,
+    phone,
+    phoneValid,
+    "Bitte eine gültige Telefonnummer eingeben (mind. 11 Ziffern).",
+  );
+
+  const allValid = nameValid && emailValid && phoneValid;
+  btn.disabled = !allValid;
+  btn.classList.toggle("btn-disabled", !allValid);
+}
+
+function updateContactFieldFeedback(inputId, value, isValid, errorMessage) {
+  if (value.length > 0) {
+    if (isValid) {
+      clearFieldError(inputId);
+    } else {
+      showFieldError(inputId, errorMessage);
+    }
+  } else {
+    clearFieldError(inputId);
+  }
 }
 
 function createContact(e) {

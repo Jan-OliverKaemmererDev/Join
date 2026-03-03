@@ -322,9 +322,9 @@ body {
 }
 
 .dialog-left {
-  width: 467px;
+  width: 364px;
   background-color: #2a3647;
-  padding: 66px 48px;
+  padding: 48px 40px;
   color: white;
   display: flex;
   flex-direction: column;
@@ -344,11 +344,11 @@ body {
   border-bottom-right-radius: 30px;
 }
 
-.input-group {
-  display: flex;
-  flex-direction: column;
+.input-wrapper {
   position: relative;
-  margin-bottom: 32px;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .input-group input {
@@ -356,6 +356,7 @@ body {
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   padding: 13px 21px;
+  padding-right: 50px; /* Space for icon */
   font-size: 20px;
   width: 100%;
   box-sizing: border-box;
@@ -369,6 +370,7 @@ body {
   width: 24px;
   height: 24px;
   opacity: 0.5;
+  pointer-events: none; /* Ensure clicks go to input */
 }
 
 .form-actions-dialog {
@@ -412,6 +414,20 @@ body {
 .btn-create-submit:hover {
   background: #29abe2;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.btn-create-submit:disabled,
+.btn-create-submit.btn-disabled {
+  background-color: #d1d1d1;
+  color: #a8a8a8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-create-submit:disabled:hover,
+.btn-create-submit.btn-disabled:hover {
+  background-color: #d1d1d1;
+  box-shadow: none;
 }
 
 .close-btn-container {
@@ -482,18 +498,6 @@ body {
   flex: 1;
 }
 
-.dialog-left {
-  width: 467px;
-  background-color: #2a3647;
-  padding: 66px 48px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-}
-
 .dialog-title-white {
   font-size: 61px;
   font-weight: 700;
@@ -543,6 +547,13 @@ body {
 .dialog-logo-small {
   width: 55px;
   margin-bottom: 12px;
+}
+
+.blue-line-horizontal {
+  width: 90px;
+  height: 3px;
+  background-color: #29abe2;
+  margin-top: 4px;
 }
 
 /* Der graue Standard-Avatar für neue Kontakte */
@@ -627,6 +638,9 @@ body {
 
 .input-group {
   position: relative;
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 422px; /* Fixed width to prevent expansion */
+  min-height: 80px; /* Reserved space for error message */
 }

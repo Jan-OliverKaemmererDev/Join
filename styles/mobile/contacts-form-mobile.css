@@ -354,7 +354,29 @@
     font-weight: 700;
   }
 
+  .btn-save-dark:disabled,
+  .btn-save-dark.btn-disabled {
+    background-color: #d1d1d1;
+    color: #a8a8a8;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .btn-save-dark:disabled:hover,
+  .btn-save-dark.btn-disabled:hover {
+    background-color: #d1d1d1;
+    box-shadow: none;
+  }
+
   .input-group {
+    position: relative;
+    width: 100%;
+    min-height: 80px; /* Reserved space for error message */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .input-wrapper {
     position: relative;
     width: 100%;
   }
@@ -362,10 +384,12 @@
   .input-group input {
     width: 100%;
     padding: 12px 21px;
+    padding-right: 40px; /* Space for icon */
     border-radius: 10px;
     border: 1px solid #d1d1d1;
     font-size: 20px;
     outline: none;
+    box-sizing: border-box;
   }
 
   .input-icon {
@@ -375,5 +399,6 @@
     transform: translateY(-50%);
     width: 20px;
     height: 20px;
+    pointer-events: none;
   }
 }

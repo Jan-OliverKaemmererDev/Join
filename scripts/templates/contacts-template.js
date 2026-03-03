@@ -136,23 +136,29 @@ function getDesktopEditContactTemplate(contact) {
             ${contact.initials}
           </div>
           
-          <form onsubmit="saveContact(event, ${contact.id})" class="edit-form-fields">
+          <form onsubmit="saveContact(event, ${contact.id})" class="edit-form-fields" novalidate>
             <div class="input-group">
-              <input type="text" value="${contact.name}" required id="edit-contact-name" placeholder="Name">
-              <img src="./assets/login-screen/person.svg" class="input-icon">
+              <div class="input-wrapper">
+                <input type="text" value="${contact.name}" id="edit-contact-name" placeholder="Name" oninput="checkContactFormValidity('edit-contact-name', 'edit-contact-email', 'edit-contact-phone', 'edit-contact-submit')">
+                <img src="./assets/login-screen/person.svg" class="input-icon">
+              </div>
             </div>
             <div class="input-group">
-              <input type="email" value="${contact.email}" required id="edit-contact-email" placeholder="Email">
-              <img src="./assets/login-screen/mail.svg" class="input-icon">
+              <div class="input-wrapper">
+                <input type="email" value="${contact.email}" id="edit-contact-email" placeholder="Email" oninput="checkContactFormValidity('edit-contact-name', 'edit-contact-email', 'edit-contact-phone', 'edit-contact-submit')">
+                <img src="./assets/login-screen/mail.svg" class="input-icon">
+              </div>
             </div>
             <div class="input-group">
-              <input type="tel" value="${contact.phone}" required id="edit-contact-phone" placeholder="Phone" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]+" title="Please enter only numbers">
-              <img src="./assets/icons/phone.svg" class="input-icon">
+              <div class="input-wrapper">
+                <input type="tel" value="${contact.phone}" id="edit-contact-phone" placeholder="Phone" oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkContactFormValidity('edit-contact-name', 'edit-contact-email', 'edit-contact-phone', 'edit-contact-submit')">
+                <img src="./assets/icons/phone.svg" class="input-icon">
+              </div>
             </div>
             
             <div class="form-actions-dialog">
               <button type="button" class="btn-cancel" onclick="deleteContact(${contact.id}); closeAddContactDialog();">Delete</button>
-              <button type="submit" class="btn-create-submit">
+              <button type="submit" class="btn-create-submit" id="edit-contact-submit">
                 Save <img src="./assets/icons/check-icon.png" alt="check" style="filter: brightness(0) invert(1);">
               </button>
             </div>
@@ -179,23 +185,29 @@ function getMobileEditContactTemplate(contact) {
           ${contact.initials}
         </div>
         
-        <form onsubmit="saveContact(event, ${contact.id})" class="edit-form-mobile">
+        <form onsubmit="saveContact(event, ${contact.id})" class="edit-form-mobile" novalidate>
           <div class="input-group">
-            <input type="text" value="${contact.name}" required id="edit-contact-name" placeholder="Name">
-            <img src="./assets/login-screen/person.svg" class="input-icon">
+            <div class="input-wrapper">
+              <input type="text" value="${contact.name}" id="edit-contact-name" placeholder="Name" oninput="checkContactFormValidity('edit-contact-name', 'edit-contact-email', 'edit-contact-phone', 'edit-contact-submit')">
+              <img src="./assets/login-screen/person.svg" class="input-icon">
+            </div>
           </div>
           <div class="input-group">
-            <input type="email" value="${contact.email}" required id="edit-contact-email" placeholder="Email">
-            <img src="./assets/login-screen/mail.svg" class="input-icon">
+            <div class="input-wrapper">
+              <input type="email" value="${contact.email}" id="edit-contact-email" placeholder="Email" oninput="checkContactFormValidity('edit-contact-name', 'edit-contact-email', 'edit-contact-phone', 'edit-contact-submit')">
+              <img src="./assets/login-screen/mail.svg" class="input-icon">
+            </div>
           </div>
           <div class="input-group">
-            <input type="tel" value="${contact.phone}" required id="edit-contact-phone" placeholder="Phone" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]+" title="Please enter only numbers">
-            <img src="./assets/icons/phone.svg" class="input-icon">
+            <div class="input-wrapper">
+              <input type="tel" value="${contact.phone}" id="edit-contact-phone" placeholder="Phone" oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkContactFormValidity('edit-contact-name', 'edit-contact-email', 'edit-contact-phone', 'edit-contact-submit')">
+              <img src="./assets/icons/phone.svg" class="input-icon">
+            </div>
           </div>
           
           <div class="form-actions-mobile">
             <button type="button" class="btn-delete-outline" onclick="deleteContact(${contact.id}); closeAddContactDialog();">Löschen</button>
-            <button type="submit" class="btn-save-dark">Speichern</button>
+            <button type="submit" class="btn-save-dark" id="edit-contact-submit">Speichern</button>
           </div>
         </form>
       </div>
@@ -238,25 +250,31 @@ function getDesktopAddContactTemplate() {
             <img src="./assets/login-screen/person.svg" alt="Default Avatar">
           </div>
           
-          <form onsubmit="createContact(event)" class="edit-form-fields">
+          <form onsubmit="createContact(event)" class="edit-form-fields" novalidate>
             <div class="input-group">
-              <input type="text" placeholder="Name" required id="new-contact-name">
-              <img src="./assets/login-screen/person.svg" class="input-icon">
+              <div class="input-wrapper">
+                <input type="text" placeholder="Name" id="new-contact-name" oninput="checkContactFormValidity('new-contact-name', 'new-contact-email', 'new-contact-phone', 'add-contact-submit')">
+                <img src="./assets/login-screen/person.svg" class="input-icon">
+              </div>
             </div>
             <div class="input-group">
-              <input type="email" placeholder="Email" required id="new-contact-email">
-              <img src="./assets/login-screen/mail.svg" class="input-icon">
+              <div class="input-wrapper">
+                <input type="email" placeholder="Email" id="new-contact-email" oninput="checkContactFormValidity('new-contact-name', 'new-contact-email', 'new-contact-phone', 'add-contact-submit')">
+                <img src="./assets/login-screen/mail.svg" class="input-icon">
+              </div>
             </div>
             <div class="input-group">
-              <input type="tel" placeholder="Phone" required id="new-contact-phone" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]+" title="Please enter only numbers">
-              <img src="./assets/icons/phone.svg" class="input-icon">
+              <div class="input-wrapper">
+                <input type="tel" placeholder="Phone" id="new-contact-phone" oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkContactFormValidity('new-contact-name', 'new-contact-email', 'new-contact-phone', 'add-contact-submit')">
+                <img src="./assets/icons/phone.svg" class="input-icon">
+              </div>
             </div>
             
             <div class="form-actions-dialog">
               <button type="button" class="btn-cancel" onclick="closeAddContactDialog()">
                 Cancel <span class="cancel-x">✕</span>
               </button>
-              <button type="submit" class="btn-create-submit">
+              <button type="submit" class="btn-create-submit btn-disabled" id="add-contact-submit" disabled>
                 Create contact <img src="./assets/icons/check-icon.png" alt="check" class="check-icon-white">
               </button>
             </div>
@@ -284,22 +302,28 @@ function getMobileAddContactTemplate() {
           <img src="./assets/login-screen/person.svg" alt="" style="width: 64px; height: 64px; filter: invert(1);">
         </div>
         
-        <form onsubmit="createContact(event)" class="edit-form-mobile">
+        <form onsubmit="createContact(event)" class="edit-form-mobile" novalidate>
           <div class="input-group">
-            <input type="text" placeholder="Name" required id="new-contact-name">
-            <img src="./assets/login-screen/person.svg" class="input-icon">
+            <div class="input-wrapper">
+              <input type="text" placeholder="Name" id="new-contact-name" oninput="checkContactFormValidity('new-contact-name', 'new-contact-email', 'new-contact-phone', 'add-contact-submit')">
+              <img src="./assets/login-screen/person.svg" class="input-icon">
+            </div>
           </div>
           <div class="input-group">
-            <input type="email" placeholder="Email" required id="new-contact-email">
-            <img src="./assets/login-screen/mail.svg" class="input-icon">
+            <div class="input-wrapper">
+              <input type="email" placeholder="Email" id="new-contact-email" oninput="checkContactFormValidity('new-contact-name', 'new-contact-email', 'new-contact-phone', 'add-contact-submit')">
+              <img src="./assets/login-screen/mail.svg" class="input-icon">
+            </div>
           </div>
           <div class="input-group">
-            <input type="tel" placeholder="Phone" required id="new-contact-phone" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]+" title="Please enter only numbers">
-            <img src="./assets/icons/phone.svg" class="input-icon">
+            <div class="input-wrapper">
+              <input type="tel" placeholder="Phone" id="new-contact-phone" oninput="this.value = this.value.replace(/[^0-9]/g, ''); checkContactFormValidity('new-contact-name', 'new-contact-email', 'new-contact-phone', 'add-contact-submit')">
+              <img src="./assets/icons/phone.svg" class="input-icon">
+            </div>
           </div>
           
           <div class="form-actions-mobile">
-            <button type="submit" class="btn-save-dark" style="width: 200px;">Kontakt erstellen</button>
+            <button type="submit" class="btn-save-dark btn-disabled" id="add-contact-submit" style="width: 200px;" disabled>Kontakt erstellen</button>
           </div>
         </form>
       </div>
