@@ -436,3 +436,25 @@
     overflow-wrap: break-word;
   }
 }
+
+@media (max-width: 450px) {
+  #contact-details-content {
+    padding-left: 0 !important;
+  }
+
+  .contact-view-title {
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  .initials-large {
+    flex-shrink: 0;
+  }
+
+  .contact-name-large {
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
+    min-width: 0;
+  }
+}
