@@ -16,13 +16,13 @@ function addSubtask() {
 }
 
 /**
- * Zeigt die Subtask-Icons (Clear & Save) an
+ * Zeigt die Subtask-Icons (Clear & Save) an und entfernt alle Ausblend-Klassen
  */
 function showSubtaskIcons() {
   const activeIcons = document.getElementById("subtask-icons-active");
   if (activeIcons) {
     activeIcons.classList.remove("v-hidden");
-    activeIcons.classList.remove("d-none"); // Also remove d-none if it was stuck
+    activeIcons.classList.remove("d-none");
   }
 }
 

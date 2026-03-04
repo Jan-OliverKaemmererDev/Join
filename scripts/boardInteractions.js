@@ -1,14 +1,12 @@
 /**
- * Öffnet das Add-Task-Overlay
+ * Öffnet das Add-Task-Overlay. Auf mobilen Geräten (≤780px) erfolgt eine Weiterleitung zu addtask.html, auf Desktop wird das Overlay eingeblendet.
  */
 function openAddTaskOverlay() {
-  // Mobile: statt Overlay -> addtask.html
   if (window.innerWidth <= 780) {
     window.location.href = "addtask.html";
     return;
   }
 
-  // Desktop: Overlay normal öffnen
   document.getElementById("add-task-overlay").classList.add("active");
 }
 
@@ -62,7 +60,7 @@ function closeTaskDetails() {
 }
 
 /**
- * Schaltet den Status eines Subtasks um
+ * Schaltet den Status eines Subtasks um. Verwendet Optimistisches Update: Checkbox und Fortschrittsbalken werden sofort aktualisiert, Speichern erfolgt im Hintergrund.
  * @param {number} taskId - Die ID des Tasks
  * @param {number} subtaskIndex - Der Index des Subtasks
  */
@@ -70,7 +68,6 @@ async function toggleSubtask(taskId, subtaskIndex) {
   const task = findTask(taskId);
   if (!task) return;
 
-  // 1. Optimistisches UI-Update: Detail-Checkbox sofort umschalten
   const subtaskItems = document.querySelectorAll(".subtask-item-detail");
   if (subtaskItems[subtaskIndex]) {
     const checkbox =
@@ -80,14 +77,11 @@ async function toggleSubtask(taskId, subtaskIndex) {
     }
   }
 
-  // 2. Datenmodell im Speicher aktualisieren
   task.subtasks[subtaskIndex].completed =
     !task.subtasks[subtaskIndex].completed;
 
-  // 3. Fortschrittsbalken auf der Board-Karte aktualisieren (ohne Full-Render)
   updateTaskCardProgress(task);
 
-  // 4. Im Hintergrund speichern (nur diesen einen Task)
   await saveSingleTask(task);
 }
 

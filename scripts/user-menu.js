@@ -1,10 +1,9 @@
 /**
- * Schaltet das Benutzer-Dropdown-Menü um
+ * Schaltet das Benutzer-Dropdown-Menü um. Auf mobilen Geräten (≤780px) wird zusätzlich ein Help-Link eingefügt.
  */
 function toggleUserMenu() {
   const dropdown = document.getElementById("user-dropdown");
 
-  // Help-Link nur mobile hinzufügen
   if (
     window.innerWidth <= 780 &&
     !document.getElementById("dropdown-help-link")

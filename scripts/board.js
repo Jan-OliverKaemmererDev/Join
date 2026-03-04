@@ -8,13 +8,13 @@ let touchStartY = 0;
 let touchDragTaskId = null;
 
 /**
- * Initialisiert das Board und lädt die Tasks
+ * Initialisiert das Board und lädt die Tasks sowie Kontakte (aus addtask.js)
  */
 async function initBoard() {
   await waitForFirebase();
   initSideMenu("board");
   await loadTasks();
-  await loadContacts(); // Shared from addtask.js
+  await loadContacts();
   renderTasks();
   checkUser();
   setupTaskAddedListener();
@@ -199,16 +199,14 @@ function findTaskById(taskId) {
 }
 
 /**
- * Verschiebt einen Task zu einem neuen Status
+ * Verschiebt einen Task zu einem neuen Status. Aktualisiert die UI sofort (Optimistisches Update) und speichert im Hintergrund.
  * @param {string} status - Der neue Status
  */
 async function moveTo(status) {
   const taskIndex = findTaskById(currentDraggedTaskId);
   if (taskIndex !== -1) {
     tasks[taskIndex].status = status;
-    // UI sofort aktualisieren (Optimistisches Update)
     renderTasks();
-    // Im Hintergrund speichern
     await saveSingleTask(tasks[taskIndex]);
   }
   currentDraggedTaskId = null;

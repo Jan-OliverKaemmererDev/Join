@@ -27,7 +27,7 @@ function setFieldHint(inputId, message) {
 }
 
 /**
- * Überprüft die Gültigkeit des Registrierungs-Formulars und zeigt Hinweise
+ * Überprüft die Gültigkeit des Registrierungs-Formulars und zeigt Hinweise nur an, wenn die Felder bereits ausgefüllt wurden
  */
 function checkFormValidity() {
   const name = document.getElementById("name").value.trim();
@@ -44,7 +44,6 @@ function checkFormValidity() {
   const confirmValid = confirm === "" ? true : pass === confirm;
   const confirmComplete = confirm.length >= 1 && pass === confirm;
 
-  // Hinweise nur zeigen, wenn Felder bereits berührt wurden
   if (name.length > 0) {
     setFieldHint(
       "name",

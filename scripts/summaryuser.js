@@ -255,7 +255,7 @@ function renderTaskMetrics() {
 }
 
 /**
- * Überprüft, ob die mobile Begrüßungs-Animation angezeigt werden soll
+ * Überprüft, ob die mobile Begrüßungs-Animation angezeigt werden soll. Das sessionStorage-Flag wird nach dem ersten Aufruf entfernt, um eine erneute Anzeige beim Neuladen zu verhindern.
  */
 function checkMobileGreeting() {
   const showGreeting = sessionStorage.getItem("showJoinGreeting");
@@ -265,8 +265,6 @@ function checkMobileGreeting() {
     return;
   }
 
-  // Consume the login greeting flag on first page load after login.
-  // This prevents showing the welcome overlay again on reload.
   sessionStorage.removeItem("showJoinGreeting");
 
   if (isMobile) {
@@ -279,8 +277,8 @@ function checkMobileGreeting() {
         setTimeout(() => {
           greetingContainer.classList.remove("mobile-greeting-overlay");
           greetingContainer.classList.remove("fade-out");
-        }, 500); // Wait for transition to finish
-      }, 1500); // Display for 1.5 seconds
+        }, 500);
+      }, 1500);
     }
   }
 }

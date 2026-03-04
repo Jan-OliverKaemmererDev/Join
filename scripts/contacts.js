@@ -128,6 +128,9 @@ function applyDesktopContactDetailsVisibility() {
   container.classList.add("visible");
 }
 
+/**
+ * Schließt die Kontakt-Detailansicht und entfernt alle aktiven Zustände. Leert den Inhalt nach der CSS-Transition.
+ */
 function closeContactDetails() {
   const containerMobile = document.querySelector(".contact-details-container");
   const containerDesktop = document.getElementById("contact-details-view");
@@ -139,7 +142,7 @@ function closeContactDetails() {
   if (content) {
     setTimeout(function () {
       content.innerHTML = "";
-    }, 200); // Wait for transition
+    }, 200);
   }
 
   const items = document.querySelectorAll(".contact-item");
@@ -194,13 +197,19 @@ function closeAddContactDialog() {
   }, 300);
 }
 
+/**
+ * Validiert das Kontaktformular (Name min. 3 Buchstaben, gültiges E-Mail-Format, Telefon min. 6 Ziffern)
+ * @param {string} nameId - Die ID des Name-Eingabefelds
+ * @param {string} emailId - Die ID des E-Mail-Eingabefelds
+ * @param {string} phoneId - Die ID des Telefon-Eingabefelds
+ * @returns {boolean} True wenn alle Felder gültig sind
+ */
 function validateContactForm(nameId, emailId, phoneId) {
   const name = document.getElementById(nameId).value.trim();
   const email = document.getElementById(emailId).value.trim();
   const phone = document.getElementById(phoneId).value.trim();
   let valid = true;
 
-  // Name: mindestens 3 Buchstaben
   const nameInput = document.getElementById(nameId);
   const nameLetters = name.replace(/[^a-zA-ZäöüÄÖÜß]/g, "");
   if (nameLetters.length < 3) {
@@ -210,7 +219,6 @@ function validateContactForm(nameId, emailId, phoneId) {
     clearFieldError(nameId);
   }
 
-  // Email: valides Format
   const emailInput = document.getElementById(emailId);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
@@ -220,7 +228,6 @@ function validateContactForm(nameId, emailId, phoneId) {
     clearFieldError(emailId);
   }
 
-  // Telefon: mindestens 6 Ziffern
   if (phone.length < 6) {
     showFieldError(
       phoneId,

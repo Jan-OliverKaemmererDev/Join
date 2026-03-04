@@ -163,7 +163,7 @@ async function loadTaskForEdit(taskId) {
 }
 
 /**
- * Füllt das Formular mit Task-Daten
+ * Füllt das Formular mit Task-Daten (Kategorie, Priorität, Kontakte und Subtasks)
  * @param {Object} task - Das Task-Objekt
  */
 function fillFormWithTaskData(task) {
@@ -171,7 +171,6 @@ function fillFormWithTaskData(task) {
   document.getElementById("description").value = task.description;
   document.getElementById("due-date").value = task.dueDate;
 
-  // Kategorie setzen
   const categoryInput = document.getElementById("category");
   if (categoryInput) categoryInput.value = task.category;
 
@@ -181,20 +180,17 @@ function fillFormWithTaskData(task) {
       task.category === "user-story" ? "User Story" : "Technical Task";
   }
 
-  // Priorität setzen
   selectPriority(task.priority);
 
-  // Kontakte setzen
   loadAssigneesForEdit(task);
 
-  // Subtasks setzen
   subtasks = task.subtasks ? JSON.parse(JSON.stringify(task.subtasks)) : [];
   renderSubtasks();
   validateForm();
 }
 
 /**
- * Konfiguriert das Formular für die Bearbeitung
+ * Konfiguriert das Formular für die Bearbeitung und blendet den Clear-Button aus
  * @param {string} taskId - Die ID des Tasks
  */
 function setupFormForEdit(taskId) {
@@ -214,7 +210,6 @@ function setupFormForEdit(taskId) {
     };
   }
 
-  // Clear-Button ausblenden oder Funktion ändern
   const clearBtn = document.querySelector(".btn-clear");
   if (clearBtn) {
     clearBtn.style.display = "none";
@@ -222,7 +217,7 @@ function setupFormForEdit(taskId) {
 }
 
 /**
- * Verarbeitet die Aktualisierung eines Tasks
+ * Verarbeitet die Aktualisierung eines Tasks und behält den ursprünglichen Status bei
  * @param {Event} event - Das Submit-Event
  * @param {string} taskId - Die ID des Tasks
  */
@@ -232,7 +227,7 @@ async function handleEditTask(event, taskId) {
   if (!currentUser) return;
 
   const task = buildTask(currentUser);
-  task.id = Number(taskId); // ID beibehalten
+  task.id = Number(taskId);
 
   try {
     const taskRef = window.fbDoc(
@@ -243,7 +238,6 @@ async function handleEditTask(event, taskId) {
       String(taskId),
     );
 
-    // Wir laden den alten Task nochmal kurz um den Status zu behalten
     const oldTaskSnap = await window.fbGetDoc(taskRef);
     if (oldTaskSnap.exists()) {
       task.status = oldTaskSnap.data().status;
