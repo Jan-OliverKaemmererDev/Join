@@ -27,63 +27,109 @@ function setFieldHint(inputId, message) {
 }
 
 /**
- * Überprüft die Gültigkeit des Registrierungs-Formulars und zeigt Hinweise nur an, wenn die Felder bereits ausgefüllt wurden
+ * Liest alle Formularwerte der Registrierungsseite aus
+ * @returns {Object} Objekt mit name, email, pass, confirm, privacy
  */
-function checkFormValidity() {
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const pass = document.getElementById("password").value;
-  const confirm = document.getElementById("confirm-password").value;
-  const privacy = document.getElementById("privacy-check").checked;
-  const btn = document.getElementById("signup-btn");
+function getSignupFormValues() {
+  return {
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    pass: document.getElementById("password").value,
+    confirm: document.getElementById("confirm-password").value,
+    privacy: document.getElementById("privacy-check").checked,
+  };
+}
 
+/**
+ * Validiert alle Felder des Registrierungsformulars
+ * @param {string} name - Der eingegebene Name
+ * @param {string} email - Die eingegebene E-Mail
+ * @param {string} pass - Das eingegebene Passwort
+ * @param {string} confirm - Die Passwortbestätigung
+ * @returns {Object} Objekt mit nameValid, emailValid, passValid, confirmComplete
+ */
+function validateSignupFields(name, email, pass, confirm) {
   const nameLetters = name.replace(/[^a-zA-ZäöüÄÖÜß]/g, "");
-  const nameValid = nameLetters.length >= 3;
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-  const passValid = pass.length >= 6;
-  const confirmValid = confirm === "" ? true : pass === confirm;
-  const confirmComplete = confirm.length >= 1 && pass === confirm;
+  return {
+    nameValid: nameLetters.length >= 3,
+    emailValid: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email),
+    passValid: pass.length >= 6,
+    confirmComplete: confirm.length >= 1 && pass === confirm,
+  };
+}
 
-  if (name.length > 0) {
+/**
+ * Zeigt Validierungshinweise für gefüllte Felder an
+ * @param {Object} values - Die Formularwerte
+ * @param {Object} validity - Die Validierungsergebnisse
+ */
+function showSignupFieldHints(values, validity) {
+  if (values.name.length > 0) {
     setFieldHint(
       "name",
-      nameValid ? null : "Der Name muss mindestens 3 Buchstaben enthalten.",
+      validity.nameValid ? null : "Der Name muss mindestens 3 Buchstaben enthalten.",
     );
   } else {
     setFieldHint("name", null);
   }
 
-  if (email.length > 0) {
+  if (values.email.length > 0) {
     setFieldHint(
       "email",
-      emailValid ? null : "Bitte eine gültige E-Mail-Adresse eingeben.",
+      validity.emailValid ? null : "Bitte eine gültige E-Mail-Adresse eingeben.",
     );
   } else {
     setFieldHint("email", null);
   }
 
-  if (pass.length > 0) {
+  if (values.pass.length > 0) {
     setFieldHint(
       "password",
-      passValid ? null : "Das Passwort muss mindestens 6 Zeichen lang sein.",
+      validity.passValid ? null : "Das Passwort muss mindestens 6 Zeichen lang sein.",
     );
   } else {
     setFieldHint("password", null);
   }
 
-  if (confirm.length > 0) {
+  if (values.confirm.length > 0) {
     setFieldHint(
       "confirm-password",
-      pass === confirm ? null : "Die Passwörter stimmen nicht überein.",
+      values.pass === values.confirm ? null : "Die Passwörter stimmen nicht überein.",
     );
   } else {
     setFieldHint("confirm-password", null);
   }
+}
 
-  const allValid =
-    nameValid && emailValid && passValid && confirmComplete && privacy;
+/**
+ * Aktiviert oder deaktiviert den Submit-Button
+ * @param {boolean} allValid - True wenn alle Felder gültig sind
+ */
+function updateSignupSubmitButton(allValid) {
+  const btn = document.getElementById("signup-btn");
   btn.disabled = !allValid;
   btn.classList.toggle("btn-disabled", !allValid);
+}
+
+/**
+ * Überprüft die Gültigkeit des Registrierungs-Formulars und zeigt Hinweise nur an, wenn die Felder bereits ausgefüllt wurden
+ */
+function checkFormValidity() {
+  const values = getSignupFormValues();
+  const validity = validateSignupFields(
+    values.name,
+    values.email,
+    values.pass,
+    values.confirm,
+  );
+  showSignupFieldHints(values, validity);
+  const allValid =
+    validity.nameValid &&
+    validity.emailValid &&
+    validity.passValid &&
+    validity.confirmComplete &&
+    values.privacy;
+  updateSignupSubmitButton(allValid);
 }
 
 /**

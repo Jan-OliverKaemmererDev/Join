@@ -53,13 +53,21 @@ function renderContactList() {
   });
 }
 
-function appendContactItemToList(list, contact) {
+/**
+ * Fügt eine Buchstabengruppe zur Liste hinzu, falls der Anfangsbuchstabe neu ist
+ * @param {HTMLElement} list - Das Listen-Element
+ * @param {Object} contact - Das Kontakt-Objekt
+ */
+function addLetterGroupIfNeeded(list, contact) {
   const first = contact.name[0].toUpperCase();
-  const lastLetter = getLastRenderedLetter();
-  if (first !== lastLetter) {
+  if (first !== getLastRenderedLetter()) {
     updateLastRenderedLetter(first);
     addLetterGroupToList(list, first);
   }
+}
+
+function appendContactItemToList(list, contact) {
+  addLetterGroupIfNeeded(list, contact);
   list.innerHTML += getContactItemTemplate(contact);
 }
 
@@ -129,26 +137,44 @@ function applyDesktopContactDetailsVisibility() {
 }
 
 /**
- * Schließt die Kontakt-Detailansicht und entfernt alle aktiven Zustände. Leert den Inhalt nach der CSS-Transition.
+ * Blendet die Kontakt-Detail-Container (Mobile und Desktop) aus
  */
-function closeContactDetails() {
+function hideContactDetailsContainers() {
   const containerMobile = document.querySelector(".contact-details-container");
   const containerDesktop = document.getElementById("contact-details-view");
-  const content = document.getElementById("contact-details-content");
-
   if (containerMobile) containerMobile.classList.remove("show-mobile");
   if (containerDesktop) containerDesktop.classList.remove("visible");
+}
 
+/**
+ * Leert den Inhalt der Kontakt-Detailansicht nach der CSS-Transition
+ */
+function clearContactDetailContent() {
+  const content = document.getElementById("contact-details-content");
   if (content) {
     setTimeout(function () {
       content.innerHTML = "";
     }, 200);
   }
+}
 
+/**
+ * Entfernt die aktive Markierung von allen Kontakt-Listenelementen
+ */
+function deactivateContactItems() {
   const items = document.querySelectorAll(".contact-item");
   items.forEach(function (item) {
     item.classList.remove("active");
   });
+}
+
+/**
+ * Schließt die Kontakt-Detailansicht und entfernt alle aktiven Zustände. Leert den Inhalt nach der CSS-Transition.
+ */
+function closeContactDetails() {
+  hideContactDetailsContainers();
+  clearContactDetailContent();
+  deactivateContactItems();
 }
 
 function checkUser() {
@@ -162,11 +188,19 @@ function checkUser() {
   }
 }
 
-function openAddContactDialog() {
+/**
+ * Setzt das HTML des Overlays, aktiviert es und sperrt das Scrollen
+ * @param {string} html - Das HTML für den Overlay-Inhalt
+ */
+function activateContactOverlay(html) {
   const overlay = document.getElementById("add-contact-overlay");
-  overlay.innerHTML = getAddContactDialogTemplate();
+  overlay.innerHTML = html;
   overlay.classList.add("active");
   document.body.style.overflow = "hidden";
+}
+
+function openAddContactDialog() {
+  activateContactOverlay(getAddContactDialogTemplate());
   checkContactFormValidity(
     "new-contact-name",
     "new-contact-email",
@@ -176,10 +210,7 @@ function openAddContactDialog() {
 }
 
 function openEditContactDialog(id) {
-  const overlay = document.getElementById("add-contact-overlay");
-  overlay.innerHTML = getEditContactDialogTemplate(findContactById(id));
-  overlay.classList.add("active");
-  document.body.style.overflow = "hidden";
+  activateContactOverlay(getEditContactDialogTemplate(findContactById(id)));
   checkContactFormValidity(
     "edit-contact-name",
     "edit-contact-email",
@@ -198,6 +229,53 @@ function closeAddContactDialog() {
 }
 
 /**
+ * Validiert das Name-Feld eines Kontaktformulars
+ * @param {string} nameId - Die ID des Name-Eingabefelds
+ * @returns {boolean} True wenn das Feld gültig ist
+ */
+function validateNameField(nameId) {
+  const name = document.getElementById(nameId).value.trim();
+  const nameLetters = name.replace(/[^a-zA-ZäöüÄÖÜß]/g, "");
+  if (nameLetters.length < 3) {
+    showFieldError(nameId, "Der Name muss mindestens 3 Buchstaben enthalten.");
+    return false;
+  }
+  clearFieldError(nameId);
+  return true;
+}
+
+/**
+ * Validiert das E-Mail-Feld eines Kontaktformulars
+ * @param {string} emailId - Die ID des E-Mail-Eingabefelds
+ * @returns {boolean} True wenn das Feld gültig ist
+ */
+function validateEmailField(emailId) {
+  const email = document.getElementById(emailId).value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  if (!emailRegex.test(email)) {
+    showFieldError(emailId, "Bitte eine gültige E-Mail-Adresse eingeben.");
+    return false;
+  }
+  clearFieldError(emailId);
+  return true;
+}
+
+/**
+ * Validiert das Telefon-Feld eines Kontaktformulars
+ * @param {string} phoneId - Die ID des Telefon-Eingabefelds
+ * @returns {boolean} True wenn das Feld gültig ist
+ */
+function validatePhoneField(phoneId) {
+  const phone = document.getElementById(phoneId).value.trim();
+  if (phone.length < 6) {
+    showFieldError(phoneId, "Bitte eine gültige Telefonnummer eingeben (mind. 6 Ziffern).");
+    return false;
+  }
+  clearFieldError(phoneId);
+  return true;
+}
+
+/**
  * Validiert das Kontaktformular (Name min. 3 Buchstaben, gültiges E-Mail-Format, Telefon min. 6 Ziffern)
  * @param {string} nameId - Die ID des Name-Eingabefelds
  * @param {string} emailId - Die ID des E-Mail-Eingabefelds
@@ -205,40 +283,10 @@ function closeAddContactDialog() {
  * @returns {boolean} True wenn alle Felder gültig sind
  */
 function validateContactForm(nameId, emailId, phoneId) {
-  const name = document.getElementById(nameId).value.trim();
-  const email = document.getElementById(emailId).value.trim();
-  const phone = document.getElementById(phoneId).value.trim();
-  let valid = true;
-
-  const nameInput = document.getElementById(nameId);
-  const nameLetters = name.replace(/[^a-zA-ZäöüÄÖÜß]/g, "");
-  if (nameLetters.length < 3) {
-    showFieldError(nameId, "Der Name muss mindestens 3 Buchstaben enthalten.");
-    valid = false;
-  } else {
-    clearFieldError(nameId);
-  }
-
-  const emailInput = document.getElementById(emailId);
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-  if (!emailRegex.test(email)) {
-    showFieldError(emailId, "Bitte eine gültige E-Mail-Adresse eingeben.");
-    valid = false;
-  } else {
-    clearFieldError(emailId);
-  }
-
-  if (phone.length < 6) {
-    showFieldError(
-      phoneId,
-      "Bitte eine gültige Telefonnummer eingeben (mind. 6 Ziffern).",
-    );
-    valid = false;
-  } else {
-    clearFieldError(phoneId);
-  }
-
-  return valid;
+  const nameValid = validateNameField(nameId);
+  const emailValid = validateEmailField(emailId);
+  const phoneValid = validatePhoneField(phoneId);
+  return nameValid && emailValid && phoneValid;
 }
 
 function showFieldError(inputId, message) {

@@ -163,14 +163,20 @@ async function loadTaskForEdit(taskId) {
 }
 
 /**
- * Füllt das Formular mit Task-Daten (Kategorie, Priorität, Kontakte und Subtasks)
+ * Füllt die Basis-Textfelder des Formulars mit Task-Daten
  * @param {Object} task - Das Task-Objekt
  */
-function fillFormWithTaskData(task) {
+function fillBasicTaskFields(task) {
   document.getElementById("title").value = task.title;
   document.getElementById("description").value = task.description;
   document.getElementById("due-date").value = task.dueDate;
+}
 
+/**
+ * Füllt das Kategorie-Feld und den Anzeigetext mit Task-Daten
+ * @param {Object} task - Das Task-Objekt
+ */
+function fillCategoryField(task) {
   const categoryInput = document.getElementById("category");
   if (categoryInput) categoryInput.value = task.category;
 
@@ -179,14 +185,62 @@ function fillFormWithTaskData(task) {
     categoryText.textContent =
       task.category === "user-story" ? "User Story" : "Technical Task";
   }
+}
 
+/**
+ * Füllt das Formular mit Task-Daten (Kategorie, Priorität, Kontakte und Subtasks)
+ * @param {Object} task - Das Task-Objekt
+ */
+function fillFormWithTaskData(task) {
+  fillBasicTaskFields(task);
+  fillCategoryField(task);
   selectPriority(task.priority);
-
   loadAssigneesForEdit(task);
-
   subtasks = task.subtasks ? JSON.parse(JSON.stringify(task.subtasks)) : [];
   renderSubtasks();
   validateForm();
+}
+
+/**
+ * Setzt den Formulartitel auf "Edit Task"
+ */
+function setEditFormTitle() {
+  const titleHeader = document.querySelector(".add-task-title");
+  if (titleHeader) titleHeader.textContent = "Edit Task";
+}
+
+/**
+ * Aktualisiert den Submit-Button auf "Save Changes"
+ */
+function setEditFormButton() {
+  const submitBtn = document.getElementById("create-task-btn");
+  if (submitBtn) {
+    submitBtn.innerHTML =
+      'Save Changes <img src="./assets/icons/check-create-icon.svg" alt="Save Changes" />';
+  }
+}
+
+/**
+ * Setzt den Submit-Handler des Formulars für den Bearbeitungsmodus
+ * @param {string} taskId - Die ID des Tasks
+ */
+function setEditFormSubmitHandler(taskId) {
+  const form = document.getElementById("add-task-form");
+  if (form) {
+    form.onsubmit = function (event) {
+      handleEditTask(event, taskId);
+    };
+  }
+}
+
+/**
+ * Blendet den Clear-Button im Bearbeitungsmodus aus
+ */
+function hideFormClearButton() {
+  const clearBtn = document.querySelector(".btn-clear");
+  if (clearBtn) {
+    clearBtn.style.display = "none";
+  }
 }
 
 /**
@@ -194,26 +248,10 @@ function fillFormWithTaskData(task) {
  * @param {string} taskId - Die ID des Tasks
  */
 function setupFormForEdit(taskId) {
-  const titleHeader = document.querySelector(".add-task-title");
-  if (titleHeader) titleHeader.textContent = "Edit Task";
-
-  const submitBtn = document.getElementById("create-task-btn");
-  if (submitBtn) {
-    submitBtn.innerHTML =
-      'Save Changes <img src="./assets/icons/check-create-icon.svg" alt="Save Changes" />';
-  }
-
-  const form = document.getElementById("add-task-form");
-  if (form) {
-    form.onsubmit = function (event) {
-      handleEditTask(event, taskId);
-    };
-  }
-
-  const clearBtn = document.querySelector(".btn-clear");
-  if (clearBtn) {
-    clearBtn.style.display = "none";
-  }
+  setEditFormTitle();
+  setEditFormButton();
+  setEditFormSubmitHandler(taskId);
+  hideFormClearButton();
 }
 
 /**

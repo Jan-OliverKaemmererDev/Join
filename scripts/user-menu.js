@@ -1,13 +1,9 @@
 /**
- * Schaltet das Benutzer-Dropdown-Menü um. Auf mobilen Geräten (≤780px) wird zusätzlich ein Help-Link eingefügt.
+ * Fügt einen Help-Link in das Dropdown ein, falls noch nicht vorhanden (nur mobil)
+ * @param {HTMLElement} dropdown - Das Dropdown-Element
  */
-function toggleUserMenu() {
-  const dropdown = document.getElementById("user-dropdown");
-
-  if (
-    window.innerWidth <= 780 &&
-    !document.getElementById("dropdown-help-link")
-  ) {
+function insertMobileHelpLink(dropdown) {
+  if (window.innerWidth <= 780 && !document.getElementById("dropdown-help-link")) {
     const helpLink = document.createElement("a");
     helpLink.id = "dropdown-help-link";
     helpLink.href = "help.html";
@@ -15,7 +11,14 @@ function toggleUserMenu() {
     helpLink.className = "dropdown-help-mobile";
     dropdown.insertBefore(helpLink, dropdown.firstChild);
   }
+}
 
+/**
+ * Schaltet das Benutzer-Dropdown-Menü um. Auf mobilen Geräten (≤780px) wird zusätzlich ein Help-Link eingefügt.
+ */
+function toggleUserMenu() {
+  const dropdown = document.getElementById("user-dropdown");
+  insertMobileHelpLink(dropdown);
   dropdown.classList.toggle("active");
 }
 

@@ -60,15 +60,11 @@ function closeTaskDetails() {
 }
 
 /**
- * Schaltet den Status eines Subtasks um. Verwendet Optimistisches Update: Checkbox und Fortschrittsbalken werden sofort aktualisiert, Speichern erfolgt im Hintergrund.
- * @param {number} taskId - Die ID des Tasks
+ * Schaltet die Checkbox-Klasse eines Subtask-Elements im DOM um
+ * @param {NodeList} subtaskItems - Die Subtask-Elemente im Detail-View
  * @param {number} subtaskIndex - Der Index des Subtasks
  */
-async function toggleSubtask(taskId, subtaskIndex) {
-  const task = findTask(taskId);
-  if (!task) return;
-
-  const subtaskItems = document.querySelectorAll(".subtask-item-detail");
+function toggleSubtaskCheckboxInDom(subtaskItems, subtaskIndex) {
   if (subtaskItems[subtaskIndex]) {
     const checkbox =
       subtaskItems[subtaskIndex].querySelector(".subtask-checkbox");
@@ -76,13 +72,62 @@ async function toggleSubtask(taskId, subtaskIndex) {
       checkbox.classList.toggle("checked");
     }
   }
+}
 
+/**
+ * Invertiert den completed-Status eines Subtasks im Task-Objekt
+ * @param {Object} task - Das Task-Objekt
+ * @param {number} subtaskIndex - Der Index des Subtasks
+ */
+function updateSubtaskCompletedState(task, subtaskIndex) {
   task.subtasks[subtaskIndex].completed =
     !task.subtasks[subtaskIndex].completed;
+}
 
+/**
+ * Schaltet den Status eines Subtasks um. Verwendet Optimistisches Update: Checkbox und Fortschrittsbalken werden sofort aktualisiert, Speichern erfolgt im Hintergrund.
+ * @param {number} taskId - Die ID des Tasks
+ * @param {number} subtaskIndex - Der Index des Subtasks
+ */
+async function toggleSubtask(taskId, subtaskIndex) {
+  const task = findTask(taskId);
+  if (!task) return;
+  const subtaskItems = document.querySelectorAll(".subtask-item-detail");
+  toggleSubtaskCheckboxInDom(subtaskItems, subtaskIndex);
+  updateSubtaskCompletedState(task, subtaskIndex);
   updateTaskCardProgress(task);
-
   await saveSingleTask(task);
+}
+
+/**
+ * Berechnet die Fortschrittsdaten für die Subtasks eines Tasks
+ * @param {Array} subtasks - Die Subtask-Liste des Tasks
+ * @returns {Object} Objekt mit completed, total und percent
+ */
+function getSubtaskProgressData(subtasks) {
+  const completed = countCompletedSubtasks(subtasks);
+  const total = subtasks.length;
+  const percent = (completed / total) * 100;
+  return { completed, total, percent };
+}
+
+/**
+ * Setzt die Breite des Fortschrittsbalkens
+ * @param {HTMLElement} progressBar - Das Fortschrittsbalken-Element
+ * @param {number} percent - Der Prozentwert (0-100)
+ */
+function applyProgressBarWidth(progressBar, percent) {
+  if (progressBar) progressBar.style.width = `${percent}%`;
+}
+
+/**
+ * Setzt den Fortschrittstext einer Task-Karte
+ * @param {HTMLElement} progressText - Das Text-Element
+ * @param {number} completed - Anzahl erledigter Subtasks
+ * @param {number} total - Gesamtzahl der Subtasks
+ */
+function applyProgressText(progressText, completed, total) {
+  if (progressText) progressText.innerText = `${completed}/${total} Subtasks`;
 }
 
 /**
@@ -96,15 +141,38 @@ function updateTaskCardProgress(task) {
   const subtaskContainer = card.querySelector(".task-subtasks");
   if (!subtaskContainer) return;
 
-  const completed = countCompletedSubtasks(task.subtasks);
-  const total = task.subtasks.length;
-  const percent = (completed / total) * 100;
-
+  const { completed, total, percent } = getSubtaskProgressData(task.subtasks);
   const progressBar = subtaskContainer.querySelector(".progress-bar");
   const progressText = subtaskContainer.querySelector("span");
 
-  if (progressBar) progressBar.style.width = `${percent}%`;
-  if (progressText) progressText.innerText = `${completed}/${total} Subtasks`;
+  applyProgressBarWidth(progressBar, percent);
+  applyProgressText(progressText, completed, total);
+}
+
+/**
+ * Löscht einen Task aus Firestore
+ * @param {number} taskId - Die ID des zu löschenden Tasks
+ * @param {string} userId - Die ID des Benutzers
+ */
+async function deleteTaskFromFirestore(taskId, userId) {
+  const taskRef = window.fbDoc(
+    window.firebaseDb,
+    "users",
+    userId,
+    "tasks",
+    String(taskId),
+  );
+  await window.fbDeleteDoc(taskRef);
+}
+
+/**
+ * Entfernt einen Task aus dem lokalen Array, rendert das Board und schließt die Detailansicht
+ * @param {number} taskId - Die ID des Tasks
+ */
+function removeTaskFromBoard(taskId) {
+  tasks = filterOutTask(taskId);
+  renderTasks();
+  closeTaskDetails();
 }
 
 /**
@@ -115,20 +183,11 @@ async function deleteTask(taskId) {
   const currentUser = getCurrentUser();
   if (!currentUser) return;
   try {
-    const taskRef = window.fbDoc(
-      window.firebaseDb,
-      "users",
-      currentUser.id,
-      "tasks",
-      String(taskId),
-    );
-    await window.fbDeleteDoc(taskRef);
+    await deleteTaskFromFirestore(taskId, currentUser.id);
   } catch (error) {
     console.error("Error deleting task:", error);
   }
-  tasks = filterOutTask(taskId);
-  renderTasks();
-  closeTaskDetails();
+  removeTaskFromBoard(taskId);
 }
 
 /**
@@ -173,6 +232,22 @@ function filterCard(card, query) {
   }
 }
 
+/**
+ * Öffnet das Bearbeitungs-Overlay für einen Task auf dem Desktop
+ * @param {Object} task - Das Task-Objekt
+ * @param {number} taskId - Die ID des Tasks
+ */
+function openEditOverlay(task, taskId) {
+  closeTaskDetails();
+  fillFormWithTaskData(task);
+  openAddTaskOverlay();
+  setupFormForEdit(taskId);
+}
+
+/**
+ * Öffnet den Bearbeitungsmodus für einen Task
+ * @param {number} taskId - Die ID des Tasks
+ */
 function editTask(taskId) {
   if (window.innerWidth <= 780) {
     window.location.href = "addtask.html?edit=" + taskId;
@@ -180,10 +255,7 @@ function editTask(taskId) {
   }
   const task = findTask(taskId);
   if (!task) return;
-  closeTaskDetails();
-  fillFormWithTaskData(task);
-  openAddTaskOverlay();
-  setupFormForEdit(taskId);
+  openEditOverlay(task, taskId);
 }
 
 /**
@@ -226,19 +298,67 @@ function loadAssigneesForEdit(task) {
 }
 
 /**
- * Konfiguriert das Formular für die Bearbeitung
- * @param {number} taskId - Die ID des zu bearbeitenden Tasks
+ * Setzt den Formulartitel auf "Edit Task"
  */
-function setupFormForEdit(taskId) {
-  const form = document.getElementById("add-task-form");
-  const submitBtn = document.getElementById("create-task-btn");
+function setBoardEditTitle() {
   const title = document.querySelector(".add-task-title");
   title.textContent = "Edit Task";
+}
+
+/**
+ * Aktualisiert den Submit-Button auf "Save Changes"
+ */
+function setBoardEditButton() {
+  const submitBtn = document.getElementById("create-task-btn");
   submitBtn.innerHTML = `Save Changes <img src="./assets/icons/check-create-icon.svg" alt="Save Changes" />`;
+}
+
+/**
+ * Setzt den Submit-Handler des Formulars für den Board-Bearbeitungsmodus
+ * @param {number} taskId - Die ID des Tasks
+ */
+function setBoardEditSubmitHandler(taskId) {
+  const form = document.getElementById("add-task-form");
   form.onsubmit = function (event) {
     event.preventDefault();
     updateTask(taskId);
   };
+}
+
+/**
+ * Konfiguriert das Formular für die Bearbeitung
+ * @param {number} taskId - Die ID des zu bearbeitenden Tasks
+ */
+function setupFormForEdit(taskId) {
+  setBoardEditTitle();
+  setBoardEditButton();
+  setBoardEditSubmitHandler(taskId);
+}
+
+/**
+ * Überträgt die Formulardaten in das Task-Objekt
+ * @param {Object} task - Das zu aktualisierende Task-Objekt
+ */
+function applyFormDataToTask(task) {
+  task.title = document.getElementById("title").value.trim();
+  task.description = document.getElementById("description").value.trim();
+  task.dueDate = document.getElementById("due-date").value;
+  task.priority = selectedPriority;
+  task.assignedTo = selectedContacts.map(function (c) {
+    return c.id;
+  });
+  task.category = document.getElementById("category").value;
+  task.subtasks = JSON.parse(JSON.stringify(subtasks));
+}
+
+/**
+ * Schließt das Overlay, setzt das Formular zurück und zeigt eine Erfolgsmeldung
+ */
+function finalizeTaskUpdate() {
+  renderTasks();
+  resetFormToAddMode();
+  closeAddTaskOverlay();
+  showToast("Task updated successfully");
 }
 
 /**
@@ -248,34 +368,42 @@ function setupFormForEdit(taskId) {
 async function updateTask(taskId) {
   const taskIndex = findTaskById(taskId);
   if (taskIndex === -1) return;
-  tasks[taskIndex].title = document.getElementById("title").value.trim();
-  tasks[taskIndex].description = document
-    .getElementById("description")
-    .value.trim();
-  tasks[taskIndex].dueDate = document.getElementById("due-date").value;
-  tasks[taskIndex].priority = selectedPriority;
-  tasks[taskIndex].assignedTo = selectedContacts.map(function (c) {
-    return c.id;
-  });
-  tasks[taskIndex].category = document.getElementById("category").value;
-  tasks[taskIndex].subtasks = JSON.parse(JSON.stringify(subtasks));
+  applyFormDataToTask(tasks[taskIndex]);
   await saveSingleTask(tasks[taskIndex]);
-  renderTasks();
-  resetFormToAddMode();
-  closeAddTaskOverlay();
-  showToast("Task updated successfully");
+  finalizeTaskUpdate();
+}
+
+/**
+ * Setzt den Formulartitel auf "Add Task"
+ */
+function setAddFormTitle() {
+  const title = document.querySelector(".add-task-title");
+  title.textContent = "Add Task";
+}
+
+/**
+ * Setzt den Submit-Button zurück auf "Create Task"
+ */
+function setAddFormButton() {
+  const submitBtn = document.getElementById("create-task-btn");
+  submitBtn.innerHTML = `Create Task <img src="./assets/icons/check-create-icon.svg" alt="Create Task" />`;
+}
+
+/**
+ * Setzt den Submit-Handler des Formulars auf den Standard-Add-Handler
+ */
+function setAddFormSubmitHandler() {
+  const form = document.getElementById("add-task-form");
+  form.onsubmit = handleAddTask;
 }
 
 /**
  * Setzt das Formular zurück in den Add-Modus
  */
 function resetFormToAddMode() {
-  const form = document.getElementById("add-task-form");
-  const submitBtn = document.getElementById("create-task-btn");
-  const title = document.querySelector(".add-task-title");
-  title.textContent = "Add Task";
-  submitBtn.innerHTML = `Create Task <img src="./assets/icons/check-create-icon.svg" alt="Create Task" />`;
-  form.onsubmit = handleAddTask;
+  setAddFormTitle();
+  setAddFormButton();
+  setAddFormSubmitHandler();
   clearForm();
   resetBoardDropdowns();
 }

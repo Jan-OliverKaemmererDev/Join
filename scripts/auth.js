@@ -30,20 +30,28 @@ async function signUpUser(name, email, password) {
     );
     const user = userCredential.user;
     await window.fbUpdateProfile(user, { displayName: name });
-
-    const batch = window.fbWriteBatch(window.firebaseDb);
-    await Promise.all([
-      saveUserProfile(user.uid, name, email, batch),
-      initDefaultContacts(user.uid, batch),
-      initDefaultTasks(user.uid, batch),
-    ]);
-    await batch.commit();
-
+    await initializeUserData(user.uid, name, email);
     return { success: true, message: "Registrierung erfolgreich" };
   } catch (error) {
     console.error("Signup error:", error);
     return handleFirebaseError(error);
   }
+}
+
+/**
+ * Initialisiert Benutzerprofil, Standardkontakte und Standard-Tasks in einem Batch
+ * @param {string} uid - Die Firebase User-ID
+ * @param {string} name - Der Name des Benutzers
+ * @param {string} email - Die E-Mail-Adresse
+ */
+async function initializeUserData(uid, name, email) {
+  const batch = window.fbWriteBatch(window.firebaseDb);
+  await Promise.all([
+    saveUserProfile(uid, name, email, batch),
+    initDefaultContacts(uid, batch),
+    initDefaultTasks(uid, batch),
+  ]);
+  await batch.commit();
 }
 
 /**
@@ -138,31 +146,58 @@ async function loginUser(email, password) {
     );
     const user = userCredential.user;
     const profile = await loadUserProfile(user.uid);
-    const userName =
-      profile.name !== "User" ? profile.name : user.displayName || profile.name;
-    const userEmail = profile.email || user.email;
+    const userName = resolveUserName(profile, user);
+    const userEmail = resolveUserEmail(profile, user);
     if (profile.name === "User" || !profile.email) {
-      const batch = window.fbWriteBatch(window.firebaseDb);
-      await Promise.all([
-        saveUserProfile(user.uid, userName, userEmail, batch),
-        initDefaultContacts(user.uid, batch),
-        initDefaultTasks(user.uid, batch),
-      ]);
-      await batch.commit();
+      await initializeUserData(user.uid, userName, userEmail);
     }
-    const sessionUser = {
-      id: user.uid,
-      name: userName,
-      email: userEmail,
-      isGuest: false,
-    };
-    sessionStorage.setItem("join_current_user", JSON.stringify(sessionUser));
-    sessionStorage.setItem("showJoinGreeting", "true");
+    const sessionUser = buildSessionUser(user.uid, userName, userEmail);
+    storeUserSession(sessionUser);
     return { success: true, user: sessionUser };
   } catch (error) {
     console.error("Login error:", error);
     return handleFirebaseError(error);
   }
+}
+
+/**
+ * Ermittelt den anzuzeigenden Benutzernamen aus Profil und Auth-Objekt
+ * @param {Object} profile - Das Firestore-Profil
+ * @param {Object} authUser - Das Firebase Auth-Objekt
+ * @returns {string} Der aufgelöste Benutzername
+ */
+function resolveUserName(profile, authUser) {
+  return profile.name !== "User" ? profile.name : authUser.displayName || profile.name;
+}
+
+/**
+ * Ermittelt die anzuzeigende E-Mail aus Profil und Auth-Objekt
+ * @param {Object} profile - Das Firestore-Profil
+ * @param {Object} authUser - Das Firebase Auth-Objekt
+ * @returns {string} Die aufgelöste E-Mail-Adresse
+ */
+function resolveUserEmail(profile, authUser) {
+  return profile.email || authUser.email;
+}
+
+/**
+ * Erstellt ein Session-Benutzer-Objekt
+ * @param {string} uid - Die Firebase User-ID
+ * @param {string} name - Der Benutzername
+ * @param {string} email - Die E-Mail-Adresse
+ * @returns {Object} Das Session-Benutzer-Objekt
+ */
+function buildSessionUser(uid, name, email) {
+  return { id: uid, name: name, email: email, isGuest: false };
+}
+
+/**
+ * Speichert den angemeldeten Benutzer in der Session
+ * @param {Object} sessionUser - Das Session-Benutzer-Objekt
+ */
+function storeUserSession(sessionUser) {
+  sessionStorage.setItem("join_current_user", JSON.stringify(sessionUser));
+  sessionStorage.setItem("showJoinGreeting", "true");
 }
 
 /**
@@ -194,8 +229,7 @@ async function guestLoginUser() {
       isGuest: true,
     };
     await ensureGuestProfile(user.uid);
-    sessionStorage.setItem("join_current_user", JSON.stringify(guestSession));
-    sessionStorage.setItem("showJoinGreeting", "true");
+    storeUserSession(guestSession);
     return { success: true, user: guestSession };
   } catch (error) {
     console.error("Guest login error:", error);
@@ -248,12 +282,7 @@ async function logoutUser() {
     firebaseUser &&
     firebaseUser.isAnonymous
   ) {
-    await deleteUserData(currentUser.id);
-    try {
-      await firebaseUser.delete();
-    } catch (e) {
-      console.warn("Could not delete anonymous auth user:", e);
-    }
+    await deleteGuestAccount(currentUser, firebaseUser);
   }
 
   try {
@@ -261,6 +290,27 @@ async function logoutUser() {
   } catch (error) {
     console.error("Logout error:", error);
   }
+  clearUserSession();
+}
+
+/**
+ * Löscht die Daten und den Auth-Account eines Gast-Benutzers
+ * @param {Object} currentUser - Das Session-Benutzer-Objekt
+ * @param {Object} firebaseUser - Das Firebase Auth-Objekt
+ */
+async function deleteGuestAccount(currentUser, firebaseUser) {
+  await deleteUserData(currentUser.id);
+  try {
+    await firebaseUser.delete();
+  } catch (e) {
+    console.warn("Could not delete anonymous auth user:", e);
+  }
+}
+
+/**
+ * Entfernt den angemeldeten Benutzer aus der Session
+ */
+function clearUserSession() {
   sessionStorage.removeItem("join_current_user");
 }
 

@@ -78,12 +78,10 @@ function updateGreeting() {
 }
 
 /**
- * Aktualisiert die Task-Metriken auf der Summary-Seite
- * @param {Object} user - Das Benutzer-Objekt
+ * Zeigt die berechneten Task-Metriken in der Summary-Seite an
+ * @param {Object} metrics - Das Metriken-Objekt
  */
-async function updateTaskMetrics(user) {
-  const userTasks = await getUserTasks(user.id);
-  const metrics = calculateTaskMetrics(userTasks);
+function displayTaskMetrics(metrics) {
   document.getElementById("count-todo").textContent = metrics.todo;
   document.getElementById("count-done").textContent = metrics.done;
   document.getElementById("count-urgent").textContent = metrics.urgent;
@@ -96,6 +94,16 @@ async function updateTaskMetrics(user) {
   } else {
     deadlineElement.textContent = "No upcoming deadline";
   }
+}
+
+/**
+ * Aktualisiert die Task-Metriken auf der Summary-Seite
+ * @param {Object} user - Das Benutzer-Objekt
+ */
+async function updateTaskMetrics(user) {
+  const userTasks = await getUserTasks(user.id);
+  const metrics = calculateTaskMetrics(userTasks);
+  displayTaskMetrics(metrics);
 }
 
 /**
@@ -255,6 +263,36 @@ function renderTaskMetrics() {
 }
 
 /**
+ * Entfernt das Begrüßungs-Flag aus dem sessionStorage
+ */
+function removeMobileGreetingFlag() {
+  sessionStorage.removeItem("showJoinGreeting");
+}
+
+/**
+ * Startet die Ausblend-Animation des Begrüßungs-Overlays
+ * @param {HTMLElement} greetingContainer - Das Begrüßungs-Container-Element
+ */
+function startGreetingFadeOut(greetingContainer) {
+  setTimeout(() => {
+    greetingContainer.classList.add("fade-out");
+    setTimeout(() => {
+      greetingContainer.classList.remove("mobile-greeting-overlay");
+      greetingContainer.classList.remove("fade-out");
+    }, 500);
+  }, 1500);
+}
+
+/**
+ * Zeigt das mobile Begrüßungs-Overlay und startet die Ausblend-Animation
+ * @param {HTMLElement} greetingContainer - Das Begrüßungs-Container-Element
+ */
+function showMobileGreetingOverlay(greetingContainer) {
+  greetingContainer.classList.add("mobile-greeting-overlay");
+  startGreetingFadeOut(greetingContainer);
+}
+
+/**
  * Überprüft, ob die mobile Begrüßungs-Animation angezeigt werden soll. Das sessionStorage-Flag wird nach dem ersten Aufruf entfernt, um eine erneute Anzeige beim Neuladen zu verhindern.
  */
 function checkMobileGreeting() {
@@ -265,20 +303,12 @@ function checkMobileGreeting() {
     return;
   }
 
-  sessionStorage.removeItem("showJoinGreeting");
+  removeMobileGreetingFlag();
 
   if (isMobile) {
     const greetingContainer = document.querySelector(".greeting-container");
     if (greetingContainer) {
-      greetingContainer.classList.add("mobile-greeting-overlay");
-
-      setTimeout(() => {
-        greetingContainer.classList.add("fade-out");
-        setTimeout(() => {
-          greetingContainer.classList.remove("mobile-greeting-overlay");
-          greetingContainer.classList.remove("fade-out");
-        }, 500);
-      }, 1500);
+      showMobileGreetingOverlay(greetingContainer);
     }
   }
 }
