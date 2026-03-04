@@ -219,7 +219,7 @@ body {
 
 #contact-details-content {
   width: 100%;
-  padding-right: 55px;
+  padding-left: 55px;
   box-sizing: border-box;
 }
 
@@ -693,8 +693,8 @@ body {
   }
 
   #contact-details-content {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
   }
 }
 
@@ -748,8 +748,8 @@ body {
   }
 
   #contact-details-content {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
 
   .contact-avatar-large {
