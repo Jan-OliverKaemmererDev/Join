@@ -183,10 +183,52 @@
 }
 
 .add-task-overlay-card {
-  width: 1116px;
+  width: 1000px;
   padding: 64px;
   border-radius: 30px;
   background: white;
+}
+
+.add-task-overlay-card .add-task-title {
+  font-size: 61px;
+  font-weight: 700;
+  margin: 0 0 32px 0;
+  color: #000;
+}
+
+.add-task-overlay-card .form-container {
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0;
+  column-gap: 48px;
+  max-width: 100%;
+}
+
+.add-task-overlay-card .form-container::after {
+  content: "";
+  grid-column: 2;
+  grid-row: 1;
+  width: 1px;
+  height: 424px;
+  background-color: #d1d1d1;
+  align-self: start;
+}
+
+.add-task-overlay-card .form-container .form-column:first-child {
+  grid-column: 1;
+}
+
+.add-task-overlay-card .form-container .form-column:last-child {
+  grid-column: 3;
+}
+
+.add-task-overlay-card #add-task-form {
+  align-items: stretch;
+}
+
+.add-task-overlay-card .form-footer {
+  border-top: none;
+  padding-top: 0;
+  max-width: 100%;
 }
 
 .task-details-card {
