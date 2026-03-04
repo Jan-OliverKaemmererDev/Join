@@ -118,9 +118,12 @@
 
 .selected-contacts-initials {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   margin-top: 8px;
+  overflow-x: auto;
+  max-width: 376px;
+  padding-bottom: 4px;
 }
 
 .selected-avatar {
@@ -133,6 +136,7 @@
   color: #fff;
   font-size: 14px;
   font-weight: 400;
+  flex-shrink: 0;
 }
 
 .priority-buttons {
