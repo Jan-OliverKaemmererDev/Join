@@ -263,18 +263,29 @@
 
   /* Task Details Overlay */
   .task-details-card {
-    width: 90vw;
-    max-width: 400px;
+    width: 92vw;
+    max-width: 450px;
     padding: 32px 24px;
+    max-height: 85vh;
   }
 
   .task-details-title {
-    font-size: 36px;
+    font-size: 32px;
+    margin-top: 8px;
   }
 
   .task-details-info {
     font-size: 16px;
-    gap: 16px;
+    gap: 12px;
+  }
+
+  .task-details-label {
+    width: 100px;
+  }
+
+  .task-details-actions {
+    margin-top: 16px;
+    gap: 8px;
   }
 
   /* Mobile Nav ausblenden (wird durch Sidebar ersetzt) */
