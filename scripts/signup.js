@@ -6,29 +6,47 @@ function initSignup() {
 }
 
 /**
+ * Setzt den Fehler-Zustand auf ein Input-Feld und den zugehörigen Hint.
+ * @param {HTMLElement} input
+ * @param {HTMLElement} hint
+ * @param {string} message
+ */
+function applyFieldError(input, hint, message) {
+  input.classList.add("input-error");
+  hint.textContent = message;
+  hint.style.display = "block";
+}
+
+/**
+ * Entfernt den Fehler-Zustand von einem Input-Feld und dem zugehörigen Hint.
+ * @param {HTMLElement} input
+ * @param {HTMLElement} hint
+ */
+function clearFieldError(input, hint) {
+  input.classList.remove("input-error");
+  hint.textContent = "";
+  hint.style.display = "none";
+}
+
+/**
  * Zeigt oder versteckt einen Hinweis unter einem Input-Feld.
- * @param {string} inputId - ID des Input-Elements
- * @param {string|null} message - Nachricht oder null zum Ausblenden
+ * @param {string} inputId
+ * @param {string|null} message
  */
 function setFieldHint(inputId, message) {
   const input = document.getElementById(inputId);
   const hint = document.getElementById("hint-" + inputId);
   if (!input || !hint) return;
-
   if (message) {
-    input.classList.add("input-error");
-    hint.textContent = message;
-    hint.style.display = "block";
+    applyFieldError(input, hint, message);
   } else {
-    input.classList.remove("input-error");
-    hint.textContent = "";
-    hint.style.display = "none";
+    clearFieldError(input, hint);
   }
 }
 
 /**
- * Liest alle Formularwerte der Registrierungsseite aus
- * @returns {Object} Objekt mit name, email, pass, confirm, privacy
+ * Liest alle Formularwerte der Registrierungsseite aus.
+ * @returns {{name: string, email: string, pass: string, confirm: string, privacy: boolean}}
  */
 function getSignupFormValues() {
   return {
@@ -41,12 +59,12 @@ function getSignupFormValues() {
 }
 
 /**
- * Validiert alle Felder des Registrierungsformulars
- * @param {string} name - Der eingegebene Name
- * @param {string} email - Die eingegebene E-Mail
- * @param {string} pass - Das eingegebene Passwort
- * @param {string} confirm - Die Passwortbestätigung
- * @returns {Object} Objekt mit nameValid, emailValid, passValid, confirmComplete
+ * Validiert alle Felder des Registrierungsformulars.
+ * @param {string} name
+ * @param {string} email
+ * @param {string} pass
+ * @param {string} confirm
+ * @returns {{nameValid: boolean, emailValid: boolean, passValid: boolean, confirmComplete: boolean}}
  */
 function validateSignupFields(name, email, pass, confirm) {
   const nameLetters = name.replace(/[^a-zA-ZäöüÄÖÜß]/g, "");
@@ -59,51 +77,55 @@ function validateSignupFields(name, email, pass, confirm) {
 }
 
 /**
- * Zeigt Validierungshinweise für gefüllte Felder an
- * @param {Object} values - Die Formularwerte
- * @param {Object} validity - Die Validierungsergebnisse
+ * @param {{name: string}} values
+ * @param {{nameValid: boolean}} validity
  */
-function showSignupFieldHints(values, validity) {
-  if (values.name.length > 0) {
-    setFieldHint(
-      "name",
-      validity.nameValid ? null : "Der Name muss mindestens 3 Buchstaben enthalten.",
-    );
-  } else {
-    setFieldHint("name", null);
-  }
-
-  if (values.email.length > 0) {
-    setFieldHint(
-      "email",
-      validity.emailValid ? null : "Bitte eine gültige E-Mail-Adresse eingeben.",
-    );
-  } else {
-    setFieldHint("email", null);
-  }
-
-  if (values.pass.length > 0) {
-    setFieldHint(
-      "password",
-      validity.passValid ? null : "Das Passwort muss mindestens 6 Zeichen lang sein.",
-    );
-  } else {
-    setFieldHint("password", null);
-  }
-
-  if (values.confirm.length > 0) {
-    setFieldHint(
-      "confirm-password",
-      values.pass === values.confirm ? null : "Die Passwörter stimmen nicht überein.",
-    );
-  } else {
-    setFieldHint("confirm-password", null);
-  }
+function showNameHint(values, validity) {
+  setFieldHint("name", values.name.length > 0 && !validity.nameValid
+    ? "Der Name muss mindestens 3 Buchstaben enthalten." : null);
 }
 
 /**
- * Aktiviert oder deaktiviert den Submit-Button
- * @param {boolean} allValid - True wenn alle Felder gültig sind
+ * @param {{email: string}} values
+ * @param {{emailValid: boolean}} validity
+ */
+function showEmailHint(values, validity) {
+  setFieldHint("email", values.email.length > 0 && !validity.emailValid
+    ? "Bitte eine gültige E-Mail-Adresse eingeben." : null);
+}
+
+/**
+ * @param {{pass: string}} values
+ * @param {{passValid: boolean}} validity
+ */
+function showPasswordHint(values, validity) {
+  setFieldHint("password", values.pass.length > 0 && !validity.passValid
+    ? "Das Passwort muss mindestens 6 Zeichen lang sein." : null);
+}
+
+/**
+ * @param {{pass: string, confirm: string}} values
+ */
+function showConfirmHint(values) {
+  setFieldHint("confirm-password", values.confirm.length > 0 && values.pass !== values.confirm
+    ? "Die Passwörter stimmen nicht überein." : null);
+}
+
+/**
+ * Zeigt Validierungshinweise für alle Felder an.
+ * @param {Object} values
+ * @param {Object} validity
+ */
+function showSignupFieldHints(values, validity) {
+  showNameHint(values, validity);
+  showEmailHint(values, validity);
+  showPasswordHint(values, validity);
+  showConfirmHint(values);
+}
+
+/**
+ * Aktiviert oder deaktiviert den Submit-Button.
+ * @param {boolean} allValid
  */
 function updateSignupSubmitButton(allValid) {
   const btn = document.getElementById("signup-btn");
@@ -112,41 +134,48 @@ function updateSignupSubmitButton(allValid) {
 }
 
 /**
- * Überprüft die Gültigkeit des Registrierungs-Formulars und zeigt Hinweise nur an, wenn die Felder bereits ausgefüllt wurden
+ * Prüft ob alle Pflichtfelder gültig sind.
+ * @param {Object} validity
+ * @param {boolean} privacy
+ * @returns {boolean}
+ */
+function isFormComplete(validity, privacy) {
+  return validity.nameValid && validity.emailValid &&
+    validity.passValid && validity.confirmComplete && privacy;
+}
+
+/**
+ * Überprüft die Gültigkeit des Formulars und aktualisiert UI-Hinweise.
  */
 function checkFormValidity() {
   const values = getSignupFormValues();
   const validity = validateSignupFields(
-    values.name,
-    values.email,
-    values.pass,
-    values.confirm,
+    values.name, values.email, values.pass, values.confirm,
   );
   showSignupFieldHints(values, validity);
-  const allValid =
-    validity.nameValid &&
-    validity.emailValid &&
-    validity.passValid &&
-    validity.confirmComplete &&
-    values.privacy;
-  updateSignupSubmitButton(allValid);
+  updateSignupSubmitButton(isFormComplete(validity, values.privacy));
 }
 
 /**
- * Verarbeitet die Benutzerregistrierung
- * @param {Event} event - Das Submit-Event des Formulars
+ * Liest die Rohwerte des Registrierungsformulars aus.
+ * @returns {{name: string, email: string, pass: string, confirm: string}}
  */
-async function handleRegistration(event) {
-  event.preventDefault();
-  await waitForFirebase();
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const pass = document.getElementById("password").value;
-  const confirm = document.getElementById("confirm-password").value;
-  if (pass !== confirm) {
-    showPasswordError();
-    return;
-  }
+function getRegistrationFormValues() {
+  return {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    pass: document.getElementById("password").value,
+    confirm: document.getElementById("confirm-password").value,
+  };
+}
+
+/**
+ * Führt den eigentlichen Registrierungsversuch durch und verarbeitet das Ergebnis.
+ * @param {string} name
+ * @param {string} email
+ * @param {string} pass
+ */
+async function attemptSignUp(name, email, pass) {
   const result = await signUpUser(name, email, pass);
   if (result.success) {
     console.log("Benutzer erfolgreich registriert:", email);
@@ -158,18 +187,38 @@ async function handleRegistration(event) {
 }
 
 /**
- * Zeigt eine Passwort-Fehlermeldung an
+ * Verarbeitet die Benutzerregistrierung.
+ * @param {Event} event
+ */
+async function handleRegistration(event) {
+  event.preventDefault();
+  await waitForFirebase();
+  const values = getRegistrationFormValues();
+  if (values.pass !== values.confirm) {
+    showPasswordError();
+    return;
+  }
+  await attemptSignUp(values.name, values.email, values.pass);
+}
+
+/**
+ * Aktiviert die visuelle Fehlermeldung bei Passwort-Mismatch.
+ * @param {HTMLElement|null} errorMsg
+ * @param {HTMLElement} confirmInput
+ */
+function displayPasswordMismatchError(errorMsg, confirmInput) {
+  if (errorMsg) errorMsg.classList.remove("v-none");
+  confirmInput.classList.add("input-error");
+}
+
+/**
+ * Zeigt eine Passwort-Fehlermeldung an und registriert einen Reset-Listener.
  */
 function showPasswordError() {
   const errorMsg = document.getElementById("error-message");
   const confirmPassInput = document.getElementById("confirm-password");
-
-  if (errorMsg) {
-    errorMsg.classList.remove("v-none");
-  }
-  confirmPassInput.classList.add("input-error");
-
-  const resetError = () => {
+  displayPasswordMismatchError(errorMsg, confirmPassInput);
+  const resetError = function () {
     if (errorMsg) errorMsg.classList.add("v-none");
     confirmPassInput.classList.remove("input-error");
     confirmPassInput.removeEventListener("input", resetError);
@@ -178,23 +227,30 @@ function showPasswordError() {
 }
 
 /**
- * Verarbeitet Registrierungsfehler und zeigt entsprechende Meldungen
- * @param {Object} result - Das Ergebnis-Objekt mit error und message
+ * Zeigt die Fehlermeldung und markiert ggf. das E-Mail-Feld.
+ * @param {HTMLElement|null} errorMsg
+ * @param {HTMLElement} emailInput
+ * @param {{error: string, message: string}} result
  */
-function handleRegistrationError(result) {
-  const errorMsg = document.getElementById("error-message");
-  const emailInput = document.getElementById("email");
-
+function displayRegistrationError(errorMsg, emailInput, result) {
   if (errorMsg) {
     errorMsg.textContent = result.message;
     errorMsg.classList.remove("v-none");
   }
-
   if (result.error === "duplicate-email" || result.error === "invalid-email") {
     emailInput.classList.add("input-error");
   }
+}
 
-  const resetError = () => {
+/**
+ * Verarbeitet Registrierungsfehler und zeigt entsprechende Meldungen.
+ * @param {{error: string, message: string}} result
+ */
+function handleRegistrationError(result) {
+  const errorMsg = document.getElementById("error-message");
+  const emailInput = document.getElementById("email");
+  displayRegistrationError(errorMsg, emailInput, result);
+  const resetError = function () {
     if (errorMsg) errorMsg.classList.add("v-none");
     emailInput.classList.remove("input-error");
     emailInput.removeEventListener("input", resetError);
@@ -203,7 +259,7 @@ function handleRegistrationError(result) {
 }
 
 /**
- * Zeigt eine Erfolgsmeldung an und leitet zur Login-Seite weiter
+ * Zeigt eine Erfolgsmeldung an und leitet zur Login-Seite weiter.
  */
 function showSuccessMessageAndRedirect() {
   const msg = document.getElementById("success-message");
