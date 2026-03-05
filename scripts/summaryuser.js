@@ -137,18 +137,8 @@ async function getUserTasks(userId) {
  * @returns {Object} Objekt mit berechneten Metriken
  */
 function calculateTaskMetrics(tasks) {
-  const metrics = {
-    todo: 0,
-    done: 0,
-    urgent: 0,
-    board: 0,
-    progress: 0,
-    awaiting: 0,
-    nextDeadline: null,
-  };
-  if (!tasks || tasks.length === 0) {
-    return metrics;
-  }
+  const metrics = createInitialMetrics();
+  if (!tasks || tasks.length === 0) return metrics;
   let nearestDeadline = null;
   for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];
@@ -159,10 +149,20 @@ function calculateTaskMetrics(tasks) {
     }
   }
   metrics.board = tasks.length;
-  if (nearestDeadline) {
-    metrics.nextDeadline = formatDeadline(nearestDeadline);
-  }
+  if (nearestDeadline) metrics.nextDeadline = formatDeadline(nearestDeadline);
   return metrics;
+}
+
+function createInitialMetrics() {
+  return {
+    todo: 0,
+    done: 0,
+    urgent: 0,
+    board: 0,
+    progress: 0,
+    awaiting: 0,
+    nextDeadline: null,
+  };
 }
 
 /**
@@ -253,7 +253,6 @@ function renderTaskMetrics() {
     "count-awaiting": "0",
     "next-deadline": "No upcoming deadline",
   };
-
   for (const [id, value] of Object.entries(elements)) {
     const element = document.getElementById(id);
     if (element) {
@@ -274,9 +273,9 @@ function removeMobileGreetingFlag() {
  * @param {HTMLElement} greetingContainer - Das Begrüßungs-Container-Element
  */
 function startGreetingFadeOut(greetingContainer) {
-  setTimeout(() => {
+  setTimeout(function () {
     greetingContainer.classList.add("fade-out");
-    setTimeout(() => {
+    setTimeout(function () {
       greetingContainer.classList.remove("mobile-greeting-overlay");
       greetingContainer.classList.remove("fade-out");
     }, 500);
@@ -297,15 +296,9 @@ function showMobileGreetingOverlay(greetingContainer) {
  */
 function checkMobileGreeting() {
   const showGreeting = sessionStorage.getItem("showJoinGreeting");
-  const isMobile = window.innerWidth <= 780;
-
-  if (showGreeting !== "true") {
-    return;
-  }
-
+  if (showGreeting !== "true") return;
   removeMobileGreetingFlag();
-
-  if (isMobile) {
+  if (window.innerWidth <= 780) {
     const greetingContainer = document.querySelector(".greeting-container");
     if (greetingContainer) {
       showMobileGreetingOverlay(greetingContainer);
@@ -320,8 +313,7 @@ function checkMobileGreeting() {
 function redirectToBoard(event) {
   const card = event.currentTarget;
   card.classList.add("card-clicked");
-
-  setTimeout(() => {
+  setTimeout(function () {
     window.location.href = "board.html";
   }, 120);
 }

@@ -37,18 +37,13 @@ function openTaskDetails(taskId) {
  * @returns {string} Das HTML für die Detailansicht
  */
 function buildTaskDetailsHtml(task) {
-  const subtasksHtml = buildSubtasksHtml(task);
-  const priorityIcon = getPriorityIcon(task.priority);
-  const categoryClass = getCategoryClass(task.category);
-  const categoryLabel = getCategoryLabel(task.category);
-  const assignedToHtml = buildAssignedToDetailsHtml(task);
   return getTaskDetailsTemplate(
     task,
-    subtasksHtml,
-    priorityIcon,
-    categoryClass,
-    categoryLabel,
-    assignedToHtml,
+    buildSubtasksHtml(task),
+    getPriorityIcon(task.priority),
+    getCategoryClass(task.category),
+    getCategoryLabel(task.category),
+    buildAssignedToDetailsHtml(task),
   );
 }
 
@@ -285,16 +280,23 @@ function loadAssigneesForEdit(task) {
   selectedContacts = [];
   if (Array.isArray(task.assignedTo)) {
     for (let i = 0; i < task.assignedTo.length; i++) {
-      const contact = allContacts.find(function (c) {
-        return String(c.id) === String(task.assignedTo[i]);
-      });
-      if (contact) {
-        selectedContacts.push(contact);
-      }
+      findAndAddContactForEdit(task.assignedTo[i]);
     }
   }
   renderAssignedToOptions();
   renderSelectedInitials();
+}
+
+/**
+ * Sucht einen Kontakt und fügt ihn zu den selektierten Kontakten hinzu
+ */
+function findAndAddContactForEdit(contactId) {
+  const contact = allContacts.find(function (c) {
+    return String(c.id) === String(contactId);
+  });
+  if (contact) {
+    selectedContacts.push(contact);
+  }
 }
 
 /**

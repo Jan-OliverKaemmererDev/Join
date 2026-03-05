@@ -4,18 +4,15 @@
  * @returns {string} Das generierte HTML
  */
 function generateTaskCardHtml(task) {
-  const categoryClass = getCategoryClass(task.category);
-  const categoryLabel = getCategoryLabel(task.category);
-  const progressHtml = generateProgressHtml(task);
-  const priorityIcon = getPriorityIcon(task.priority);
-  const assigneesHtml = generateAssigneesHtml(task);
+  const catClass = getCategoryClass(task.category);
+  const catLabel = getCategoryLabel(task.category);
   return getTaskCardTemplate(
     task,
-    categoryClass,
-    categoryLabel,
-    progressHtml,
-    assigneesHtml,
-    priorityIcon,
+    catClass,
+    catLabel,
+    generateProgressHtml(task),
+    generateAssigneesHtml(task),
+    getPriorityIcon(task.priority),
   );
 }
 
@@ -75,26 +72,43 @@ function countCompletedSubtasks(subtasks) {
  */
 function generateAssigneesHtml(task) {
   if (!task.assignedTo || !Array.isArray(task.assignedTo)) return "";
-  let html = "";
-  const displayCount = Math.min(task.assignedTo.length, 3);
+  let html = addAssigneeBadges(task.assignedTo);
+  if (task.assignedTo.length > 3) {
+    html += addExtraAssigneesBadge(task.assignedTo.length);
+  }
+  return html;
+}
 
+/**
+ * Fügt die Badges für die ersten 3 Assignees hinzu
+ */
+function addAssigneeBadges(assignedTo) {
+  let html = "";
+  const displayCount = Math.min(assignedTo.length, 3);
   for (let i = 0; i < displayCount; i++) {
-    const contactId = task.assignedTo[i];
-    const contact = allContacts.find((c) => String(c.id) === String(contactId));
+    const contact = findContactById(assignedTo[i]);
     if (contact) {
       const initials = getInitialsFromName(contact.name);
       html += getAssigneeBadgeTemplate(initials, contact.color);
     }
   }
-
-  if (task.assignedTo.length > 3) {
-    html += getAssigneeBadgeTemplate(
-      `+${task.assignedTo.length - 3}`,
-      "#2A3647",
-    );
-  }
-
   return html;
+}
+
+/**
+ * Fügt das "+X" Badge hinzu
+ */
+function addExtraAssigneesBadge(totalCount) {
+  return getAssigneeBadgeTemplate(`+${totalCount - 3}`, "#2A3647");
+}
+
+/**
+ * Sucht einen Kontakt anhand der ID (ohne Arrow Function)
+ */
+function findContactById(contactId) {
+  return allContacts.find(function (c) {
+    return String(c.id) === String(contactId);
+  });
 }
 
 /**
@@ -121,19 +135,25 @@ function buildAssignedToDetailsHtml(task) {
 function buildAssigneeDetailItems(assignedIds) {
   let html = "";
   for (let i = 0; i < assignedIds.length; i++) {
-    const contact = allContacts.find(
-      (c) => String(c.id) === String(assignedIds[i]),
-    );
-    if (contact) {
-      const initials = getInitialsFromName(contact.name);
-      html += getAssignedToDetailItemTemplate(
-        initials,
-        contact.color,
-        contact.name,
-      );
-    }
+    html += processAssigneeItem(assignedIds[i]);
   }
   return html || "<span>No one</span>";
+}
+
+/**
+ * Verarbeitet einen einzelnen Assignee-Eintrag für Details
+ */
+function processAssigneeItem(contactId) {
+  const contact = findContactById(contactId);
+  if (contact) {
+    const initials = getInitialsFromName(contact.name);
+    return getAssignedToDetailItemTemplate(
+      initials,
+      contact.color,
+      contact.name,
+    );
+  }
+  return "";
 }
 
 /**

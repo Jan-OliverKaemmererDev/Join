@@ -54,21 +54,30 @@ async function loadTasks() {
   const currentUser = getCurrentUser();
   if (!currentUser) return;
   try {
-    const tasksRef = window.fbCollection(
-      window.firebaseDb,
-      "users",
-      currentUser.id,
-      "tasks",
-    );
+    const tasksRef = getTasksRef(currentUser.id);
     const snapshot = await window.fbGetDocs(tasksRef);
-    tasks = [];
-    snapshot.forEach(function (doc) {
-      tasks.push(doc.data());
-    });
+    processTasksSnapshot(snapshot);
   } catch (error) {
     console.error("Error loading tasks:", error);
     tasks = [];
   }
+}
+
+/**
+ * Erstellt die Referenz auf die Tasks-Collection
+ */
+function getTasksRef(userId) {
+  return window.fbCollection(window.firebaseDb, "users", userId, "tasks");
+}
+
+/**
+ * Verarbeitet den Snapshot der Tasks
+ */
+function processTasksSnapshot(snapshot) {
+  tasks = [];
+  snapshot.forEach(function (doc) {
+    tasks.push(doc.data());
+  });
 }
 
 /**
@@ -236,19 +245,20 @@ async function saveTasks() {
   const currentUser = getCurrentUser();
   if (!currentUser) return;
   try {
-    for (let i = 0; i < tasks.length; i++) {
-      const task = tasks[i];
-      const taskRef = window.fbDoc(
-        window.firebaseDb,
-        "users",
-        currentUser.id,
-        "tasks",
-        String(task.id),
-      );
-      await window.fbSetDoc(taskRef, task);
-    }
+    await saveAllTasksToFirestore(currentUser.id);
   } catch (error) {
     console.error("Error saving tasks:", error);
+  }
+}
+
+/**
+ * Iteriert über alle Tasks und speichert sie
+ */
+async function saveAllTasksToFirestore(userId) {
+  for (let i = 0; i < tasks.length; i++) {
+    const task = tasks[i];
+    const taskRef = getTaskRefForUser(userId, task.id);
+    await window.fbSetDoc(taskRef, task);
   }
 }
 
@@ -260,17 +270,24 @@ async function saveSingleTask(task) {
   const currentUser = getCurrentUser();
   if (!currentUser) return;
   try {
-    const taskRef = window.fbDoc(
-      window.firebaseDb,
-      "users",
-      currentUser.id,
-      "tasks",
-      String(task.id),
-    );
+    const taskRef = getTaskRefForUser(currentUser.id, task.id);
     await window.fbSetDoc(taskRef, task);
   } catch (error) {
     console.error("Error saving single task:", error);
   }
+}
+
+/**
+ * Erstellt eine Dokument-Referenz für einen spezifischen Task
+ */
+function getTaskRefForUser(userId, taskId) {
+  return window.fbDoc(
+    window.firebaseDb,
+    "users",
+    userId,
+    "tasks",
+    String(taskId),
+  );
 }
 
 /**

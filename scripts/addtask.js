@@ -51,9 +51,15 @@ async function handleAddTask(event) {
   showToast("Task added to board");
   dispatchTaskAddedEvent(task);
   clearForm();
+  redirectToBoard();
+}
 
+/**
+ * Leitet den Benutzer zum Board weiter nach einer Verzögerung
+ */
+function redirectToBoard() {
   if (!window.location.pathname.includes("board.html")) {
-    setTimeout(() => {
+    setTimeout(function () {
       window.location.href = "board.html";
     }, 1000);
   }
@@ -65,19 +71,39 @@ async function handleAddTask(event) {
  * @returns {Object} Das Task-Objekt
  */
 function buildTask(currentUser) {
+  const assignedToIds = selectedContacts.map(function (c) {
+    return c.id;
+  });
+  const formData = getTaskFormData();
+  return createTaskObject(currentUser, assignedToIds, formData);
+}
+
+/**
+ * Holt die Task-Daten aus den Formularfeldern
+ */
+function getTaskFormData() {
   return {
-    id: Date.now(),
     title: document.getElementById("title").value.trim(),
     description: document.getElementById("description").value.trim(),
     dueDate: document.getElementById("due-date").value,
-    priority: selectedPriority,
-    assignedTo: selectedContacts.map((c) => c.id),
     category: document.getElementById("category").value,
+  };
+}
+
+/**
+ * Erstellt das finale Task-Objekt
+ */
+function createTaskObject(currentUser, assignedToIds, formData) {
+  const task = {
+    id: Date.now(),
+    priority: selectedPriority,
+    assignedTo: assignedToIds,
     subtasks: copySubtasks(),
     status: "todo",
     createdAt: new Date().toISOString(),
     createdBy: currentUser.id,
   };
+  return Object.assign(task, formData);
 }
 
 /**
@@ -152,13 +178,20 @@ async function loadTaskForEdit(taskId) {
       taskId,
     );
     const docSnap = await window.fbGetDoc(taskRef);
-    if (docSnap.exists()) {
-      const task = docSnap.data();
-      fillFormWithTaskData(task);
-      setupFormForEdit(taskId);
-    }
+    processLoadedTask(docSnap, taskId);
   } catch (error) {
     console.error("Error loading task for edit:", error);
+  }
+}
+
+/**
+ * Verarbeitet den geladenen Task für den Bearbeitungsmodus
+ */
+function processLoadedTask(docSnap, taskId) {
+  if (docSnap.exists()) {
+    const task = docSnap.data();
+    fillFormWithTaskData(task);
+    setupFormForEdit(taskId);
   }
 }
 
@@ -263,33 +296,53 @@ async function handleEditTask(event, taskId) {
   event.preventDefault();
   const currentUser = getCurrentUser();
   if (!currentUser) return;
-
   const task = buildTask(currentUser);
   task.id = Number(taskId);
+  await executeTaskUpdate(currentUser, taskId, task);
+}
 
+/**
+ * Führt das eigentliche Update des Tasks in Firestore aus
+ */
+async function executeTaskUpdate(currentUser, taskId, task) {
   try {
-    const taskRef = window.fbDoc(
-      window.firebaseDb,
-      "users",
-      currentUser.id,
-      "tasks",
-      String(taskId),
-    );
-
-    const oldTaskSnap = await window.fbGetDoc(taskRef);
-    if (oldTaskSnap.exists()) {
-      task.status = oldTaskSnap.data().status;
-    }
-
-    await window.fbSetDoc(taskRef, task);
+    const taskRef = getTaskRef(currentUser.id, taskId);
+    task.status = await getOriginalTaskStatus(taskRef);
+    await updateExistingTask(taskRef, task);
     showToast("Task updated successfully");
-
-    if (!window.location.pathname.includes("board.html")) {
-      setTimeout(function () {
-        window.location.href = "board.html";
-      }, 1000);
-    }
+    redirectToBoard();
   } catch (error) {
     console.error("Error updating task:", error);
   }
+}
+
+/**
+ * Erstellt eine Referenz auf einen Task in Firestore
+ */
+function getTaskRef(userId, taskId) {
+  return window.fbDoc(
+    window.firebaseDb,
+    "users",
+    userId,
+    "tasks",
+    String(taskId),
+  );
+}
+
+/**
+ * Holt den ursprünglichen Status eines Tasks
+ */
+async function getOriginalTaskStatus(taskRef) {
+  const oldTaskSnap = await window.fbGetDoc(taskRef);
+  if (oldTaskSnap.exists()) {
+    return oldTaskSnap.data().status;
+  }
+  return "todo";
+}
+
+/**
+ * Aktualisiert einen bestehenden Task in Firestore
+ */
+async function updateExistingTask(taskRef, task) {
+  await window.fbSetDoc(taskRef, task);
 }

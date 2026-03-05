@@ -5,20 +5,8 @@ async function loadContacts() {
   const currentUser = getCurrentUser();
   if (!currentUser) return;
   try {
-    const contactsRef = window.fbCollection(
-      window.firebaseDb,
-      "users",
-      currentUser.id,
-      "contacts",
-    );
-    const snapshot = await window.fbGetDocs(contactsRef);
-    allContacts = [];
-    snapshot.forEach((doc) => {
-      const contact = doc.data();
-      contact.id = doc.id;
-      contact.isYou = contact.email === currentUser.email;
-      allContacts.push(contact);
-    });
+    const snapshot = await fetchContactsSnapshot(currentUser.id);
+    processContactsSnapshot(snapshot, currentUser);
     sortContactsByName();
     renderAssignedToOptions();
   } catch (error) {
@@ -27,10 +15,38 @@ async function loadContacts() {
 }
 
 /**
+ * Holt den Snapshot der Kontakte aus Firestore
+ */
+function fetchContactsSnapshot(userId) {
+  const contactsRef = window.fbCollection(
+    window.firebaseDb,
+    "users",
+    userId,
+    "contacts",
+  );
+  return window.fbGetDocs(contactsRef);
+}
+
+/**
+ * Verarbeitet den Firestore Snapshot der Kontakte
+ */
+function processContactsSnapshot(snapshot, currentUser) {
+  allContacts = [];
+  snapshot.forEach(function (doc) {
+    const contact = doc.data();
+    contact.id = doc.id;
+    contact.isYou = contact.email === currentUser.email;
+    allContacts.push(contact);
+  });
+}
+
+/**
  * Sortiert Kontakte alphabetisch
  */
 function sortContactsByName() {
-  allContacts.sort((a, b) => a.name.localeCompare(b.name));
+  allContacts.sort(function (a, b) {
+    return a.name.localeCompare(b.name);
+  });
 }
 
 /**
@@ -40,8 +56,10 @@ function renderAssignedToOptions() {
   const optionsContainer = document.getElementById("assigned-to-options");
   if (!optionsContainer) return;
   optionsContainer.innerHTML = "";
-  allContacts.forEach((contact) => {
-    const isSelected = selectedContacts.some((c) => c.id === contact.id);
+  allContacts.forEach(function (contact) {
+    const isSelected = selectedContacts.some(function (c) {
+      return c.id === contact.id;
+    });
     optionsContainer.innerHTML += getContactOptionTemplate(contact, isSelected);
   });
 }
@@ -63,18 +81,27 @@ function toggleAssignedToDropdown() {
  */
 function toggleContactSelection(contactId, event) {
   event.stopPropagation();
-  const contact = allContacts.find((c) => c.id === contactId);
+  const contact = allContacts.find(function (c) {
+    return c.id === contactId;
+  });
   if (!contact) return;
+  updateSelectedContacts(contact, contactId);
+  renderAssignedToOptions();
+  renderSelectedInitials();
+}
 
-  const index = selectedContacts.findIndex((c) => c.id === contactId);
+/**
+ * Aktualisiert die Liste der ausgewählten Kontakte
+ */
+function updateSelectedContacts(contact, contactId) {
+  const index = selectedContacts.findIndex(function (c) {
+    return c.id === contactId;
+  });
   if (index > -1) {
     selectedContacts.splice(index, 1);
   } else {
     selectedContacts.push(contact);
   }
-
-  renderAssignedToOptions();
-  renderSelectedInitials();
 }
 
 /**
@@ -84,7 +111,7 @@ function renderSelectedInitials() {
   const container = document.getElementById("selected-contacts-initials");
   if (!container) return;
   container.innerHTML = "";
-  selectedContacts.forEach((contact) => {
+  selectedContacts.forEach(function (contact) {
     container.innerHTML += getSelectedContactInitialsTemplate(contact);
   });
 }
@@ -110,15 +137,29 @@ document.addEventListener(
 function loadAssigneesForEdit(task) {
   selectedContacts = [];
   if (Array.isArray(task.assignedTo)) {
-    for (let i = 0; i < task.assignedTo.length; i++) {
-      const contact = allContacts.find(function (c) {
-        return String(c.id) === String(task.assignedTo[i]);
-      });
-      if (contact) {
-        selectedContacts.push(contact);
-      }
-    }
+    processEditAssignees(task.assignedTo);
   }
   renderAssignedToOptions();
   renderSelectedInitials();
+}
+
+/**
+ * Verarbeitet die Assignees beim Bearbeiten eines Tasks
+ */
+function processEditAssignees(assignedToList) {
+  for (let i = 0; i < assignedToList.length; i++) {
+    const contact = findContactById(assignedToList[i]);
+    if (contact) {
+      selectedContacts.push(contact);
+    }
+  }
+}
+
+/**
+ * Findet einen Kontakt anhand seiner ID
+ */
+function findContactById(id) {
+  return allContacts.find(function (c) {
+    return String(c.id) === String(id);
+  });
 }

@@ -37,12 +37,7 @@ function handleTouchMove(ev) {
     createTouchDragClone(touch);
   }
   if (touchDragClone) {
-    if (ev.cancelable) ev.preventDefault();
-    touchDragClone.style.left =
-      touch.clientX - touchDragClone.offsetWidth / 2 + "px";
-    touchDragClone.style.top = touch.clientY - 30 + "px";
-    highlightColumnUnderTouch(touch.clientX, touch.clientY);
-    updateAutoScroll(touch.clientY);
+    updateDragClonePosition(ev, touch);
   }
 }
 
@@ -65,6 +60,18 @@ function createTouchDragClone(touch) {
 }
 
 /**
+ * Aktualisiert Position des Klons und prüft Highlights/Scroll
+ */
+function updateDragClonePosition(ev, touch) {
+  if (ev.cancelable) ev.preventDefault();
+  touchDragClone.style.left =
+    touch.clientX - touchDragClone.offsetWidth / 2 + "px";
+  touchDragClone.style.top = touch.clientY - 30 + "px";
+  highlightColumnUnderTouch(touch.clientX, touch.clientY);
+  updateAutoScroll(touch.clientY);
+}
+
+/**
  * Behandelt das Touchend-Event und führt den Drop aus
  * @param {TouchEvent} ev - Das Touch-Event
  */
@@ -73,25 +80,39 @@ function handleTouchEnd(ev) {
   document.body.style.overflow = "";
   if (!touchDragElement) return;
   if (touchDragClone) {
-    const touch = ev.changedTouches[0];
-    const column = getColumnUnderPoint(touch.clientX, touch.clientY);
-    if (column && touchDragTaskId !== null) {
-      currentDraggedTaskId = touchDragTaskId;
-      const status = getStatusFromColumnId(column.id);
-      if (status) {
-        moveTo(status);
-      }
-    }
-    touchDragClone.remove();
-    touchDragClone = null;
-    touchDragElement.style.opacity = "";
-    removeAllHighlights();
+    performTouchDrop(ev);
+    cleanupTouchDragState();
   }
   touchDragElement = null;
   touchDragTaskId = null;
   setTimeout(function () {
     isDragging = false;
   }, 0);
+}
+
+/**
+ * Führt den eigentlichen Drop-Vorgang aus
+ */
+function performTouchDrop(ev) {
+  const touch = ev.changedTouches[0];
+  const column = getColumnUnderPoint(touch.clientX, touch.clientY);
+  if (column && touchDragTaskId !== null) {
+    currentDraggedTaskId = touchDragTaskId;
+    const status = getStatusFromColumnId(column.id);
+    if (status) {
+      moveTo(status);
+    }
+  }
+}
+
+/**
+ * Bereinigt den Drag-Zustand nach dem Drop
+ */
+function cleanupTouchDragState() {
+  touchDragClone.remove();
+  touchDragClone = null;
+  touchDragElement.style.opacity = "";
+  removeAllHighlights();
 }
 
 /**
@@ -144,12 +165,9 @@ function getColumnUnderPoint(x, y) {
   const columns = document.querySelectorAll(".board-column");
   for (let i = 0; i < columns.length; i++) {
     const rect = columns[i].getBoundingClientRect();
-    if (
-      x >= rect.left &&
-      x <= rect.right &&
-      y >= rect.top &&
-      y <= rect.bottom
-    ) {
+    const inX = x >= rect.left && x <= rect.right;
+    const inY = y >= rect.top && y <= rect.bottom;
+    if (inX && inY) {
       return columns[i];
     }
   }

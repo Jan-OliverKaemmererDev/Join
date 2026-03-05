@@ -8,11 +8,19 @@ function addSubtask() {
     hideSubtaskIcons();
     return;
   }
-  const subtask = createSubtask(subtaskText);
-  subtasks.push(subtask);
+  processNewSubtask(subtaskText);
   input.value = "";
   renderSubtasks();
   hideSubtaskIcons();
+}
+
+/**
+ * Verarbeitet die Erstellung eines neuen Subtasks
+ * @param {string} text - Der Text des Subtasks
+ */
+function processNewSubtask(text) {
+  const subtask = createSubtask(text);
+  subtasks.push(subtask);
 }
 
 /**
@@ -97,12 +105,21 @@ function renderSubtasks() {
  * @param {number} id - Die ID des Subtasks
  */
 function editSubtask(id) {
-  const subtask = subtasks.find((s) => s.id === id);
+  const subtask = findSubtaskById(id);
   if (!subtask) return;
   const container = document.getElementById(`subtask-item-${id}`);
   if (container && container.parentElement) {
     container.parentElement.innerHTML = getSubtaskEditTemplate(subtask);
-    const input = document.getElementById(`subtask-input-${id}`);
+    setupSubtaskEditFocus(id);
+  }
+}
+
+/**
+ * Setzt den Fokus auf das Subtask-Edit-Feld
+ */
+function setupSubtaskEditFocus(id) {
+  const input = document.getElementById(`subtask-input-${id}`);
+  if (input) {
     input.focus();
     input.setSelectionRange(input.value.length, input.value.length);
   }
@@ -120,7 +137,14 @@ function saveEditSubtask(id) {
     removeSubtask(id);
     return;
   }
-  const subtask = subtasks.find((s) => s.id === id);
+  updateSubtaskText(id, newText);
+}
+
+/**
+ * Aktualisiert den Text eines Subtasks
+ */
+function updateSubtaskText(id, newText) {
+  const subtask = findSubtaskById(id);
   if (subtask) {
     subtask.text = newText;
     renderSubtasks();
@@ -146,7 +170,9 @@ function handleSubtaskEditKeydown(id, event) {
  * @param {number} id - Die ID des zu entfernenden Subtasks
  */
 function removeSubtask(id) {
-  subtasks = subtasks.filter((s) => s.id !== id);
+  subtasks = subtasks.filter(function (s) {
+    return s.id !== id;
+  });
   renderSubtasks();
 }
 
@@ -160,4 +186,13 @@ function copySubtasks() {
     copy.push(subtasks[i]);
   }
   return copy;
+}
+
+/**
+ * Findet einen Subtask anhand seiner ID
+ */
+function findSubtaskById(id) {
+  return subtasks.find(function (s) {
+    return s.id === id;
+  });
 }
