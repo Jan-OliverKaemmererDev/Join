@@ -106,7 +106,7 @@ function showAlertWithDelay(alert) {
   }, 50);
   setTimeout(function () {
     hideAndRemoveAlert(alert);
-  }, 800);
+  }, 1000);
 }
 
 function hideAndRemoveAlert(alert) {
