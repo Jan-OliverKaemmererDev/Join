@@ -1,3 +1,13 @@
+/**
+ * @fileoverview Default data used for guest sessions.
+ * Provides a guest user object, a list of pre-defined demo contacts,
+ * and a set of sample tasks that are loaded when a user logs in as guest.
+ */
+
+/**
+ * Default guest user object used when no authenticated user is present.
+ * @type {{id: string, name: string, email: string, isGuest: boolean}}
+ */
 const GUEST_USER = {
   id: "guest",
   name: "Gast",
@@ -5,6 +15,10 @@ const GUEST_USER = {
   isGuest: true,
 };
 
+/**
+ * List of pre-defined demo contacts loaded for guest users.
+ * @type {Array<{id: number, name: string, email: string, phone: string, color: string, initials: string}>}
+ */
 const DEFAULT_CONTACTS = [
   {
     id: 1,
@@ -128,6 +142,10 @@ const DEFAULT_CONTACTS = [
   },
 ];
 
+/**
+ * List of pre-defined sample tasks loaded for guest users.
+ * @type {Array<{id: number, title: string, description: string, dueDate: string, priority: string, assignedTo: string[], subtasks: Array<{id: number, text: string, completed: boolean}>, status: string, createdAt: string, createdBy: string}>}
+ */
 const DEFAULT_TASKS = [
   {
     id: 101,
