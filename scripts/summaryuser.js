@@ -228,8 +228,8 @@ function formatDeadline(deadline) {
 /**
  * Meldet den Benutzer ab und leitet zur Login-Seite
  */
-function logoutFromSummary() {
-  logoutUser();
+async function logoutFromSummary() {
+  await logoutUser();
   window.location.href = "index.html";
 }
 /**
