@@ -1,6 +1,6 @@
 /**
  * Wartet darauf, dass Firebase initialisiert ist
- * @returns {Promise} Wird aufgelöst, wenn Firebase bereit ist
+ * @returns {Promise}
  */
 function waitForFirebase() {
   return new Promise(function (resolve) {
@@ -15,21 +15,29 @@ function waitForFirebase() {
 }
 
 /**
+ * Erstellt einen Firebase Auth-Benutzer und aktualisiert sein Profil
+ * @param {string} name
+ * @param {string} email
+ * @param {string} password
+ * @returns {Object} Firebase User-Objekt
+ */
+async function createFirebaseUser(name, email, password) {
+  const userCredential = await window.fbCreateUser(window.firebaseAuth, email, password);
+  const user = userCredential.user;
+  await window.fbUpdateProfile(user, { displayName: name });
+  return user;
+}
+
+/**
  * Registriert einen neuen Benutzer über Firebase Authentication
- * @param {string} name - Der Name des Benutzers
- * @param {string} email - Die E-Mail-Adresse
- * @param {string} password - Das Passwort
+ * @param {string} name
+ * @param {string} email
+ * @param {string} password
  * @returns {Object} Ergebnis-Objekt mit success und message
  */
 async function signUpUser(name, email, password) {
   try {
-    const userCredential = await window.fbCreateUser(
-      window.firebaseAuth,
-      email,
-      password,
-    );
-    const user = userCredential.user;
-    await window.fbUpdateProfile(user, { displayName: name });
+    const user = await createFirebaseUser(name, email, password);
     await initializeUserData(user.uid, name, email);
     return { success: true, message: "Registrierung erfolgreich" };
   } catch (error) {
@@ -40,9 +48,9 @@ async function signUpUser(name, email, password) {
 
 /**
  * Initialisiert Benutzerprofil, Standardkontakte und Standard-Tasks in einem Batch
- * @param {string} uid - Die Firebase User-ID
- * @param {string} name - Der Name des Benutzers
- * @param {string} email - Die E-Mail-Adresse
+ * @param {string} uid
+ * @param {string} name
+ * @param {string} email
  */
 async function initializeUserData(uid, name, email) {
   const batch = window.fbWriteBatch(window.firebaseDb);
@@ -56,9 +64,10 @@ async function initializeUserData(uid, name, email) {
 
 /**
  * Speichert das Benutzerprofil in Firestore
- * @param {string} uid - Die Firebase User-ID
- * @param {string} name - Der Name des Benutzers
- * @param {string} email - Die E-Mail-Adresse
+ * @param {string} uid
+ * @param {string} name
+ * @param {string} email
+ * @param {Object} batch
  */
 async function saveUserProfile(uid, name, email, batch) {
   const userRef = window.fbDoc(window.firebaseDb, "users", uid);
@@ -76,82 +85,92 @@ async function saveUserProfile(uid, name, email, batch) {
 }
 
 /**
- * Schreibt die Standard-Kontakte für einen neuen Benutzer in Firestore
- * @param {string} uid - Die Firebase User-ID
+ * Gibt das Daten-Objekt eines Kontakts zurück
+ * @param {Object} contact
+ * @returns {Object}
  */
-async function initDefaultContacts(uid, batch) {
-  for (let i = 0; i < DEFAULT_CONTACTS.length; i++) {
-    const contact = DEFAULT_CONTACTS[i];
-    const contactRef = window.fbDoc(
-      window.firebaseDb,
-      "users",
-      uid,
-      "contacts",
-      String(contact.id),
-    );
-    if (batch) {
-      batch.set(contactRef, {
-        name: contact.name,
-        email: contact.email,
-        phone: contact.phone,
-        color: contact.color,
-        initials: contact.initials,
-      });
-    } else {
-      await window.fbSetDoc(contactRef, {
-        name: contact.name,
-        email: contact.email,
-        phone: contact.phone,
-        color: contact.color,
-        initials: contact.initials,
-      });
-    }
+function getContactData(contact) {
+  return { name: contact.name, email: contact.email, phone: contact.phone, color: contact.color, initials: contact.initials };
+}
+
+/**
+ * Schreibt einen einzelnen Kontakt in Firestore
+ * @param {string} uid
+ * @param {Object} contact
+ * @param {Object} batch
+ */
+async function writeContact(uid, contact, batch) {
+  const contactRef = window.fbDoc(window.firebaseDb, "users", uid, "contacts", String(contact.id));
+  const data = getContactData(contact);
+  if (batch) {
+    batch.set(contactRef, data);
+  } else {
+    await window.fbSetDoc(contactRef, data);
   }
 }
 
 /**
- * Schreibt die Standard-Tasks für einen neuen Benutzer (oder Gast) in Firestore
- * @param {string} uid - Die Firebase User-ID
+ * Schreibt die Standard-Kontakte für einen neuen Benutzer in Firestore
+ * @param {string} uid
+ * @param {Object} batch
+ */
+async function initDefaultContacts(uid, batch) {
+  for (let i = 0; i < DEFAULT_CONTACTS.length; i++) {
+    await writeContact(uid, DEFAULT_CONTACTS[i], batch);
+  }
+}
+
+/**
+ * Schreibt einen einzelnen Task in Firestore
+ * @param {string} uid
+ * @param {Object} task
+ * @param {Object} batch
+ */
+async function writeTask(uid, task, batch) {
+  const taskRef = window.fbDoc(window.firebaseDb, "users", uid, "tasks", String(task.id));
+  if (batch) {
+    batch.set(taskRef, task);
+  } else {
+    await window.fbSetDoc(taskRef, task);
+  }
+}
+
+/**
+ * Schreibt die Standard-Tasks für einen neuen Benutzer in Firestore
+ * @param {string} uid
+ * @param {Object} batch
  */
 async function initDefaultTasks(uid, batch) {
   for (let i = 0; i < DEFAULT_TASKS.length; i++) {
-    const task = DEFAULT_TASKS[i];
-    const taskRef = window.fbDoc(
-      window.firebaseDb,
-      "users",
-      uid,
-      "tasks",
-      String(task.id),
-    );
-    if (batch) {
-      batch.set(taskRef, task);
-    } else {
-      await window.fbSetDoc(taskRef, task);
-    }
+    await writeTask(uid, DEFAULT_TASKS[i], batch);
   }
+}
+
+/**
+ * Verarbeitet den angemeldeten Firebase-Benutzer und erstellt eine Session
+ * @param {Object} user - Firebase Auth-Objekt
+ * @returns {Object} Session-Benutzer-Objekt
+ */
+async function processLoginUser(user) {
+  const profile = await loadUserProfile(user.uid);
+  const userName = resolveUserName(profile, user);
+  const userEmail = resolveUserEmail(profile, user);
+  if (profile.name === "User" || !profile.email) {
+    await initializeUserData(user.uid, userName, userEmail);
+  }
+  return buildSessionUser(user.uid, userName, userEmail);
 }
 
 /**
  * Meldet einen Benutzer über Firebase Authentication an
- * @param {string} email - Die E-Mail-Adresse
- * @param {string} password - Das Passwort
+ * @param {string} email
+ * @param {string} password
  * @returns {Object} Ergebnis-Objekt mit success und user
  */
 async function loginUser(email, password) {
   try {
-    const userCredential = await window.fbSignIn(
-      window.firebaseAuth,
-      email,
-      password,
-    );
-    const user = userCredential.user;
-    const profile = await loadUserProfile(user.uid);
-    const userName = resolveUserName(profile, user);
-    const userEmail = resolveUserEmail(profile, user);
-    if (profile.name === "User" || !profile.email) {
-      await initializeUserData(user.uid, userName, userEmail);
-    }
-    const sessionUser = buildSessionUser(user.uid, userName, userEmail);
+    const userCredential = await window.fbSignIn(window.firebaseAuth, email, password);
+    const sessionUser = await processLoginUser(userCredential.user);
     storeUserSession(sessionUser);
     return { success: true, user: sessionUser };
   } catch (error) {
@@ -162,9 +181,9 @@ async function loginUser(email, password) {
 
 /**
  * Ermittelt den anzuzeigenden Benutzernamen aus Profil und Auth-Objekt
- * @param {Object} profile - Das Firestore-Profil
- * @param {Object} authUser - Das Firebase Auth-Objekt
- * @returns {string} Der aufgelöste Benutzername
+ * @param {Object} profile
+ * @param {Object} authUser
+ * @returns {string}
  */
 function resolveUserName(profile, authUser) {
   return profile.name !== "User" ? profile.name : authUser.displayName || profile.name;
@@ -172,9 +191,9 @@ function resolveUserName(profile, authUser) {
 
 /**
  * Ermittelt die anzuzeigende E-Mail aus Profil und Auth-Objekt
- * @param {Object} profile - Das Firestore-Profil
- * @param {Object} authUser - Das Firebase Auth-Objekt
- * @returns {string} Die aufgelöste E-Mail-Adresse
+ * @param {Object} profile
+ * @param {Object} authUser
+ * @returns {string}
  */
 function resolveUserEmail(profile, authUser) {
   return profile.email || authUser.email;
@@ -182,10 +201,10 @@ function resolveUserEmail(profile, authUser) {
 
 /**
  * Erstellt ein Session-Benutzer-Objekt
- * @param {string} uid - Die Firebase User-ID
- * @param {string} name - Der Benutzername
- * @param {string} email - Die E-Mail-Adresse
- * @returns {Object} Das Session-Benutzer-Objekt
+ * @param {string} uid
+ * @param {string} name
+ * @param {string} email
+ * @returns {Object}
  */
 function buildSessionUser(uid, name, email) {
   return { id: uid, name: name, email: email, isGuest: false };
@@ -193,7 +212,7 @@ function buildSessionUser(uid, name, email) {
 
 /**
  * Speichert den angemeldeten Benutzer in der Session
- * @param {Object} sessionUser - Das Session-Benutzer-Objekt
+ * @param {Object} sessionUser
  */
 function storeUserSession(sessionUser) {
   sessionStorage.setItem("join_current_user", JSON.stringify(sessionUser));
@@ -202,7 +221,7 @@ function storeUserSession(sessionUser) {
 
 /**
  * Lädt das Benutzerprofil aus Firestore
- * @param {string} uid - Die Firebase User-ID
+ * @param {string} uid
  * @returns {Object} Das Benutzerprofil
  */
 async function loadUserProfile(uid) {
@@ -215,6 +234,15 @@ async function loadUserProfile(uid) {
 }
 
 /**
+ * Erstellt das Gast-Session-Objekt
+ * @param {string} uid
+ * @returns {Object}
+ */
+function buildGuestSession(uid) {
+  return { id: uid, name: "Gast", email: "guest@join.com", isGuest: true };
+}
+
+/**
  * Meldet einen Gast-Benutzer über Firebase Anonymous Auth an
  * @returns {Object} Ergebnis-Objekt mit success und user
  */
@@ -222,12 +250,7 @@ async function guestLoginUser() {
   try {
     const userCredential = await window.fbSignInAnon(window.firebaseAuth);
     const user = userCredential.user;
-    const guestSession = {
-      id: user.uid,
-      name: "Gast",
-      email: "guest@join.com",
-      isGuest: true,
-    };
+    const guestSession = buildGuestSession(user.uid);
     await ensureGuestProfile(user.uid);
     storeUserSession(guestSession);
     return { success: true, user: guestSession };
@@ -238,35 +261,46 @@ async function guestLoginUser() {
 }
 
 /**
+ * Erstellt ein neues Gast-Profil in Firestore mit Standarddaten
+ * @param {string} uid
+ */
+async function createGuestProfile(uid) {
+  const userRef = window.fbDoc(window.firebaseDb, "users", uid);
+  const batch = window.fbWriteBatch(window.firebaseDb);
+  batch.set(userRef, { name: "Gast", email: "guest@join.com", isGuest: true, createdAt: new Date().toISOString() });
+  await Promise.all([initDefaultContacts(uid, batch), initDefaultTasks(uid, batch)]);
+  await batch.commit();
+}
+
+/**
  * Stellt sicher, dass ein Gast-Profil in Firestore existiert
- * @param {string} uid - Die Firebase User-ID des Gasts
+ * @param {string} uid
  */
 async function ensureGuestProfile(uid) {
   const userRef = window.fbDoc(window.firebaseDb, "users", uid);
   const docSnap = await window.fbGetDoc(userRef);
   if (!docSnap.exists()) {
-    const batch = window.fbWriteBatch(window.firebaseDb);
-    batch.set(userRef, {
-      name: "Gast",
-      email: "guest@join.com",
-      isGuest: true,
-      createdAt: new Date().toISOString(),
-    });
-    await Promise.all([
-      initDefaultContacts(uid, batch),
-      initDefaultTasks(uid, batch),
-    ]);
-    await batch.commit();
+    await createGuestProfile(uid);
   }
 }
 
 /**
  * Ruft den aktuell angemeldeten Benutzer ab
- * @returns {Object|null} Der aktuelle Benutzer oder null
+ * @returns {Object|null}
  */
 function getCurrentUser() {
   const userJson = sessionStorage.getItem("join_current_user");
   return userJson ? JSON.parse(userJson) : null;
+}
+
+/**
+ * Prüft ob der aktuelle Benutzer ein anonymer Gast ist
+ * @param {Object} currentUser
+ * @param {Object} firebaseUser
+ * @returns {boolean}
+ */
+function isGuestUser(currentUser, firebaseUser) {
+  return currentUser && currentUser.isGuest && firebaseUser && firebaseUser.isAnonymous;
 }
 
 /**
@@ -275,16 +309,9 @@ function getCurrentUser() {
 async function logoutUser() {
   const currentUser = getCurrentUser();
   const firebaseUser = window.firebaseAuth.currentUser;
-
-  if (
-    currentUser &&
-    currentUser.isGuest &&
-    firebaseUser &&
-    firebaseUser.isAnonymous
-  ) {
+  if (isGuestUser(currentUser, firebaseUser)) {
     await deleteGuestAccount(currentUser, firebaseUser);
   }
-
   try {
     await window.fbSignOut(window.firebaseAuth);
   } catch (error) {
@@ -295,8 +322,8 @@ async function logoutUser() {
 
 /**
  * Löscht die Daten und den Auth-Account eines Gast-Benutzers
- * @param {Object} currentUser - Das Session-Benutzer-Objekt
- * @param {Object} firebaseUser - Das Firebase Auth-Objekt
+ * @param {Object} currentUser
+ * @param {Object} firebaseUser
  */
 async function deleteGuestAccount(currentUser, firebaseUser) {
   await deleteUserData(currentUser.id);
@@ -315,34 +342,36 @@ function clearUserSession() {
 }
 
 /**
+ * Löscht alle Dokumente einer Subcollection in einem Batch
+ * @param {Object} batch
+ * @param {string} uid
+ * @param {string} collectionName
+ */
+async function addCollectionDeletesToBatch(batch, uid, collectionName) {
+  const ref = window.fbCollection(window.firebaseDb, "users", uid, collectionName);
+  const snap = await window.fbGetDocs(ref);
+  snap.forEach((doc) => batch.delete(doc.ref));
+}
+
+/**
+ * Fügt alle Lösch-Operationen für Benutzer-Collections dem Batch hinzu
+ * @param {Object} batch
+ * @param {string} uid
+ */
+async function batchDeleteUserCollections(batch, uid) {
+  await addCollectionDeletesToBatch(batch, uid, "tasks");
+  await addCollectionDeletesToBatch(batch, uid, "contacts");
+  batch.delete(window.fbDoc(window.firebaseDb, "users", uid));
+}
+
+/**
  * Löscht alle Daten eines Benutzers aus Firestore
- * @param {string} uid - Die Firebase User-ID
+ * @param {string} uid
  */
 async function deleteUserData(uid) {
   try {
     const batch = window.fbWriteBatch(window.firebaseDb);
-
-    const tasksRef = window.fbCollection(
-      window.firebaseDb,
-      "users",
-      uid,
-      "tasks",
-    );
-    const tasksSnap = await window.fbGetDocs(tasksRef);
-    tasksSnap.forEach((doc) => batch.delete(doc.ref));
-
-    const contactsRef = window.fbCollection(
-      window.firebaseDb,
-      "users",
-      uid,
-      "contacts",
-    );
-    const contactsSnap = await window.fbGetDocs(contactsRef);
-    contactsSnap.forEach((doc) => batch.delete(doc.ref));
-
-    const userRef = window.fbDoc(window.firebaseDb, "users", uid);
-    batch.delete(userRef);
-
+    await batchDeleteUserCollections(batch, uid);
     await batch.commit();
   } catch (error) {
     console.error("Error deleting guest data:", error);
@@ -351,56 +380,47 @@ async function deleteUserData(uid) {
 
 /**
  * Prüft ob ein Benutzer angemeldet ist
- * @returns {boolean} True wenn ein Benutzer angemeldet ist
+ * @returns {boolean}
  */
 function isLoggedIn() {
   return getCurrentUser() !== null;
 }
 
 /**
+ * Gibt die Fehlerdetails für einen Firebase-Fehlercode zurück
+ * @param {string} code
+ * @returns {Array|null}
+ */
+function getFirebaseErrorDetails(code) {
+  const errors = {
+    "auth/email-already-in-use": ["This email address is already registered", "duplicate-email"],
+    "auth/invalid-email": ["Invalid email address", "invalid-email"],
+    "auth/weak-password": ["The password is too weak (at least 6 characters)", "weak-password"],
+    "auth/user-not-found": ["User not found", "user-not-found"],
+    "auth/wrong-password": ["Wrong password", "wrong-password"],
+    "auth/invalid-credential": ["Email or password is incorrect", "invalid-credential"],
+  };
+  return errors[code] || null;
+}
+
+/**
  * Erstellt ein Fehler-Ergebnis-Objekt aus einem Firebase-Fehler
- * @param {Object} error - Das Firebase Error-Objekt
- * @returns {Object} Das Fehler-Objekt
+ * @param {Object} error
+ * @returns {Object}
  */
 function handleFirebaseError(error) {
-  let message = "An error occurred";
-  let errorCode = error.code || "unknown";
-  switch (error.code) {
-    case "auth/email-already-in-use":
-      message = "This email address is already registered";
-      errorCode = "duplicate-email";
-      break;
-    case "auth/invalid-email":
-      message = "Invalid email address";
-      errorCode = "invalid-email";
-      break;
-    case "auth/weak-password":
-      message = "The password is too weak (at least 6 characters)";
-      errorCode = "weak-password";
-      break;
-    case "auth/user-not-found":
-      message = "User not found";
-      errorCode = "user-not-found";
-      break;
-    case "auth/wrong-password":
-      message = "Wrong password";
-      errorCode = "wrong-password";
-      break;
-    case "auth/invalid-credential":
-      message = "Email or password is incorrect";
-      errorCode = "invalid-credential";
-      break;
-    default:
-      message = "An error occurred: " + error.message;
+  const details = getFirebaseErrorDetails(error.code);
+  if (details) {
+    return { success: false, error: details[1], message: details[0] };
   }
-  return { success: false, error: errorCode, message: message };
+  return { success: false, error: error.code || "unknown", message: "An error occurred: " + error.message };
 }
 
 /**
  * Erstellt ein Fehler-Ergebnis-Objekt
- * @param {string} error - Der Fehlertyp
- * @param {string} message - Die Fehlermeldung
- * @returns {Object} Das Fehler-Objekt
+ * @param {string} error
+ * @param {string} message
+ * @returns {Object}
  */
 function createErrorResult(error, message) {
   return { success: false, error: error, message: message };
