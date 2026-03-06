@@ -133,3 +133,14 @@ button:hover {
 .toast-message:not(.d-none) {
   bottom: 75%;
 }
+
+/* ---- Scroll Prevention ---- */
+
+html.no-scroll,
+body.no-scroll {
+  overflow: hidden !important;
+}
+
+body.no-scroll .main-content {
+  overflow: hidden !important;
+}

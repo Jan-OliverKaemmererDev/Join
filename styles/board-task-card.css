@@ -111,5 +111,6 @@
 .task-priority img,
 .task-priority svg {
   width: 17px;
-  height: 12px;
+  height: auto;
+  object-fit: contain;
 }

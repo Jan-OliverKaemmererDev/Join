@@ -8,6 +8,8 @@ function openAddTaskOverlay() {
   }
 
   document.getElementById("add-task-overlay").classList.add("active");
+  document.documentElement.classList.add("no-scroll");
+  document.body.classList.add("no-scroll");
 }
 
 /**
@@ -15,6 +17,8 @@ function openAddTaskOverlay() {
  */
 function closeAddTaskOverlay() {
   document.getElementById("add-task-overlay").classList.remove("active");
+  document.documentElement.classList.remove("no-scroll");
+  document.body.classList.remove("no-scroll");
   resetFormToAddMode();
 }
 
@@ -29,6 +33,8 @@ function openTaskDetails(taskId) {
   document.getElementById("task-details-content").innerHTML =
     buildTaskDetailsHtml(task);
   document.getElementById("task-details-overlay").classList.add("active");
+  document.documentElement.classList.add("no-scroll");
+  document.body.classList.add("no-scroll");
 }
 
 /**
@@ -52,6 +58,8 @@ function buildTaskDetailsHtml(task) {
  */
 function closeTaskDetails() {
   document.getElementById("task-details-overlay").classList.remove("active");
+  document.documentElement.classList.remove("no-scroll");
+  document.body.classList.remove("no-scroll");
 }
 
 /**

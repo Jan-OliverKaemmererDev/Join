@@ -178,7 +178,7 @@ function getAssignedToDetailItemTemplate(initials, color, name) {
  * @returns {string} Das HTML für das Urgent-Icon
  */
 function getUrgentPriorityIcon() {
-  return `<svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 0L0.5 12H16.5L8.5 0Z" fill="#FF3D00"/></svg>`;
+  return `<img src="./assets/icons/urgent-iconAddTask.png" alt="Urgent">`;
 }
 
 
@@ -187,7 +187,7 @@ function getUrgentPriorityIcon() {
  * @returns {string} Das HTML für das Medium-Icon
  */
 function getMediumPriorityIcon() {
-  return `<svg width="17" height="8" viewBox="0 0 17 8" fill="none"><rect width="17" height="3" rx="1" fill="#FFA800"/><rect y="5" width="17" height="3" rx="1" fill="#FFA800"/></svg>`;
+  return `<img src="./assets/icons/medium-iconAddTask.png" alt="Medium">`;
 }
 
 
@@ -196,5 +196,5 @@ function getMediumPriorityIcon() {
  * @returns {string} Das HTML für das Low-Icon
  */
 function getLowPriorityIcon() {
-  return `<svg width="17" height="12" viewBox="0 0 17 12" fill="none"><path d="M8.5 12L16.5 0H0.5L8.5 12Z" fill="#7AE229"/></svg>`;
+  return `<img src="./assets/icons/low-iconAddTask.png" alt="Low">`;
 }
