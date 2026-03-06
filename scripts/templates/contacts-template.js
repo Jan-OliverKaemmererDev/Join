@@ -85,17 +85,17 @@ function getMobileContactDetailsTemplate(contact) {
     <div class="info-label">Email</div>
     <a href="mailto:${contact.email}" class="info-value-email">${contact.email}</a>
 
-    <div class="info-label">Telefon</div>
+    <div class="info-label">Phone</div>
     <div class="info-value">${contact.phone}</div>
 
     <div class="mobile-menu-btn" onclick="toggleContactMenu(event)">
         <img src="./assets/icons/more_vert.svg">
         <div id="contact-menu-box" class="contact-menu-box" onclick="event.stopPropagation()">
             <div class="menu-item" onclick="openEditContactDialog(${contact.id})">
-                <img src="./assets/icons/edit.svg" alt="Edit"> Bearbeiten
+                <img src="./assets/icons/edit.svg" alt="Edit"> Edit
             </div>
             <div class="menu-item" onclick="deleteContact(${contact.id}); closeContactDetails();">
-                <img src="./assets/icons/delete.svg" alt="Delete"> Löschen
+                <img src="./assets/icons/delete.svg" alt="Delete"> Delete
             </div>
         </div>
     </div>
@@ -206,8 +206,8 @@ function getMobileEditContactTemplate(contact) {
           </div>
           
           <div class="form-actions-mobile">
-            <button type="button" class="btn-delete-outline" onclick="deleteContact(${contact.id}); closeAddContactDialog();">Löschen</button>
-            <button type="submit" class="btn-save-dark" id="edit-contact-submit">Speichern</button>
+            <button type="button" class="btn-delete-outline" onclick="deleteContact(${contact.id}); closeAddContactDialog();">Delete</button>
+            <button type="submit" class="btn-save-dark" id="edit-contact-submit">Save</button>
           </div>
         </form>
       </div>

@@ -253,7 +253,7 @@ function openEditOverlay(task, taskId) {
  */
 function editTask(taskId) {
   if (window.innerWidth <= 780) {
-    window.location.href = "addtask.html?edit=" + taskId;
+    openMobileEditOverlay(taskId);
     return;
   }
   const task = findTask(taskId);
