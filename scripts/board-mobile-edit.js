@@ -35,19 +35,40 @@ function closeMobileEditOverlay() {
  * @param {Object} task - Das Task-Objekt
  */
 function fillMobileEditForm(task) {
+  fillMobileEditBasicInfo(task);
+  selectMobileEditPriority(task.priority || "medium");
+  fillMobileEditSubtasks(task);
+  fillMobileEditContacts(task);
+  renderMobileEditAssignedToOptions();
+  renderMobileEditSelectedInitials();
+  validateMobileEditForm();
+}
+
+/**
+ * Füllt Grunddaten im mobilen Edit-Formular
+ */
+function fillMobileEditBasicInfo(task) {
   document.getElementById("mobile-edit-title").value = task.title || "";
   document.getElementById("mobile-edit-description").value =
     task.description || "";
   document.getElementById("mobile-edit-due-date").value = task.dueDate || "";
+}
 
-  selectMobileEditPriority(task.priority || "medium");
-
+/**
+ * Füllt Subtasks im mobilen Edit-Formular
+ */
+function fillMobileEditSubtasks(task) {
   mobileEditSubtasks =
     task.subtasks && task.subtasks.length > 0
       ? JSON.parse(JSON.stringify(task.subtasks))
       : [];
   renderMobileEditSubtasks();
+}
 
+/**
+ * Füllt Kontakte im mobilen Edit-Formular
+ */
+function fillMobileEditContacts(task) {
   mobileEditSelectedContacts = [];
   if (Array.isArray(task.assignedTo)) {
     task.assignedTo.forEach(function (id) {
@@ -57,9 +78,6 @@ function fillMobileEditForm(task) {
       if (contact) mobileEditSelectedContacts.push(contact);
     });
   }
-  renderMobileEditAssignedToOptions();
-  renderMobileEditSelectedInitials();
-  validateMobileEditForm();
 }
 
 /**
@@ -114,19 +132,26 @@ function getMobileEditContactOptionTemplate(contact, isSelected) {
 function toggleMobileEditContactSelection(contactId, event) {
   event.stopPropagation();
   const contact = allContacts.find(function (c) {
-    return c.id === contactId;
+    return String(c.id) === String(contactId);
   });
   if (!contact) return;
+  updateMobileSelectedContacts(contactId, contact);
+  renderMobileEditAssignedToOptions();
+  renderMobileEditSelectedInitials();
+}
+
+/**
+ * Fügt Kontakt zur Auswahl hinzu oder entfernt ihn
+ */
+function updateMobileSelectedContacts(contactId, contact) {
   const index = mobileEditSelectedContacts.findIndex(function (c) {
-    return c.id === contactId;
+    return String(c.id) === String(contactId);
   });
   if (index > -1) {
     mobileEditSelectedContacts.splice(index, 1);
   } else {
     mobileEditSelectedContacts.push(contact);
   }
-  renderMobileEditAssignedToOptions();
-  renderMobileEditSelectedInitials();
 }
 
 /**
@@ -226,6 +251,97 @@ function handleMobileEditSubtaskKeydown(event) {
 }
 
 /**
+ * Wechselt ein Subtask im mobilen Edit in den Bearbeitungsmodus
+ * @param {number} id - Die ID des Subtasks
+ */
+function editMobileEditSubtask(id) {
+  const subtask = findMobileSubtaskById(id);
+  if (!subtask) return;
+  const container = document.getElementById(`mobile-edit-subtask-item-${id}`);
+  if (container) {
+    container.innerHTML = getMobileEditSubtaskEditTemplate(subtask);
+    setupMobileSubtaskEditFocus(id);
+  }
+}
+
+/**
+ * Setzt Fokus und Selection auf das mobile Subtask-Edit-Feld
+ */
+function setupMobileSubtaskEditFocus(id) {
+  const input = document.getElementById(`mobile-edit-subtask-input-${id}`);
+  if (input) {
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+  }
+}
+
+/**
+ * Findet einen Subtask im mobilen Edit anhand der ID
+ */
+function findMobileSubtaskById(id) {
+  return mobileEditSubtasks.find(function (s) {
+    return s.id === id;
+  });
+}
+
+/**
+ * Generiert das HTML-Template für einen zu bearbeitenden Subtask im mobilen Edit
+ * @param {Object} subtask - Das Subtask-Objekt
+ */
+function getMobileEditSubtaskEditTemplate(subtask) {
+  return `
+    <div class="subtask-item-edit">
+      <input type="text" class="subtask-edit-input" id="mobile-edit-subtask-input-${subtask.id}" value="${subtask.text}" onkeydown="handleMobileEditSubtaskEditKeydown(${subtask.id}, event)">
+      <div class="subtask-icons" style="display: flex;">
+        <img src="./assets/icons/delete.svg" class="subtask-icon-small" onclick="removeMobileEditSubtask(${subtask.id})" alt="Delete">
+        <div class="subtask-icon-divider"></div>
+        <img src="./assets/icons/check-create-icon-black.svg" class="subtask-icon-small" onclick="saveMobileEditSubtask(${subtask.id})" alt="Save">
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Speichert die Bearbeitung eines Subtasks im mobilen Edit
+ * @param {number} id - Die ID des Subtasks
+ */
+function saveMobileEditSubtask(id) {
+  const input = document.getElementById(`mobile-edit-subtask-input-${id}`);
+  if (!input) return;
+  const newText = input.value.trim();
+  if (newText === "") {
+    removeMobileEditSubtask(id);
+    return;
+  }
+  updateMobileSubtaskText(id, newText);
+}
+
+/**
+ * Aktualisiert den Text eines Subtasks im mobilen Edit
+ */
+function updateMobileSubtaskText(id, newText) {
+  const subtask = findMobileSubtaskById(id);
+  if (subtask) {
+    subtask.text = newText;
+    renderMobileEditSubtasks();
+  }
+}
+
+/**
+ * Behandelt Tasteneingaben im Subtask-Edit-Feld
+ * @param {number} id - Die ID des Subtasks
+ * @param {KeyboardEvent} event - Das Keyboard-Event
+ */
+function handleMobileEditSubtaskEditKeydown(id, event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    saveMobileEditSubtask(id);
+  } else if (event.key === "Escape") {
+    renderMobileEditSubtasks();
+  }
+}
+
+/**
  * Rendert die Subtask-Liste im mobilen Edit
  */
 function renderMobileEditSubtasks() {
@@ -234,9 +350,11 @@ function renderMobileEditSubtasks() {
   list.innerHTML = "";
   mobileEditSubtasks.forEach(function (subtask) {
     list.innerHTML += `
-      <div class="subtask-item" id="mobile-edit-subtask-item-${subtask.id}">
+      <div class="subtask-item" id="mobile-edit-subtask-item-${subtask.id}" ondblclick="editMobileEditSubtask(${subtask.id})">
         <div class="subtask-content"><span class="subtask-text">${subtask.text}</span></div>
         <div class="subtask-icons">
+          <img src="./assets/icons/edit.svg" class="subtask-icon-small" onclick="editMobileEditSubtask(${subtask.id})" alt="Edit">
+          <div class="subtask-icon-divider"></div>
           <img src="./assets/icons/delete.svg" class="subtask-icon-small" onclick="removeMobileEditSubtask(${subtask.id})" alt="Delete">
         </div>
       </div>
@@ -263,6 +381,15 @@ async function saveMobileEditTask() {
   if (taskIndex === -1) return;
 
   const task = tasks[taskIndex];
+  updateTaskDataFromMobileEdit(task);
+  await saveSingleTask(task);
+  finalizeMobileEditSave();
+}
+
+/**
+ * Aktualisiert das Task-Objekt aus den Formulardaten
+ */
+function updateTaskDataFromMobileEdit(task) {
   task.title = document.getElementById("mobile-edit-title").value.trim();
   task.description = document
     .getElementById("mobile-edit-description")
@@ -273,8 +400,12 @@ async function saveMobileEditTask() {
     return c.id;
   });
   task.subtasks = JSON.parse(JSON.stringify(mobileEditSubtasks));
+}
 
-  await saveSingleTask(task);
+/**
+ * Schließt Overlays und zeigt Erfolgsmeldung nach Speichern
+ */
+function finalizeMobileEditSave() {
   renderTasks();
   closeMobileEditOverlay();
   closeTaskDetails();
