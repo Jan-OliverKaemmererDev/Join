@@ -100,6 +100,7 @@ function createTaskObject(currentUser, assignedToIds, formData) {
     assignedTo: assignedToIds,
     subtasks: copySubtasks(),
     status: "todo",
+    position: Date.now(),
     createdAt: new Date().toISOString(),
     createdBy: currentUser.id,
   };

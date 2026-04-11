@@ -1,5 +1,8 @@
 let autoScrollInterval;
 let scrollDirection = 0; // 1 for down, -1 for up, 0 for none
+let horizontalAutoScrollInterval;
+let scrollDirectionX = 0; // 1 for right, -1 for left, 0 for none
+let currentScrollingList = null;
 
 /**
  * Initialisiert Touch-Drag-and-Drop für mobile Geräte
@@ -69,6 +72,7 @@ function updateDragClonePosition(ev, touch) {
   touchDragClone.style.top = touch.clientY - 30 + "px";
   highlightColumnUnderTouch(touch.clientX, touch.clientY);
   updateAutoScroll(touch.clientY);
+  updateHorizontalAutoScroll(touch.clientX, touch.clientY);
 }
 
 /**
@@ -77,6 +81,7 @@ function updateDragClonePosition(ev, touch) {
  */
 function handleTouchEnd(ev) {
   stopAutoScroll();
+  stopHorizontalAutoScroll();
   document.body.style.overflow = "";
   if (!touchDragElement) return;
   if (touchDragClone) {
@@ -95,12 +100,28 @@ function handleTouchEnd(ev) {
  */
 function performTouchDrop(ev) {
   const touch = ev.changedTouches[0];
-  const column = getColumnUnderPoint(touch.clientX, touch.clientY);
+  const x = touch.clientX;
+  const y = touch.clientY;
+  const column = getColumnUnderPoint(x, y);
+
   if (column && touchDragTaskId !== null) {
     currentDraggedTaskId = touchDragTaskId;
     const status = getStatusFromColumnId(column.id);
+
+    const element = document.elementFromPoint(x, y);
+    const targetCard = element ? element.closest(".task-card") : null;
+    let targetTaskId = null;
+    let relativePos = "after";
+
+    if (targetCard && targetCard !== touchDragElement) {
+      targetTaskId = getTaskIdFromCard(targetCard);
+      const rect = targetCard.getBoundingClientRect();
+      const midX = rect.left + rect.width / 2;
+      if (x < midX) relativePos = "before";
+    }
+
     if (status) {
-      moveTo(status);
+      moveTo(status, targetTaskId, relativePos);
     }
   }
 }
@@ -153,6 +174,59 @@ function stopAutoScroll() {
     autoScrollInterval = null;
   }
   scrollDirection = 0;
+}
+
+/**
+ * Aktualisiert die horizontale Auto-Scroll-Richtung basierend auf der Touch-Position innerhalb einer Spalte
+ */
+function updateHorizontalAutoScroll(x, y) {
+  const column = getColumnUnderPoint(x, y);
+  if (!column) {
+    stopHorizontalAutoScroll();
+    return;
+  }
+  const list = column.querySelector(".task-list");
+  if (!list) {
+    stopHorizontalAutoScroll();
+    return;
+  }
+  const rect = list.getBoundingClientRect();
+  const threshold = 50;
+  if (x < rect.left + threshold) {
+    scrollDirectionX = -1;
+    startHorizontalAutoScroll(list);
+  } else if (x > rect.right - threshold) {
+    scrollDirectionX = 1;
+    startHorizontalAutoScroll(list);
+  } else {
+    stopHorizontalAutoScroll();
+  }
+}
+
+/**
+ * Startet den horizontalen Auto-Scroll-Intervall für eine spezifische Liste
+ */
+function startHorizontalAutoScroll(list) {
+  if (horizontalAutoScrollInterval && currentScrollingList === list) return;
+  stopHorizontalAutoScroll();
+  currentScrollingList = list;
+  horizontalAutoScrollInterval = setInterval(function () {
+    if (currentScrollingList) {
+      currentScrollingList.scrollLeft += scrollDirectionX * 15;
+    }
+  }, 20);
+}
+
+/**
+ * Stoppt den horizontalen Auto-Scroll-Intervall
+ */
+function stopHorizontalAutoScroll() {
+  if (horizontalAutoScrollInterval) {
+    clearInterval(horizontalAutoScrollInterval);
+    horizontalAutoScrollInterval = null;
+  }
+  scrollDirectionX = 0;
+  currentScrollingList = null;
 }
 
 /**

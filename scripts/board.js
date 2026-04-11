@@ -76,7 +76,11 @@ function getTasksRef(userId) {
 function processTasksSnapshot(snapshot) {
   tasks = [];
   snapshot.forEach(function (doc) {
-    tasks.push(doc.data());
+    const data = doc.data();
+    if (data.position === undefined) {
+      data.position = data.id || Date.now();
+    }
+    tasks.push(data);
   });
 }
 
@@ -94,6 +98,9 @@ function clearAllColumns() {
  * Rendert alle Tasks auf dem Board
  */
 function renderTasks() {
+  tasks.sort(function (a, b) {
+    return (a.position || 0) - (b.position || 0);
+  });
   clearAllColumns();
   let counts = { todo: 0, inprogress: 0, awaitfeedback: 0, done: 0 };
   for (let i = 0; i < tasks.length; i++) {
@@ -211,14 +218,65 @@ function findTaskById(taskId) {
  * Verschiebt einen Task zu einem neuen Status. Aktualisiert die UI sofort (Optimistisches Update) und speichert im Hintergrund.
  * @param {string} status - Der neue Status
  */
-async function moveTo(status) {
+async function moveTo(status, targetTaskId = null, relativePos = "after") {
   const taskIndex = findTaskById(currentDraggedTaskId);
   if (taskIndex !== -1) {
-    tasks[taskIndex].status = status;
+    const task = tasks[taskIndex];
+    task.status = status;
+    if (targetTaskId !== null && targetTaskId !== currentDraggedTaskId) {
+      task.position = calculateNewPosition(status, targetTaskId, relativePos);
+    } else if (targetTaskId === null) {
+      task.position = getNewPositionAtEnd(status);
+    }
     renderTasks();
-    await saveSingleTask(tasks[taskIndex]);
+    await saveSingleTask(task);
   }
   currentDraggedTaskId = null;
+}
+
+/**
+ * Berechnet die neue Position für einen Task am Ende einer Spalte
+ */
+function getNewPositionAtEnd(status) {
+  const columnTasks = tasks.filter(function (t) {
+    return t.status === status;
+  });
+  if (columnTasks.length === 0) return Date.now();
+  let maxPos = 0;
+  for (let i = 0; i < columnTasks.length; i++) {
+    if ((columnTasks[i].position || 0) > maxPos) {
+      maxPos = columnTasks[i].position;
+    }
+  }
+  return maxPos + 1024;
+}
+
+/**
+ * Berechnet die neue Position zwischen zwei Tasks oder an den Rändern
+ */
+function calculateNewPosition(status, targetTaskId, relativePos) {
+  const columnTasks = tasks
+    .filter(function (t) {
+      return t.status === status;
+    })
+    .sort(function (a, b) {
+      return (a.position || 0) - (b.position || 0);
+    });
+  const targetIndex = columnTasks.findIndex(function (t) {
+    return t.id === targetTaskId;
+  });
+  if (targetIndex === -1) return getNewPositionAtEnd(status);
+  if (relativePos === "before") {
+    const prevTask = columnTasks[targetIndex - 1];
+    const targetTask = columnTasks[targetIndex];
+    if (!prevTask) return targetTask.position - 1024;
+    return (prevTask.position + targetTask.position) / 2;
+  } else {
+    const targetTask = columnTasks[targetIndex];
+    const nextTask = columnTasks[targetIndex + 1];
+    if (!nextTask) return targetTask.position + 1024;
+    return (targetTask.position + nextTask.position) / 2;
+  }
 }
 
 /**
@@ -235,7 +293,21 @@ function drop(ev, status) {
       currentDraggedTaskId = Number(data);
     }
   }
-  moveTo(status);
+  const targetCard = ev.target.closest(".task-card");
+  let targetTaskId = null;
+  let relativePos = "after";
+  if (targetCard) {
+    targetTaskId = getTaskIdFromCard(targetCard);
+    const rect = targetCard.getBoundingClientRect();
+    if (window.innerWidth <= 780) {
+      const midX = rect.left + rect.width / 2;
+      if (ev.clientX < midX) relativePos = "before";
+    } else {
+      const midY = rect.top + rect.height / 2;
+      if (ev.clientY < midY) relativePos = "before";
+    }
+  }
+  moveTo(status, targetTaskId, relativePos);
 }
 
 /**
