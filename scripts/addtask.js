@@ -7,13 +7,15 @@ let selectedContacts = [];
  * Initialisiert die Add-Task-Seite
  */
 async function initAddTask() {
-  await waitForFirebase();
   const currentUser = getCurrentUser();
+  if (currentUser) {
+    updateHeaderInitials(currentUser);
+  }
+  await waitForFirebase();
   if (!currentUser) {
     window.location.href = "index.html";
     return;
   }
-  updateHeaderInitials(currentUser);
   setMinimumDate();
   await loadContacts();
   validateForm();

@@ -2,11 +2,11 @@ let contacts = [];
 
 function initContacts() {
   return (async function () {
+    checkUser();
     await waitForFirebase();
     initSideMenu("contacts");
     await loadContactsFromFirestore();
     renderContactList();
-    checkUser();
   })();
 }
 

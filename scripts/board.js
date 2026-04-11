@@ -11,12 +11,12 @@ let touchDragTaskId = null;
  * Initialisiert das Board und lädt die Tasks sowie Kontakte (aus addtask.js)
  */
 async function initBoard() {
+  checkUser();
   await waitForFirebase();
   initSideMenu("board");
   await loadTasks();
   await loadContacts();
   renderTasks();
-  checkUser();
   setupTaskAddedListener();
   initTouchDragDrop();
 }
