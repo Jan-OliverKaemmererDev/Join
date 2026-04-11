@@ -58,6 +58,7 @@ function createTouchDragClone(touch) {
   touchDragClone.style.transform = "rotate(3deg)";
   document.body.appendChild(touchDragClone);
   document.body.style.overflow = "hidden";
+  document.body.classList.add("no-select");
   touchDragElement.style.opacity = "0.3";
   isDragging = true;
 }
@@ -83,6 +84,7 @@ function handleTouchEnd(ev) {
   stopAutoScroll();
   stopHorizontalAutoScroll();
   document.body.style.overflow = "";
+  document.body.classList.remove("no-select");
   if (!touchDragElement) return;
   if (touchDragClone) {
     performTouchDrop(ev);

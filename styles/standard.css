@@ -101,6 +101,11 @@ button:hover {
   border: 1px solid #ff8190 !important;
 }
 
+.no-select {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
 .error-message {
   color: #ff8190;
   font-size: 14px;
